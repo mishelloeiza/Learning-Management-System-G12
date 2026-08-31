@@ -1,9 +1,7 @@
 create database if not exists bd_tutorias;
 use bd_tutorias;
 
-
 -- tablas sin relaciones
-
 create table if not exists materias (
     id_materia int primary key auto_increment not null,
     nombre varchar(255) not null unique,
@@ -24,15 +22,14 @@ create table if not exists tutores (
     telefono varchar(255) not null
 );
 
--- tablas con relaciones 
-
+-- tablas con relaciones
 create table if not exists usuarios (
     id_usuario int primary key auto_increment not null,
     nombre varchar(255) not null,
     apellido varchar(255) not null,
     correo varchar(255) not null unique,
     telefono varchar(9) not null,
-    contrasena varchar(255) not null, -- se recomienda guardar la contraseña cifrada (hash), no en texto plano
+    contrasena varchar(255) not null,
     id_rol int not null,
     creado_en timestamp default current_timestamp not null,
     ultima_modificacion timestamp default current_timestamp on update current_timestamp not null,
@@ -45,7 +42,6 @@ create table if not exists tutorias (
     id_tutoria int primary key auto_increment not null,
     titulo varchar(255) not null,
     descripcion varchar(255) not null,
-    -- se usa "in" en vez de "=" con "||" porque ese operador no valida una lista de valores en mysql
     estado varchar(15) not null check (estado in ('activa','finalizada','cancelada','en curso')),
     fecha_inicio date not null,
     fecha_fin date not null check (fecha_fin > fecha_inicio),
@@ -65,8 +61,6 @@ create table if not exists horarios (
     id_horarios int primary key auto_increment not null,
     hora_inicio time not null,
     hora_fin time not null check (hora_fin > hora_inicio),
-    -- nota: si un horario puede tener varios dias (ej. "lunes,miercoles"), este check de valor unico
-    -- no lo va a validar bien; para eso se necesitaria una tabla aparte de dias. se deja como en el diseño original.
     dias_curso varchar(255) not null check (dias_curso in ('lunes','martes','miercoles','jueves','viernes','sabado','domingo')),
     estado varchar(15) not null check (estado in ('disponible','finalizado','cancelado','asignado')),
     id_tutoria int not null,
@@ -75,9 +69,7 @@ create table if not exists horarios (
         on delete cascade
 );
 
-
--- tablas intermedias (relaciones n:m)
-
+-- tablas intermedias
 create table if not exists especialidades (
     id_especialidad int primary key auto_increment not null,
     id_tutor int not null,
@@ -88,14 +80,14 @@ create table if not exists especialidades (
     foreign key (id_materia) references materias(id_materia)
         on update cascade
         on delete cascade,
-    unique key uq_tutor_materia (id_tutor, id_materia) -- evita que un tutor repita la misma especialidad
+    unique key uq_tutor_materia (id_tutor, id_materia)
 );
 
 create table if not exists solicitudes (
     id_solicitud int primary key auto_increment not null,
     estado varchar(10) not null check (estado in ('pendiente','aprobada','rechazada')),
     fecha_solicitud timestamp default current_timestamp not null,
-    fecha_respuesta date null, -- se llena despues, cuando el tutor revisa la solicitud
+    fecha_respuesta date null,
     id_horario int not null,
     id_usuario int not null,
     foreign key (id_horario) references horarios(id_horarios)
