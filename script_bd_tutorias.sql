@@ -14,13 +14,10 @@ create table if not exists roles (
     descripcion varchar(255) null
 );
 
-create table if not exists tutores (
-    id_tutor int primary key auto_increment not null,
-    nombre varchar(255) not null,
-    apellido varchar(255) not null,
-    correo varchar(255) not null,
-    telefono varchar(255) not null
-);
+insert into roles (nombre, descripcion) values ('Estudiante','Usuario de estudiantes');
+insert into roles (nombre, descripcion) values ('Tutor','Usuario de tutores');
+insert into roles (nombre, descripcion) values ('Administrador','Usuario de Administradores');
+select*from roles; 
 
 -- tablas con relaciones
 create table if not exists usuarios (
@@ -38,6 +35,8 @@ create table if not exists usuarios (
         on delete cascade
 );
 
+select*from usuarios; 
+
 create table if not exists tutorias (
     id_tutoria int primary key auto_increment not null,
     titulo varchar(255) not null,
@@ -49,7 +48,7 @@ create table if not exists tutorias (
     id_materia int not null,
     creado_en timestamp default current_timestamp not null,
     ultima_modificacion timestamp default current_timestamp on update current_timestamp not null,
-    foreign key (id_tutor) references tutores(id_tutor)
+    foreign key (id_tutor) references usuarios(id_usuario)
         on update cascade
         on delete cascade,
     foreign key (id_materia) references materias(id_materia)
@@ -74,7 +73,7 @@ create table if not exists especialidades (
     id_especialidad int primary key auto_increment not null,
     id_tutor int not null,
     id_materia int not null,
-    foreign key (id_tutor) references tutores(id_tutor)
+    foreign key (id_tutor) references usuarios(id_usuario)
         on update cascade
         on delete cascade,
     foreign key (id_materia) references materias(id_materia)
