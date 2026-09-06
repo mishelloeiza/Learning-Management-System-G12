@@ -1,20 +1,22 @@
-<?php 
-	include("conexion.php");
+<?php
+include("conexion.php");
+$cn->set_charset("utf8mb4");
 
-	//si existe una sesion activa se cierra
-	session_start(); 
-
-	session_unset();
-	session_destroy();
+//si existe una sesion activa se cierra
+session_start();
+session_unset();
+session_destroy();
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Crear Cuenta</title>
 </head>
+
 <body>
 	<main>
 		<h1>Crear Cuenta</h1>
@@ -38,24 +40,41 @@
 		</form>
 	</main>
 </body>
+
 </html>
 
-<?php 
-	if(isset($_POST['btn'])){
-		$nombre = $cn->real_escape_string($_POST['nombre']);
-	  	$apellido = $cn->real_escape_string($_POST['apellido']);
-	  	$correo = $cn->real_escape_string($_POST['correo']);
-	  	$telefono = $cn->real_escape_string($_POST['telefono']);
-	  	$contrasena = $cn->real_escape_string($_POST['contrasena']);
-		
+<?php
+if (isset($_POST['btn'])) {
+	$nombre = trim($_POST['nombre']);
+	$apellido = trim($_POST['apellido']);
+	$correo = trim($_POST['correo']);
+	$telefono = trim($_POST['telefono']);
+	$contrasena = $_POST['contrasena'];
+
+	//Validaciones de campos
+	if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+		echo "<script>alert('Correo inválido')</script>";
+	} else if (strlen($telefono) > 9 || !ctype_digit($telefono)) {
+		echo "<script>alert('Teléfono inválido')</script>";
+	} else if (strlen($contrasena < 8)) {
+		echo "<script>alert('La contraseña debe tener al menos 8 caracteres')</script>";
+	} else {
 		//Cifrar la contraseña
 		$cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
-		//Siempre el rol sera 1 porque es el rol de los estudiantes; 	
-		$sql = "insert into usuarios(nombre, apellido, correo, telefono, contrasena, id_rol) values ('$nombre','$apellido','$correo','$telefono','$cifrada','1')";
-
-	    mysqli_query($cn, $sql);
-	    echo "<script>alert('Cuenta Creada Correctamente')</script>"; 
-	
+		try {
+			//Sentencia SQL preparada
+			$stmt = $cn->prepare("INSERT INTO usuarios (nombre, apellido, correo, telefono, contrasena, id_rol) VALUES (?, ?, ?, ?, ?, 1)");
+			$stmt->bind_param("sssss", $nombre, $apellido, $correo, $telefono, $cifrada);
+			$stmt->execute();
+			echo "<script>alert('Cuenta creada correctamente')</script>";
+		} catch (mysqli_sql_exception $error) {
+			if ($error->getCode() == 1062) {
+				echo "<script>alert('Ese correo ya está registrado')</script>";
+			} else {
+				echo "<script>alert('No se puedo crea la cuenta, intenta de nuevo')</script>";
+			}
+		}
 	}
+}
 ?>

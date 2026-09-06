@@ -1,51 +1,57 @@
-<?php 
-	//conexion
-	include("conexion.php");
+<?php
+//conexion
+include("conexion.php");
+$cn->set_charset("utf8mb4");
 
-	//si existe una sesion activa se cierra
-	session_start(); 
+//si existe una sesion activa se cierra
+session_start();
+session_unset();
+session_destroy();
 
-	session_unset();
-	session_destroy();
+//abrir nueva sesion
+session_start();
 
-	//abrir nueva sesion
-	session_start();
+//Verificacion login
+if (isset($_POST['btn'])) {
+	$usuario = $_POST['usuario'];
+	$contrasena = $_POST['contrasena'];
 
-	//Verificacion login
-	if(isset($_POST['btn'])){
-		$usuario = $cn->real_escape_string($_POST['usuario']);
-		$contrasena = $cn->real_escape_string($_POST['contrasena']); 
-		
-		$sql = "select correo, contrasena, id_rol from usuarios where correo = '".$usuario."'"; 
-	    $busqueda = mysqli_query($cn, $sql);
-		$arrayb =  mysqli_fetch_assoc($busqueda);
+	//Sentencia SQL preparada
+	$stmt = $cn->prepare("SELECT correo, contrasena, id_rol FROM usuarios WHERE correo = ?");
+	$stmt->bind_param("s", $usuario);
+	$stmt->execute();
+	$arrayb = $stmt->get_result()->fetch_assoc();
 
+	if ($arrayb !== null && password_verify($contrasena, $arrayb['contrasena'])) {
+		session_regenerate_id(true);
 		//Definir rol de la sesion
-		$_SESSION['rol'] = $arrayb['id_rol']; 
+		$_SESSION['rol'] = (string) $arrayb['id_rol'];
 
-		if ($arrayb !== null && password_verify($contrasena, $arrayb['contrasena'])) {
-			if ($_SESSION['rol'] == '3'){
-				header("Location: ./admin/adm_dashboard.php");
-				echo "<script>alert('Iniciando Sesión')</script>"; 
-			}else if ($_SESSION['rol'] == '2'){
-				header("Location: ./tutor/tut_dashboard.php");
-			}else if ($_SESSION['rol'] == '1'){
-				header("Location: ./estudiante/stu_dashboard.php");
-			}		
-			exit(); //Detener php    
-		} else {
-		    echo "<script>alert('Contraseña o Usuario incorrectos.')</script>"; 
+		if ($_SESSION['rol'] === '3') {
+			header("Location: ./admin/adm_dashboard.php");
+			echo "<script>alert('Iniciando Sesión')</script>";
+		} else if ($_SESSION['rol'] === '2') {
+			header("Location: ./tutor/tut_dashboard.php");
+		} else if ($_SESSION['rol'] === '1') {
+			header("Location: ./estudiante/stu_dashboard.php");
 		}
+		//Detener php
+		exit();    
+	} else {
+		echo "<script>alert('Contraseña o Usuario incorrectos.')</script>";
 	}
+}
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
 </head>
+
 <body>
 	<main>
 		<h1>Iniciar Sesión</h1>
@@ -60,8 +66,9 @@
 		</form>
 	</main>
 </body>
+
 </html>
 
-<?php 
+<?php
 
 ?>
