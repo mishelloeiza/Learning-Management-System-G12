@@ -35,34 +35,36 @@ create table if not exists usuarios (
         on delete cascade
 );
 
-select*from usuarios; 
+select * from usuarios; 
 
 create table if not exists tutorias (
-    id_tutoria int primary key auto_increment not null,
+    id_tutoria int primary key auto_increment,
     titulo varchar(255) not null,
     descripcion varchar(255) not null,
     estado varchar(15) not null check (estado in ('activa','finalizada','cancelada','en curso')),
     fecha_inicio date not null,
-    fecha_fin date not null check (fecha_fin > fecha_inicio),
+    fecha_fin date not null,
     id_tutor int not null,
     id_materia int not null,
     creado_en timestamp default current_timestamp not null,
     ultima_modificacion timestamp default current_timestamp on update current_timestamp not null,
+    constraint chk_fechas check (fecha_fin > fecha_inicio),
     foreign key (id_tutor) references usuarios(id_usuario)
         on update cascade
-        on delete cascade,
+        on delete restrict,
     foreign key (id_materia) references materias(id_materia)
         on update cascade
-        on delete cascade
+        on delete restrict
 );
 
 create table if not exists horarios (
     id_horarios int primary key auto_increment not null,
     hora_inicio time not null,
-    hora_fin time not null check (hora_fin > hora_inicio),
+    hora_fin time not null,
     dias_curso varchar(255) not null check (dias_curso in ('lunes','martes','miercoles','jueves','viernes','sabado','domingo')),
     estado varchar(15) not null check (estado in ('disponible','finalizado','cancelado','asignado')),
     id_tutoria int not null,
+    constraint chk_horas check (hora_fin > hora_inicio),
     foreign key (id_tutoria) references tutorias(id_tutoria)
         on update cascade
         on delete cascade
