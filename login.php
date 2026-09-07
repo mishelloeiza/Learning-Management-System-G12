@@ -44,27 +44,43 @@ if (isset($_POST['btn'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="auth.css">
 </head>
 
 <body>
-	<main>
-		<h1>Iniciar Sesión</h1>
-		<form action="login.php" method="post">
-			<label for="usuario">Correo:</label>
-			<input type="text" name="usuario" placeholder="Ingrese su correo">
-			<label for="contrasena">Contraseña:</label>
-			<input type="password" name="contrasena" placeholder="Ingrese su contraseña">
-			<button type="submit" name="btn">Ingresar</button>
+	<div class="auth-page">
+		<div class="auth-card">
+			<div class="auth-card-bar"></div>
+			<main class="auth-form">
+				<h2>Iniciar sesión</h2>
+				<p class="subtitle">Ingresá con tu correo institucional.</p>
 
-			<a href="crear_cuenta.php" title="Crear cuenta">Crear Cuenta</a>
-		</form>
-	</main>
+				<form action="login.php" method="post">
+					<div class="field">
+						<label for="usuario">Correo</label>
+						<input type="text" id="usuario" name="usuario" placeholder="Ingrese su correo">
+					</div>
+
+					<div class="field">
+						<label for="contrasena">Contraseña</label>
+						<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña">
+					</div>
+
+					<button type="submit" name="btn" class="btn-primary">Ingresar</button>
+
+					<p class="auth-switch"><a href="crear_cuenta.php" title="Crear cuenta">Crear cuenta</a></p>
+				</form>
+			</main>
+		</div>
+	</div>
 </body>
 
 </html>
