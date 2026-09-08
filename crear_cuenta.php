@@ -31,32 +31,32 @@ session_destroy();
 				<form action="crear_cuenta.php" method="post">
 					<div class="field">
 						<label for="nombre">Nombre</label>
-						<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre">
+						<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
 					</div>
 
 					<div class="field">
 						<label for="apellido">Apellido</label>
-						<input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido">
+						<input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
 					</div>
 
 					<div class="field">
 						<label for="correo">Correo</label>
-						<input type="email" id="correo" name="correo" placeholder="Ingrese su correo">
+						<input type="email" id="correo" name="correo" placeholder="Ingrese su correo" required>
 					</div>
 
 					<div class="field">
 						<label for="telefono">Teléfono</label>
-						<input type="tel" id="telefono" name="telefono" placeholder="Ingrese su teléfono">
+						<input type="tel" id="telefono" name="telefono" placeholder="Ingrese su teléfono" required>
 					</div>
 
 					<div class="field">
 						<label for="contrasena">Contraseña</label>
-						<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña">
+						<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
 					</div>
 
 					<button type="submit" name="btn" class="btn-primary">Crear cuenta</button>
 
-					<p class="auth-switch">¿Ya tenés cuenta? <a href="login.php">Iniciá sesión</a></p>
+					<p class="auth-switch">¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
 				</form>
 			</main>
 		</div>

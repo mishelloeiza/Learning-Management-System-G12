@@ -20,7 +20,20 @@
 	<title></title>
 </head>
 <body>
-	<h1>Tutor</h1>
-	<a href="../cerrar_sesion.php">Cerrar sesión</a>
+		<header>
+		<nav>
+			<ul>
+				<li>
+					<a href="./tut_perfil.php">Mi perfil</a>	
+				</li>
+				<li>
+					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+				</li>
+			</ul>
+		</nav>	
+	</header>
+	<main>
+		<h1>Tutor</h1>
+	</main>
 </body>
 </html>

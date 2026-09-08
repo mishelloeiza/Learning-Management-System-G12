@@ -17,7 +17,7 @@ if (isset($_POST['btn'])) {
 	$contrasena = $_POST['contrasena'];
 
 	//Sentencia SQL preparada
-	$stmt = $cn->prepare("SELECT correo, contrasena, id_rol FROM usuarios WHERE correo = ?");
+	$stmt = $cn->prepare("SELECT id_usuario, correo, contrasena, id_rol FROM usuarios WHERE correo = ?");
 	$stmt->bind_param("s", $usuario);
 	$stmt->execute();
 	$arrayb = $stmt->get_result()->fetch_assoc();
@@ -26,6 +26,8 @@ if (isset($_POST['btn'])) {
 		session_regenerate_id(true);
 		//Definir rol de la sesion
 		$_SESSION['rol'] = (string) $arrayb['id_rol'];
+		//Definir id de la sesion
+		$_SESSION['id'] = (string) $arrayb['id_usuario'];
 
 		if ($_SESSION['rol'] === '3') {
 			header("Location: ./admin/adm_dashboard.php");
