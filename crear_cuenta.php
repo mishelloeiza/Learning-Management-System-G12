@@ -1,11 +1,8 @@
 <?php
-include("conexion.php");
-$cn->set_charset("utf8mb4");
-
-//si existe una sesion activa se cierra
-session_start();
-session_unset();
-session_destroy();
+	//si existe una sesion activa se cierra
+	session_start();
+	session_unset();
+	session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +25,7 @@ session_destroy();
 				<h2>Crear cuenta</h2>
 				<p class="subtitle">Completá tus datos para registrarte.</p>
 
-				<form action="crear_cuenta.php" method="post">
+				<form action="./api/estudiante/crear_cuenta.php" id="form" method="post">
 					<div class="field">
 						<label for="nombre">Nombre</label>
 						<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
@@ -61,42 +58,36 @@ session_destroy();
 			</main>
 		</div>
 	</div>
+
+	<script>
+		document.getElementById("form").addEventListener("submit", async function(e) {
+			//Evitar comportamiento normal
+			e.preventDefault();
+			//Recoger datos
+			const formulario = new FormData(this);
+			try {
+				//Enviar datos a la API
+				const respuesta = await fetch("./api/estudiante/crear_cuenta.php", {
+					method: "POST",
+					body: formulario
+				});
+				//Guardar resultado de la API
+				const resultado = await respuesta.json();
+				//Si el resultado es ok
+				if (resultado.code === 201) {
+					alert(resultado.message);
+					//Limpiar formulario
+					this.reset();
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.error(error);
+				alert("Ocurrió un error al comunicarse con el servidor.");
+			}
+		});
+	</script>
+
 </body>
 
 </html>
-
-<?php
-if (isset($_POST['btn'])) {
-	$nombre = trim($_POST['nombre']);
-	$apellido = trim($_POST['apellido']);
-	$correo = trim($_POST['correo']);
-	$telefono = trim($_POST['telefono']);
-	$contrasena = $_POST['contrasena'];
-
-	//Validaciones de campos
-	if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-		echo "<script>alert('Correo inválido')</script>";
-	} else if (strlen($telefono) > 9 || !ctype_digit($telefono)) {
-		echo "<script>alert('Teléfono inválido')</script>";
-	} else if (strlen($contrasena < 8)) {
-		echo "<script>alert('La contraseña debe tener al menos 8 caracteres')</script>";
-	} else {
-		//Cifrar la contraseña
-		$cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
-
-		try {
-			//Sentencia SQL preparada
-			$stmt = $cn->prepare("INSERT INTO usuarios (nombre, apellido, correo, telefono, contrasena, id_rol) VALUES (?, ?, ?, ?, ?, 1)");
-			$stmt->bind_param("sssss", $nombre, $apellido, $correo, $telefono, $cifrada);
-			$stmt->execute();
-			echo "<script>alert('Cuenta creada correctamente')</script>";
-		} catch (mysqli_sql_exception $error) {
-			if ($error->getCode() == 1062) {
-				echo "<script>alert('Ese correo ya está registrado')</script>";
-			} else {
-				echo "<script>alert('No se puedo crea la cuenta, intenta de nuevo')</script>";
-			}
-		}
-	}
-}
-?>

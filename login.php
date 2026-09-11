@@ -86,7 +86,3 @@ if (isset($_POST['btn'])) {
 </body>
 
 </html>
-
-<?php
-
-?>
