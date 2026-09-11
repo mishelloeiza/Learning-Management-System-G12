@@ -37,6 +37,13 @@ create table if not exists usuarios (
 
 select * from usuarios; 
 
+-- vista solo para usuarios de estudiantes 
+create view usuarios_1 as select * from usuarios where id_rol = 1; 
+select * from usuarios_1; 
+
+-- añadir bitacora tabla, id, fecha, info nueva, info vieja con json
+-- crear tabla de carreras universitarias
+-- crear vistas para la tabla de usuarios
 create table if not exists tutorias (
     id_tutoria int primary key auto_increment,
     titulo varchar(255) not null,
@@ -98,3 +105,5 @@ create table if not exists solicitudes (
         on update cascade
         on delete cascade
 );
+
+
