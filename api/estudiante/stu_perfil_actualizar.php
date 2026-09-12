@@ -17,8 +17,9 @@
     $apellido = trim($_POST['apellido'] ?? '');
     $correo = trim($_POST['correo'] ?? '');
     $telefono = trim($_POST['telefono'] ?? '');
+    $carrera = trim($_POST["carrera"] ??'');
 
-    if(empty($nombre) || empty($apellido) || empty($correo) || empty($telefono)){
+    if(empty($nombre) || empty($apellido) || empty($correo) || empty($telefono) || empty($carrera)){
         Response::error("Todos los campos son obligatorios", -1002, 400);
     }
 
@@ -33,8 +34,8 @@
     try {
         $cn = new Connection();
 
-        $stmt = $cn->prepare("UPDATE usuarios_1 SET nombre = ?, apellido = ?, correo = ?, telefono = ? WHERE id_usuario = ?");
-        $stmt->execute([$nombre, $apellido, $correo, $telefono, $id]);
+        $stmt = $cn->prepare("UPDATE usuarios_1 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
+        $stmt->execute([$nombre, $apellido, $correo, $telefono, $carrera, $id]);
 
         Response::success("Informacion actualizada", 200);
     } catch (PDOException $error) {

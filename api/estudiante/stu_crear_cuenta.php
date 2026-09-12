@@ -13,10 +13,11 @@
     $apellido = trim($_POST['apellido'] ?? '');
     $correo = trim($_POST['correo'] ?? '');
     $telefono = trim($_POST['telefono'] ?? '');
+    $carrera = trim($_POST['carrera'] ??'');
     $contrasena = $_POST['contrasena'] ?? '';
 
     //Validar campos vacios
-    if (empty($nombre) || empty($apellido) || empty($correo) || empty($telefono) || empty($contrasena)) {
+    if (empty($nombre) || empty($apellido) || empty($correo) || empty($telefono) || empty($carrera) ||empty($contrasena)) {
         Response::error("Todos los campos son obligatorios", -1001, 400);
     }
 
@@ -41,13 +42,13 @@
     try {
         $cn = new Connection();
         //Consulta preparada
-        $stmt = $cn->prepare("INSERT INTO usuarios_1 (nombre, apellido, correo, telefono, contrasena, id_rol) VALUES (?, ?, ?, ?, ?, 1)");
-        $stmt->execute([$nombre, $apellido, $correo, $telefono, $cifrada]); 
+        $stmt = $cn->prepare("INSERT INTO usuarios_1 (nombre, apellido, correo, telefono, contrasena, id_carrera, id_rol) VALUES (?, ?, ?, ?, ?, ?, 1)");
+        $stmt->execute([$nombre, $apellido, $correo, $telefono, $cifrada, $carrera]);
         //Llamar a response
         Response::success("Cuenta creada correctamente", 201);
-        exit(); 
+        exit();
     } catch (PDOException $error) {
-        //Correo duplicado con el codigo 1062 de sql 
+        //Correo duplicado con el codigo 1062 de sql
         if ($error->errorInfo[1] == 1062) {
             Response::error("Ese correo ya está registrado", -1005, 409);
         }

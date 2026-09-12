@@ -20,7 +20,7 @@
         $cn = new Connection();
 
         //Hacer consulta a BDD
-        $stmt = $cn->prepare("SELECT nombre, apellido, correo, telefono, contrasena FROM usuarios_1 WHERE id_usuario = ?"); 
+        $stmt = $cn->prepare("SELECT u.nombre, u.apellido, u.correo, u.telefono, u.contrasena, c.id_carrera AS idcarrera FROM usuarios_1 u INNER JOIN carreras c ON u.id_carrera = c.id_carrera WHERE u.id_usuario = ?");
         //Ejecutar con el id del usuario
         $stmt->execute([$id]);
         //Informacion del usuario como array
@@ -28,14 +28,14 @@
 
         //Comprobar la informacion
         if($usuario == false){
-            response::error("Usuario no encontrado", -1002, 404);
+            Response::error("Usuario no encontrado", -1002, 404);
         }
 
         //Enviar los datos
-        response::success("Datos obtenidos", 200, ["usuario"=>$usuario]);
+        Response::success("Datos obtenidos", 200, ["usuario"=>$usuario]);
 
     } catch (PDOException $error) {
-        response::error("No se pudieron carga los datos", -1003, 500);
+        Response::error("No se pudieron carga los datos", -1003, 500);
         //Response::debug($error->getMessage(), -1004, 500);
     }
 ?>

@@ -14,7 +14,7 @@
 	<title>Crear Cuenta</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="auth.css">
+	<link rel="stylesheet" href="../CSS/auth.css">
 </head>
 
 <body>
@@ -47,19 +47,53 @@
 					</div>
 
 					<div class="field">
+						<label for="carrera">Carrera</label>
+						<select name="carrera" id="carrera" required>
+							<option value="">Seleccione una carrera</option>
+						</select>
+					</div>
+
+					<div class="field">
 						<label for="contrasena">Contraseña</label>
 						<input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
 					</div>
 
 					<button type="submit" name="btn" class="btn-primary">Crear cuenta</button>
 
-					<p class="auth-switch">¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
+					<p class="auth-switch">¿Ya tienes cuenta? <a href="./stu_login.php">Inicia sesión</a></p>
 				</form>
 			</main>
 		</div>
 	</div>
 
 	<script>
+		//Funcion para cargar las carreras existentes
+		async function Cargarcarreras(){
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_ver_carreras.php");
+
+				const resultado = await respuesta.json();
+
+				if(resultado.code === 200){
+					const selectCarrera = document.getElementById("carrera");
+
+					resultado.carreras.forEach(function(carrera) {
+						const opcion = document.createElement('option');
+						opcion.value = carrera.id_carrera;
+						opcion.textContent = carrera.nombre;
+						selectCarrera.appendChild(opcion);
+					});
+				}else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Error al comunicarse con el servidor");
+			}
+		}
+
+		Cargarcarreras();
+
 		document.getElementById("form").addEventListener("submit", async function(e) {
 			//Evitar comportamiento normal
 			e.preventDefault();
@@ -67,7 +101,7 @@
 			const formulario = new FormData(this);
 			try {
 				//Enviar datos a la API
-				const respuesta = await fetch("../api/estudiante/crear_cuenta.php", {
+				const respuesta = await fetch("../api/estudiante/stu_crear_cuenta.php", {
 					method: "POST",
 					body: formulario
 				});

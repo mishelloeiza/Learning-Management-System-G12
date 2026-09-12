@@ -31,6 +31,12 @@
 		<input type="email" id="correo" name="correo" disabled required>
 		<label for="telefono">Teléfono</label>
 		<input type="tel" id="telefono" name="telefono" disabled required>
+
+    	<label for="carrera">Carrera</label>
+    	<select id="carrera" name="carrera" disabled required>
+        	<option value="">Seleccione una carrera</option>
+    	</select>
+
 		<button type="button" name="btnE" id="btnE">Editar Datos</button>
 		<button type="submit" name="btnG" id="btnG" disabled >Guardar Cambios</button>
 	</form>
@@ -56,11 +62,13 @@
 		const Editar = document.getElementById("btnE");
 		const Guardar = document.getElementById("btnG");
 		const inputs = document.querySelectorAll("input");
+		const combo = document.getElementById("carrera");
 
 		Editar.addEventListener("click", function(){
 			inputs.forEach(function(input) {
 	            input.disabled = false;
 	        });
+			combo.disabled = false;
 	        Guardar.disabled = false;
         	Editar.disabled = true;
 		});
@@ -90,14 +98,28 @@
 			try {
 				//cargar la api
 				const respuesta = await fetch("../api/estudiante/stu_perfil_cargar.php");
-
 				const resultado = await respuesta.json();
 
-				if(resultado.code = 200){
+				const respuesta2 = await fetch("../api/estudiante/stu_ver_carreras.php");
+				const resultado2 = await respuesta2.json();
+
+				if(resultado.code == 200 && resultado2.code == 200){
 					document.getElementById("nombre").value = resultado.usuario.nombre;
 					document.getElementById("apellido").value = resultado.usuario.apellido;
 					document.getElementById("correo").value = resultado.usuario.correo;
 					document.getElementById("telefono").value = resultado.usuario.telefono;
+
+					const selectCarrera = document.getElementById("carrera");
+					resultado2.carreras.forEach(function(carrera){
+						const opcion = document.createElement("option");
+						opcion.value = carrera.id_carrera;
+						opcion.textContent = carrera.nombre;
+
+						selectCarrera.appendChild(opcion);
+					});
+
+					selectCarrera.value = resultado.usuario.idcarrera;
+
 				}else {
 					alert(resultado.message);
 				}
@@ -127,6 +149,7 @@
 					inputs.forEach(function(input) {
 						input.disabled = true;
 					});
+					combo.disabled = true;
 					Guardar.disabled = true;
         			Editar.disabled = false;
 				}else {
