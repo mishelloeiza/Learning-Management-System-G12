@@ -1,15 +1,5 @@
 <?php
-	//conexion
-	include("../conexion.php");
-
-	//Verificar sesion
-	session_start();
-
-	//Si no hay sesion iniciada o si el rol no es 1
-	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '1') {
-	    header("Location: ../login.php");
-	    exit();
-	}
+	require_once("../api/estudiante/stu_verificar_sesion.php");
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +17,7 @@
 					<a href="./stu_perfil.php">Mi perfil</a>	
 				</li>
 				<li>
-					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
 		</nav>	
@@ -35,5 +25,27 @@
 	<main>
 		<h1>Estudiante</h1>
 	</main>
+
+	<script>
+		document.getElementById("CerrarS").addEventListener("click", async function() {
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_cerrar_sesion.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json(); 
+
+				if (resultado.code = 200){
+					window.location.href = "../prin_dashboard.php";
+				} else {
+					alert(resultado.message); 
+				}
+			
+			} catch (error) {
+				console.error(error);
+				alert("Ocurrio un error al cerrar sesión");
+			}
+		}); 
+	</script>
 </body>
 </html>

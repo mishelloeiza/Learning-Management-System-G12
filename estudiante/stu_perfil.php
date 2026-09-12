@@ -1,113 +1,5 @@
 <?php
-	//conexion
-	include("../conexion.php");
-
-	//Verificar sesion
-	session_start();
-
-	//Si no hay sesion iniciada o si el rol no es 1
-	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '1') {
-	    header("Location: ../login.php");
-	    exit();
-	}
-
-	//obtener id del usuario
-	$id = $_SESSION['id'];
-
-	//hacer consulta
-	function cargardatos(){
-		include("../conexion.php");
-		$id = $_SESSION['id'];
-		
-		$sql = "SELECT nombre, apellido, correo, telefono, contrasena FROM usuarios WHERE id_usuario = $id";
-		$resultado = $cn->query($sql);
-		$fila = $resultado->fetch_assoc();
-
-		return $fila; 
-	}
-	
-	//Cambiar datos 
-	if (isset($_POST['btnG'])) {
-		$nombre = trim($_POST['nombre']);
-		$apellido = trim($_POST['apellido']);
-		$correo = trim($_POST['correo']);
-		$telefono = trim($_POST['telefono']);
-
-		//Validaciones de campos
-		if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-			echo "<script>alert('Correo inválido')</script>";
-		} else if (strlen($telefono) > 9 || !ctype_digit($telefono)) {
-			echo "<script>alert('Teléfono inválido')</script>";
-		} else {
-			try {
-				//Sentencia SQL preparada
-				$stmt = $cn->prepare("UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, telefono = ? WHERE id_usuario = ?");
-				$stmt->bind_param("ssssi", $nombre, $apellido, $correo, $telefono, $id);
-				$stmt->execute();
-				echo "<script>alert('Información actualizada correctamente')</script>";
-			} catch (mysqli_sql_exception $error) {
-				if ($error->getCode() == 1062) {
-					echo "<script>alert('Ese correo ya está registrado')</script>";
-				} else {
-					echo "<script>alert('No se puedo crea la cuenta, intenta de nuevo')</script>";
-				}
-			}
-		}
-	}
- 
- 	$act = cargardatos();
-	//obtener valores
-	$nombre = $act['nombre'];
-	$apellido = $act['apellido'];
-	$correo = $act['correo'];
-	$telefono = $act['telefono'];
-	
-	//Cambiar contraseña
-	if (isset($_POST['btnC'])) {
-		$contrasena_act = $_POST['contrasena_act'];
-		$contrasena_new = $_POST['contrasena_new'];
-
-		//Sentencia SQL preparada
-		$stmt = $cn->prepare("SELECT contrasena FROM usuarios WHERE id_usuario = ?");
-		$stmt->bind_param("i", $id);
-		$stmt->execute();
-		$arrayb = $stmt->get_result()->fetch_assoc();
-
-		if ($arrayb !== null && password_verify($contrasena_act, $arrayb['contrasena'])) {
-   			if (strlen($contrasena_new < 8)) {
-				echo "<script>alert('La nueva contraseña debe tener al menos 8 caracteres')</script>";
-			}else {
-				//Cifrar la contraseña
-				$cifrada = password_hash($contrasena_new, PASSWORD_DEFAULT);
-				// Actualizar contraseña
-            	$stmt = $cn->prepare("UPDATE usuarios SET contrasena = ? WHERE id_usuario = ?");
-            	$stmt->bind_param("si", $cifrada, $id);
-            	if ($stmt->execute()){
-            		echo "<script>alert('Contraseña actualizada correctamente')</script>";
-            	}else {
-            		echo "<script>alert('Contraseña no actualizada')</script>";
-            	}	
-			}
-		} else {
-			echo "<script>alert('La contraseña actual es incorrecta')</script>";
-		}
-	}
-
-	//Eliminar cuenta
-	if(isset($_POST['btnElim'])){
-		$stmt = $cn->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
-		$stmt->bind_param("i", $id);
-		if($stmt->execute()){
-			session_start();
-			$_SESSION = [];
-			session_destroy();
-			header("Location: ../login.php");
-			exit(); 
-		}else {
-			echo "<script>alert('Cuenta no eliminada')</script>";
-		}
-	}
-
+	require_once("../api/estudiante/stu_verificar_sesion.php");
 ?>
 
 <!DOCTYPE html>
@@ -122,28 +14,35 @@
 		<nav>
 			<ul>
 				<li>
-					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
-	
+
 	<h1>Mi perfil</h1>
-	<form action="stu_perfil.php" method="post">
+
+	<form id="formactu" method="post">
 		<label for="nombre">Nombre:</label>
-		<input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($nombre) ?>" disabled required>
+		<input type="text" id="nombre" name="nombre"  disabled required>
 		<label for="apellido">Apellido:</label>
-		<input type="text" id="apellido" name="apellido" value="<?= htmlspecialchars($apellido) ?>" disabled required>
+		<input type="text" id="apellido" name="apellido" disabled required>
 		<label for="correo">Correo</label>
-		<input type="email" id="correo" name="correo" value="<?= htmlspecialchars($correo) ?>" disabled required>
+		<input type="email" id="correo" name="correo" disabled required>
 		<label for="telefono">Teléfono</label>
-		<input type="tel" id="telefono" name="telefono" value="<?= htmlspecialchars($telefono) ?>" disabled required>
-		<button type="submit" name="btnE" id="btnE">Editar Datos</button>
+		<input type="tel" id="telefono" name="telefono" disabled required>
+
+    	<label for="carrera">Carrera</label>
+    	<select id="carrera" name="carrera" disabled required>
+        	<option value="">Seleccione una carrera</option>
+    	</select>
+
+		<button type="button" name="btnE" id="btnE">Editar Datos</button>
 		<button type="submit" name="btnG" id="btnG" disabled >Guardar Cambios</button>
 	</form>
 
 	<h2>Cambiar contraseña</h2>
-	<form action="stu_perfil.php" method="post">
+	<form id="formcam" method="post">
 		<label for="contrasena_act">Contraseña Actual:</label>
 		<input type="password" name="contrasena_act" placeholder="Ingrese su contraseña actual" required>
 		<label for="contrasena_new">Nueva Contraseña:</label>
@@ -151,7 +50,7 @@
 		<button type="submit" name="btnC" id="btnC">Cambiar contraseña</button>
 	</form>
 
-	<form action="stu_perfil.php" method="post" 
+	<form id="formeli" method="post"
 	onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta?');">
 	    <button type="submit" name="btnElim">
 	        Eliminar cuenta
@@ -159,20 +58,154 @@
 	</form>
 
 	<script>
+		//Habilitar boton de guardar
 		const Editar = document.getElementById("btnE");
 		const Guardar = document.getElementById("btnG");
-		const inputs = document.querySelectorAll("input"); 
+		const inputs = document.querySelectorAll("input");
+		const combo = document.getElementById("carrera");
 
 		Editar.addEventListener("click", function(){
 			inputs.forEach(function(input) {
 	            input.disabled = false;
 	        });
+			combo.disabled = false;
 	        Guardar.disabled = false;
-
         	Editar.disabled = true;
 		});
+
+		//boton de cerrar sesion
+		document.getElementById("CerrarS").addEventListener("click", async function() {
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_cerrar_sesion.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json();
+
+				if(resultado.code = 200){
+					window.location.href = "../prin_dashboard.php";
+				}else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al cerrar sesión");
+			}
+		});
+
+		//cargar datos
+		async function cargardatos() {
+			try {
+				//cargar la api
+				const respuesta = await fetch("../api/estudiante/stu_perfil_cargar.php");
+				const resultado = await respuesta.json();
+
+				const respuesta2 = await fetch("../api/estudiante/stu_ver_carreras.php");
+				const resultado2 = await respuesta2.json();
+
+				if(resultado.code == 200 && resultado2.code == 200){
+					document.getElementById("nombre").value = resultado.usuario.nombre;
+					document.getElementById("apellido").value = resultado.usuario.apellido;
+					document.getElementById("correo").value = resultado.usuario.correo;
+					document.getElementById("telefono").value = resultado.usuario.telefono;
+
+					const selectCarrera = document.getElementById("carrera");
+					resultado2.carreras.forEach(function(carrera){
+						const opcion = document.createElement("option");
+						opcion.value = carrera.id_carrera;
+						opcion.textContent = carrera.nombre;
+
+						selectCarrera.appendChild(opcion);
+					});
+
+					selectCarrera.value = resultado.usuario.idcarrera;
+
+				}else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Error al cargar datos");
+			}
+		}
+
+		cargardatos();
+
+		//Actualizar datos
+		document.getElementById("formactu").addEventListener("submit", async function(e) {
+			e.preventDefault();
+			const formulario = new FormData(this);
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_perfil_actualizar.php", {
+					method: "POST",
+					body: formulario
+				});
+
+				const resultado = await respuesta.json();
+
+				if(resultado.code === 200){
+					alert(resultado.message);
+					cargardatos();
+					inputs.forEach(function(input) {
+						input.disabled = true;
+					});
+					combo.disabled = true;
+					Guardar.disabled = true;
+        			Editar.disabled = false;
+				}else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
+		});
+
+		document.getElementById("formcam").addEventListener("submit", async function(e) {
+			e.preventDefault();
+			const formulario = new FormData(this);
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_perfil_camcont.php",{
+					method: "POST",
+					body: formulario
+				});
+
+				const resultado = await respuesta.json();
+
+				if(resultado.code === 200){
+					alert(resultado.message);
+					this.reset();
+				}else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
+		});
+
+		document.getElementById("formeli").addEventListener("submit", async function(e) {
+			e.preventDefault;
+			try {
+				const respuesta = await fetch("../api/estudiante/stu_perfil_eliminar.php",{
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json();
+
+				if(resultado.code === 200){
+					alert(resultado.message);
+				}else{
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
+
+		});
 	</script>
-	
+
 </body>
 </html>
 
