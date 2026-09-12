@@ -2,8 +2,8 @@ create database if not exists bd_tutorias;
 use bd_tutorias;
 
 -- tablas sin relaciones
-create table if not exists materias (
-    id_materia int primary key auto_increment not null,
+create table if not exists carreras (
+    id_carrera int primary key auto_increment not null,
     nombre varchar(255) not null unique,
     descripcion varchar(255) null
 );
@@ -20,6 +20,16 @@ insert into roles (nombre, descripcion) values ('Administrador','Usuario de Admi
 select*from roles; 
 
 -- tablas con relaciones
+create table if not exists materias (
+    id_materia int primary key auto_increment not null,
+    nombre varchar(255) not null unique,
+    descripcion varchar(255) null,
+	id_carrera int not null,
+    foreign key (id_carrera) references carreras(id_carrera)
+        on update cascade
+        on delete cascade
+);
+
 create table if not exists usuarios (
     id_usuario int primary key auto_increment not null,
     nombre varchar(255) not null,
@@ -28,9 +38,13 @@ create table if not exists usuarios (
     telefono varchar(9) not null,
     contrasena varchar(255) not null,
     id_rol int not null,
+    id_carrera int not null, 
     creado_en timestamp default current_timestamp not null,
     ultima_modificacion timestamp default current_timestamp on update current_timestamp not null,
     foreign key (id_rol) references roles(id_rol)
+        on update cascade
+        on delete cascade, 
+	foreign key (id_carrera) references carreras(id_carrera)
         on update cascade
         on delete cascade
 );
@@ -41,9 +55,14 @@ select * from usuarios;
 create view usuarios_1 as select * from usuarios where id_rol = 1; 
 select * from usuarios_1; 
 
--- añadir bitacora tabla, id, fecha, info nueva, info vieja con json
--- crear tabla de carreras universitarias
--- crear vistas para la tabla de usuarios
+-- vista solo para usuarios de tutores
+create view usuarios_2 as select * from usuarios where id_rol = 2; 
+select * from usuarios_2; 
+
+-- vista solo para usuarios de administradores
+create view usuarios_3 as select * from usuarios where id_rol = 3; 
+select * from usuarios_3; 
+
 create table if not exists tutorias (
     id_tutoria int primary key auto_increment,
     titulo varchar(255) not null,
@@ -106,4 +125,4 @@ create table if not exists solicitudes (
         on delete cascade
 );
 
-
+-- añadir bitacora tabla, id, fecha, info nueva, info vieja con json
