@@ -1,0 +1,3 @@
+<FilesMatch "^(script_bd_tutorias\.sql|script_bd_usuarios\.sql|README\.md|\.gitignore)$">
+    Require all denied
+</FilesMatch>

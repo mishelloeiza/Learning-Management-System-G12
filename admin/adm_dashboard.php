@@ -1,15 +1,5 @@
 <?php
-	//conexion
-	include("../conexion.php");
-
-	//Verificar sesion
-	session_start();
-
-	//Si no hay sesion iniciada o si el rol no es 3
-	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '3') {
-	    header("Location: ../login.php");
-	    exit();
-	}
+	require_once("../api/admin/adm_verificar_sesion.php");
 ?>
 
 <!DOCTYPE html>
@@ -24,16 +14,43 @@
 		<nav>
 			<ul>
 				<li>
-					<a href="./adm_perfil.php">Mi perfil</a>	
+					<a href="./adm_perfil.php">Mi perfil</a>
 				</li>
 				<li>
-					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+					<a href="./adm_carreras.php">Administrar Carreras</a>
+				</li>
+				<li>
+					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
 	<main>
 		<h1>Administrador</h1>
 	</main>
+
+	<script>
+
+		//Cerrar sesion
+		document.getElementById("CerrarS").addEventListener("click", async function() {
+			try {
+				const respuesta = await fetch("../api/admin/adm_cerrar_sesion.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json(); 
+
+				if (resultado.code = 200){
+					window.location.href = "../prin_dashboard.php";
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.error(error);
+				alert("Ocurrio un error al cerrar sesión");
+			}
+		});
+	</script>
+
 </body>
 </html>
