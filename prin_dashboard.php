@@ -23,7 +23,7 @@
 					<a href="./estudiante/tut_login.php">Iniciar Sesion Tutor</a>
 				</li>
                 <li>
-					<a href="./estudiante/adm_login.php">Iniciar Sesion Administrador</a>
+					<a href="./admin/adm_login.php">Iniciar Sesion Administrador</a>
 				</li>
 			</ul>
 		</nav>	

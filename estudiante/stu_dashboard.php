@@ -14,13 +14,13 @@
 		<nav>
 			<ul>
 				<li>
-					<a href="./stu_perfil.php">Mi perfil</a>	
+					<a href="./stu_perfil.php">Mi perfil</a>
 				</li>
 				<li>
 					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
 	<main>
 		<h1>Estudiante</h1>
@@ -33,19 +33,18 @@
 					method: "POST"
 				});
 
-				const resultado = await respuesta.json(); 
+				const resultado = await respuesta.json();
 
 				if (resultado.code = 200){
 					window.location.href = "../prin_dashboard.php";
 				} else {
-					alert(resultado.message); 
+					alert(resultado.message);
 				}
-			
 			} catch (error) {
 				console.error(error);
 				alert("Ocurrio un error al cerrar sesión");
 			}
-		}); 
+		});
 	</script>
 </body>
 </html>

@@ -8,6 +8,12 @@ create table if not exists carreras (
     descripcion varchar(255) null
 );
 
+insert into carreras (nombre, descripcion) values ('Ingenieria en sistemas','Carrera de ingenieria en sistemas');
+insert into carreras (nombre, descripcion) values ('Ingenieria industrial','Carrera de ingenieria industrial');
+insert into carreras (nombre, descripcion) values ('Derecho','Carrera de ciencias juridicas y sociales');
+
+select*from carreras; 
+
 create table if not exists roles (
     id_rol int primary key auto_increment not null,
     nombre varchar(255) not null unique,
@@ -97,18 +103,6 @@ create table if not exists horarios (
 );
 
 -- tablas intermedias
-create table if not exists especialidades (
-    id_especialidad int primary key auto_increment not null,
-    id_tutor int not null,
-    id_materia int not null,
-    foreign key (id_tutor) references usuarios(id_usuario)
-        on update cascade
-        on delete cascade,
-    foreign key (id_materia) references materias(id_materia)
-        on update cascade
-        on delete cascade,
-    unique key uq_tutor_materia (id_tutor, id_materia)
-);
 
 create table if not exists solicitudes (
     id_solicitud int primary key auto_increment not null,

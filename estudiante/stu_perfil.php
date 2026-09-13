@@ -161,6 +161,7 @@
 			}
 		});
 
+		//Cambiar contraseña
 		document.getElementById("formcam").addEventListener("submit", async function(e) {
 			e.preventDefault();
 			const formulario = new FormData(this);
@@ -184,6 +185,7 @@
 			}
 		});
 
+		//Eliminar cuenta
 		document.getElementById("formeli").addEventListener("submit", async function(e) {
 			e.preventDefault;
 			try {
