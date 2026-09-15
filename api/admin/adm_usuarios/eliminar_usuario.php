@@ -10,25 +10,25 @@
         Response::error("No autorizado", -1001, 404);
     }
 
-    $id_carrera = trim($_POST["id_carrera"] ?? '');
+    $id_usuario = trim($_POST["id_usuario"] ?? '');
 
-    if(empty($id_carrera)) {
-        Response::error("El id de la carrera es obligarotio", -1002, 400);
+    if(empty($id_usuario)) {
+        Response::error("El id del usuario es obligarotio", -1002, 400);
     }
 
     try {
         $cn = new Connection();
 
-        $stmt = $cn->prepare("UPDATE carreras SET activo = false WHERE id_carrera = ?");
-        $stmt->execute([$id_carrera]);
+        $stmt = $cn->prepare("UPDATE usuarios SET activo = false WHERE id_usuario = ?");
+        $stmt->execute([$id_usuario]);
 
         if($stmt->rowCount() === 0) {
-            Response::error("No se encontro la carrera", -1003, 404);
+            Response::error("No se encontro el usuario", -1003, 404);
         }
 
-        Response::success("Carrera eliminada correctamente", 200);
+        Response::success("Usuario eliminada correctamente", 200);
     } catch (PDOException $error) {
-        Response::error("No se pudo eliminar la carrera", -1004, 500);
+        Response::error("No se pudo eliminar al usuario", -1004, 500);
         //Response::debug($error->getMessage(), -1004, 500);
     }
 ?>

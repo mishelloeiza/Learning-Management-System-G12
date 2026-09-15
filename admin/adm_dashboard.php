@@ -20,6 +20,9 @@
 					<a href="./adm_carreras.php">Administrar Carreras</a>
 				</li>
 				<li>
+					<a href="./adm_usuarios.php">Administrar Usuarios</a>
+				</li>
+				<li>
 					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>

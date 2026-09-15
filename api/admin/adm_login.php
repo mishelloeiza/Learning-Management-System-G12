@@ -27,7 +27,7 @@
         $cn = new Connection();
 
         //Realizar la consulta a la base de datos
-        $stmt = $cn->prepare("SELECT id_usuario, correo, contrasena, id_rol FROM usuarios_3 WHERE correo = ?");
+        $stmt = $cn->prepare("SELECT id_usuario, correo, contrasena, id_rol FROM usuarios_3 WHERE correo = ? && activo = true");
         $stmt->execute([$usuario]);
         //Obtener info del usuario como arreglo
         $usuarioBD = $stmt->fetch(PDO::FETCH_ASSOC);
