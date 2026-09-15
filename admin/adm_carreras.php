@@ -186,6 +186,7 @@
                             document.getElementById("nombre").disabled = true;
                             document.getElementById("descripcion").disabled = true;
                             document.getElementById("activo").disabled = true;
+                            document.getElementById("btnGuardar").disabled = true;
                         });
 
                         //Eliminar una carreras
@@ -241,6 +242,7 @@
             document.getElementById("descripcion").disabled = false;
             document.getElementById("activo").disabled = false;
 
+            document.getElementById("btnGuardar").disabled = false;
             document.getElementById("btnGuardar").textContent = "Guardar Cambios";
             editando = true;
         });
@@ -258,6 +260,7 @@
             document.getElementById("descripcion").disabled = false;
             document.getElementById("activo").disabled = true;
 
+            document.getElementById("btnGuardar").disabled = false;
             document.getElementById("btnGuardar").textContent = "Registrar";
         });
 
