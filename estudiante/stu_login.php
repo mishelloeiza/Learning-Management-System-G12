@@ -38,7 +38,7 @@
 
 					<button type="submit" name="btn" class="btn-primary">Ingresar</button>
 
-					<p class="auth-switch"><a href="../crear_cuenta.php" title="Crear cuenta">Crear cuenta</a></p>
+					<p class="auth-switch"><a href="./stu_crear_cuenta.php" title="Crear cuenta">Crear cuenta</a></p>
 				</form>
 			</main>
 		</div>

@@ -19,7 +19,7 @@
     try {
         $cn = new Connection();
 
-        $stmt = $cn->prepare("DELETE FROM carreras WHERE id_carrera = ?");
+        $stmt = $cn->prepare("UPDATE carreras SET activo = false WHERE id_carrera = ?");
         $stmt->execute([$id_carrera]);
 
         if($stmt->rowCount() === 0) {

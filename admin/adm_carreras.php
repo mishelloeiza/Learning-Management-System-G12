@@ -29,9 +29,11 @@
         <h2>Registrar nueva carrera</h2>
         <form id="formcar" method="POST">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre de la carrera">
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre de la carrera" required>
             <label for="descripcion">Descripcion</label>
-            <input type="text" id="descripcion" name="descripcion" placeholder="Ingrese descripcion de la carrera">
+            <input type="text" id="descripcion" name="descripcion" placeholder="Ingrese descripcion de la carrera" required>
+            <label for="activo">Estado</label>
+            <input type="checkbox" id="activo" name="activo" disabled>
             <button type="submit" id="btnGuardar">Registrar</button>
             <button type="button" id="btnEditar">Editar</button>
             <button type="button" id="btnCancelar">Cancelar</button>
@@ -50,6 +52,7 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Descripcion</th>
+                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -89,7 +92,10 @@
             const formulario = new FormData(this);
             try {
                 if(editando == true){
+                    const estado = document.getElementById("activo").checked ? 1 : 0;
+
                     formulario.append("id_carrera", idcarreraselect);
+                    formulario.append("activo", estado);
 
                     const respuesta_e = await fetch("../api/admin/adm_carreras/editar_carrera.php", {
                         method: "POST",
@@ -102,8 +108,19 @@
                         alert(resultado_e.message);
                         this.reset();
                         verCarreras();
+                        idcarreraselect = null;
+                        editando = false;
+                        document.getElementById("activo").disabled = true;
+                        document.getElementById("btnGuardar").textContent = "Registrar";
                     }else {
                         alert(resultado_e.message);
+                        idcarreraselect = null;
+                        editando = false;
+                        document.getElementById("nombre").value = "";
+                        document.getElementById("descripcion").value = "";
+                        document.getElementById("activo").checked = false;
+                        document.getElementById("activo").disabled = true;
+                        document.getElementById("btnGuardar").textContent = "Registrar";
                     }
                 }else{
                     const respuesta = await fetch("../api/admin/adm_carreras/crear_carrera.php", {
@@ -116,6 +133,7 @@
                     if(resultado.code === 200){
                         alert(resultado.message);
                         this.reset();
+                        verCarreras();
                     }else {
                         alert(resultado.message);
                     }
@@ -148,6 +166,7 @@
                             <td>${carrera.id_carrera}</td>
                             <td>${carrera.nombre}</td>
                             <td>${carrera.descripcion}</td>
+                            <td>${carrera.activo}</td>
                             <td>
                                 <button type="button" class="btnSeleccionar">Seleccionar</button>
                                 <button type="button" class="btnEliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta carrera?');">Eliminar</button>
@@ -162,9 +181,11 @@
                             idcarreraselect = carrera.id_carrera;
                             document.getElementById("nombre").value = carrera.nombre;
                             document.getElementById("descripcion").value = carrera.descripcion;
+                            document.getElementById("activo").checked = carrera.activo == 1;
                             editando = false;
                             document.getElementById("nombre").disabled = true;
                             document.getElementById("descripcion").disabled = true;
+                            document.getElementById("activo").disabled = true;
                         });
 
                         //Eliminar una carreras
@@ -218,6 +239,7 @@
             }
             document.getElementById("nombre").disabled = false;
             document.getElementById("descripcion").disabled = false;
+            document.getElementById("activo").disabled = false;
 
             document.getElementById("btnGuardar").textContent = "Guardar Cambios";
             editando = true;
@@ -230,9 +252,11 @@
 
             document.getElementById("nombre").value = "";
             document.getElementById("descripcion").value = "";
+            document.getElementById("activo").checked = false;
 
             document.getElementById("nombre").disabled = false;
             document.getElementById("descripcion").disabled = false;
+            document.getElementById("activo").disabled = true;
 
             document.getElementById("btnGuardar").textContent = "Registrar";
         });

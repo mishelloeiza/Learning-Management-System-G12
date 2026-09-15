@@ -9,7 +9,7 @@
     try {
         $cn = new Connection();
 
-        $stmt = $cn->prepare("SELECT * FROM carreras");
+        $stmt = $cn->prepare("SELECT * FROM carreras WHERE activo = true");
         $stmt->execute();
         $carreras = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

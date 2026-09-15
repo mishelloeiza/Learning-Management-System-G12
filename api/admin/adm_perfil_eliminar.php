@@ -14,7 +14,7 @@
 
     try {
         $cn = new Connection();
-        $stmt = $cn->prepare("DELETE FROM usuarios_3 WHERE id_usuario = ?");
+        $stmt = $cn->prepare("UPDATE usuarios_3 SET activo = false WHERE id_usuario = ?");
         $stmt->execute([$id]);
 
         if($stmt->rowCount() === 0){
