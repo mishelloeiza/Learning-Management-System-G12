@@ -2,10 +2,13 @@ create database if not exists bd_tutorias;
 use bd_tutorias;
 
 -- tablas sin relaciones
+
+-- carreras con soft delete
 create table if not exists carreras (
     id_carrera int primary key auto_increment not null,
     nombre varchar(255) not null unique,
-    descripcion varchar(255) null
+    descripcion varchar(255) null, 
+    activo boolean not null default true
 );
 
 insert into carreras (nombre, descripcion) values ('Ingenieria en sistemas','Carrera de ingenieria en sistemas');
@@ -14,6 +17,7 @@ insert into carreras (nombre, descripcion) values ('Derecho','Carrera de ciencia
 
 select*from carreras; 
 
+-- roles no hace soft delete
 create table if not exists roles (
     id_rol int primary key auto_increment not null,
     nombre varchar(255) not null unique,
@@ -26,16 +30,20 @@ insert into roles (nombre, descripcion) values ('Administrador','Usuario de Admi
 select*from roles; 
 
 -- tablas con relaciones
+
+-- materias con soft delete
 create table if not exists materias (
     id_materia int primary key auto_increment not null,
     nombre varchar(255) not null unique,
     descripcion varchar(255) null,
+    activo boolean not null default true,
 	id_carrera int not null,
     foreign key (id_carrera) references carreras(id_carrera)
         on update cascade
         on delete cascade
 );
 
+-- usuarios con soft delete
 create table if not exists usuarios (
     id_usuario int primary key auto_increment not null,
     nombre varchar(255) not null,
@@ -43,6 +51,7 @@ create table if not exists usuarios (
     correo varchar(255) not null unique,
     telefono varchar(9) not null,
     contrasena varchar(255) not null,
+    activo boolean not null default true, 
     id_rol int not null,
     id_carrera int not null, 
     creado_en timestamp default current_timestamp not null,
@@ -69,6 +78,7 @@ select * from usuarios_2;
 create view usuarios_3 as select * from usuarios where id_rol = 3; 
 select * from usuarios_3; 
 
+-- tutorias ya tiene soft delete con el estado
 create table if not exists tutorias (
     id_tutoria int primary key auto_increment,
     titulo varchar(255) not null,
@@ -89,6 +99,7 @@ create table if not exists tutorias (
         on delete restrict
 );
 
+-- horarios ya tiene soft delete con el estado
 create table if not exists horarios (
     id_horarios int primary key auto_increment not null,
     hora_inicio time not null,
@@ -104,6 +115,7 @@ create table if not exists horarios (
 
 -- tablas intermedias
 
+-- solicitudes ya tiene soft delete con el estado
 create table if not exists solicitudes (
     id_solicitud int primary key auto_increment not null,
     estado varchar(10) not null check (estado in ('pendiente','aprobada','rechazada')),

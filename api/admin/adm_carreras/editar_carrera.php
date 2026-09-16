@@ -13,6 +13,7 @@
     $id_carrera = trim($_POST["id_carrera"] ?? "");
     $nombre = trim($_POST["nombre"] ?? "");
     $descripcion = trim($_POST["descripcion"] ?? "");
+    $activo = trim($_POST["activo"] ?? 0);
 
     if(empty($id_carrera) || empty($nombre) || empty($descripcion)) {
         Response::error("Todos los campos son obligatorios", -1002, 400);
@@ -21,8 +22,8 @@
     try {
         $cn = new Connection();
 
-        $stmt = $cn->prepare("UPDATE carreras SET nombre = ?, descripcion = ? WHERE id_carrera = ?");
-        $stmt->execute([$nombre, $descripcion, $id_carrera]);
+        $stmt = $cn->prepare("UPDATE carreras SET nombre = ?, descripcion = ?, activo = ? WHERE id_carrera = ?");
+        $stmt->execute([$nombre, $descripcion, $activo, $id_carrera]);
 
         if($stmt->rowCount() === 0) {
             Response::error("No se encontro la carrera", -1003, 404);
