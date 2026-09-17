@@ -35,12 +35,12 @@
 
         if(empty($usuarios)){
             Response::error("No se encontraron usuarios", -1002, 404);
-            //Response::debug($error->getMessage(), -1004, 500);
+
         }
 
         Response::success("Usuarios encontradas", 200, ["usuarios"=>$usuarios]);
     } catch (PDOException $error) {
         Response::error("No se pudieron cargar los usuarios", -1003, 500);
-        
+        //Response::debug($error->getMessage(), -1004, 500);
     }
 ?>
