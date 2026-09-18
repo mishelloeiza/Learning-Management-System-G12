@@ -19,8 +19,8 @@ class Connection extends PDO
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             //Informacion de erorr de conexion
-            //Response::error("Ocurrio un error", -1001, 400);
-            Response::debug($e->getMessage(), -1001, 400);
+            Response::error("Ocurrio un error", -1001, 400);
+            //Response::debug($e->getMessage(), -1001, 400);
         }
     }
 }

@@ -2,12 +2,22 @@ create database if not exists bd_tutorias;
 use bd_tutorias;
 
 -- tablas sin relaciones
-create table if not exists materias (
-    id_materia int primary key auto_increment not null,
+
+-- carreras con soft delete
+create table if not exists carreras (
+    id_carrera int primary key auto_increment not null,
     nombre varchar(255) not null unique,
-    descripcion varchar(255) null
+    descripcion varchar(255) null, 
+    activo boolean not null default true
 );
 
+insert into carreras (nombre, descripcion) values ('Ingenieria en sistemas','Carrera de ingenieria en sistemas');
+insert into carreras (nombre, descripcion) values ('Ingenieria industrial','Carrera de ingenieria industrial');
+insert into carreras (nombre, descripcion) values ('Derecho','Carrera de ciencias juridicas y sociales');
+
+select*from carreras; 
+
+-- roles no hace soft delete
 create table if not exists roles (
     id_rol int primary key auto_increment not null,
     nombre varchar(255) not null unique,
@@ -20,6 +30,20 @@ insert into roles (nombre, descripcion) values ('Administrador','Usuario de Admi
 select*from roles; 
 
 -- tablas con relaciones
+
+-- materias con soft delete
+create table if not exists materias (
+    id_materia int primary key auto_increment not null,
+    nombre varchar(255) not null unique,
+    descripcion varchar(255) null,
+    activo boolean not null default true,
+	id_carrera int not null,
+    foreign key (id_carrera) references carreras(id_carrera)
+        on update cascade
+        on delete cascade
+);
+
+-- usuarios con soft delete
 create table if not exists usuarios (
     id_usuario int primary key auto_increment not null,
     nombre varchar(255) not null,
@@ -27,10 +51,15 @@ create table if not exists usuarios (
     correo varchar(255) not null unique,
     telefono varchar(9) not null,
     contrasena varchar(255) not null,
+    activo boolean not null default true, 
     id_rol int not null,
+    id_carrera int not null, 
     creado_en timestamp default current_timestamp not null,
     ultima_modificacion timestamp default current_timestamp on update current_timestamp not null,
     foreign key (id_rol) references roles(id_rol)
+        on update cascade
+        on delete cascade, 
+	foreign key (id_carrera) references carreras(id_carrera)
         on update cascade
         on delete cascade
 );
@@ -41,9 +70,15 @@ select * from usuarios;
 create view usuarios_1 as select * from usuarios where id_rol = 1; 
 select * from usuarios_1; 
 
--- añadir bitacora tabla, id, fecha, info nueva, info vieja con json
--- crear tabla de carreras universitarias
--- crear vistas para la tabla de usuarios
+-- vista solo para usuarios de tutores
+create view usuarios_2 as select * from usuarios where id_rol = 2; 
+select * from usuarios_2; 
+
+-- vista solo para usuarios de administradores
+create view usuarios_3 as select * from usuarios where id_rol = 3; 
+select * from usuarios_3; 
+
+-- tutorias ya tiene soft delete con el estado
 create table if not exists tutorias (
     id_tutoria int primary key auto_increment,
     titulo varchar(255) not null,
@@ -64,6 +99,7 @@ create table if not exists tutorias (
         on delete restrict
 );
 
+-- horarios ya tiene soft delete con el estado
 create table if not exists horarios (
     id_horarios int primary key auto_increment not null,
     hora_inicio time not null,
@@ -78,19 +114,8 @@ create table if not exists horarios (
 );
 
 -- tablas intermedias
-create table if not exists especialidades (
-    id_especialidad int primary key auto_increment not null,
-    id_tutor int not null,
-    id_materia int not null,
-    foreign key (id_tutor) references usuarios(id_usuario)
-        on update cascade
-        on delete cascade,
-    foreign key (id_materia) references materias(id_materia)
-        on update cascade
-        on delete cascade,
-    unique key uq_tutor_materia (id_tutor, id_materia)
-);
 
+-- solicitudes ya tiene soft delete con el estado
 create table if not exists solicitudes (
     id_solicitud int primary key auto_increment not null,
     estado varchar(10) not null check (estado in ('pendiente','aprobada','rechazada')),
@@ -106,4 +131,4 @@ create table if not exists solicitudes (
         on delete cascade
 );
 
-
+-- añadir bitacora tabla, id, fecha, info nueva, info vieja con json
