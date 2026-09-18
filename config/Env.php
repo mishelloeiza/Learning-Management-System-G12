@@ -2,7 +2,7 @@
 
 class Env
 {
-    //Inicializar que .env no ha sido cargado
+    //Inicializar que .env no ha sido cargado global
     private static $loaded = false;
 
     //Leer el .env
