@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         $stmt = $cn->prepare("UPDATE usuarios SET activo = false WHERE id_usuario = ?");
         $stmt->execute([$id_usuario]);

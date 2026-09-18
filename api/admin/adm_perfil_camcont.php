@@ -24,7 +24,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         $stmt = $cn->prepare('SELECT contrasena FROM usuarios_3 WHERE id_usuario = ?');
         $stmt->execute([$id]);

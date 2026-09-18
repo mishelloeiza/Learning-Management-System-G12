@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         $stmt = $cn->prepare("UPDATE carreras SET activo = false WHERE id_carrera = ?");
         $stmt->execute([$id_carrera]);
