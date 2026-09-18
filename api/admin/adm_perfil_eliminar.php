@@ -13,7 +13,7 @@
     $id = $_SESSION['id'];
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
         $stmt = $cn->prepare("UPDATE usuarios_3 SET activo = false WHERE id_usuario = ?");
         $stmt->execute([$id]);
 

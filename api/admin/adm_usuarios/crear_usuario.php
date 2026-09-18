@@ -41,7 +41,7 @@
     $cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         $stmt = $cn->prepare("INSERT INTO usuarios (nombre, apellido, correo, telefono, contrasena, id_rol, id_carrera) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $cifrada, $rol, $carrera]);

@@ -17,7 +17,7 @@
 
     try {
         //Crear la conexion
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         //Hacer consulta a BDD
         $stmt = $cn->prepare("SELECT u.nombre, u.apellido, u.correo, u.telefono, u.contrasena, c.id_carrera AS idcarrera FROM usuarios_3 u INNER JOIN carreras c ON u.id_carrera = c.id_carrera WHERE u.id_usuario = ?");

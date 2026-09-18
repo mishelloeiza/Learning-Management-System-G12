@@ -40,7 +40,7 @@
     $cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
         //Consulta preparada
         $stmt = $cn->prepare("INSERT INTO usuarios_1 (nombre, apellido, correo, telefono, contrasena, id_carrera, id_rol) VALUES (?, ?, ?, ?, ?, ?, 1)");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $cifrada, $carrera]);

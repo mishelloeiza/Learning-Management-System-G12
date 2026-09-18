@@ -13,7 +13,7 @@
     $buscar = trim($_GET["buscar"] ?? '');
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         if($buscar == ""){
             $stmt = $cn->prepare("SELECT * FROM carreras ORDER BY id_carrera LIMIT 5");

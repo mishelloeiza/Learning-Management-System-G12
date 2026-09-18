@@ -15,7 +15,7 @@
     $id_rol = trim($_GET["id_rol"] ?? '');
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         if($buscar == "" && $id_carrera == "" && $id_rol == "") {
             $stmt = $cn->prepare("SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.telefono, u.id_carrera, c.nombre AS carrera,

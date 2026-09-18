@@ -38,7 +38,7 @@
     $cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         if(empty($contrasena)){
             $stmt = $cn->prepare("UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, telefono = ?, activo = ?, 

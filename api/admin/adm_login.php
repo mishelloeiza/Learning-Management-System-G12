@@ -24,7 +24,7 @@
 
     try {
         //Crear conexion cn
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         //Realizar la consulta a la base de datos
         $stmt = $cn->prepare("SELECT id_usuario, correo, contrasena, id_rol FROM usuarios_3 WHERE correo = ? && activo = true");

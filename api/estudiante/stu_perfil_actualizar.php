@@ -32,7 +32,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         $stmt = $cn->prepare("UPDATE usuarios_1 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $carrera, $id]);
