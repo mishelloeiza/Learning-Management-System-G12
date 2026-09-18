@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/config_adm/Connection.php");
-    require_once(__DIR__ . "/config_adm/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     if($_SERVER['REQUEST_METHOD'] !== 'POST'){
         Response::error("Metodo no permitido", -1000, 404);

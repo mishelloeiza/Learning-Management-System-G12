@@ -1,7 +1,7 @@
 <?php
     //Usar archivos de response y conexion
-    require_once(__DIR__ . "/config_adm/Connection.php");
-    require_once(__DIR__ . "/config_adm/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     //Solo aceptar solicitudes POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
