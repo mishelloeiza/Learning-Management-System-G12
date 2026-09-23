@@ -20,7 +20,19 @@
 					<a href="./adm_carreras.php">Administrar Carreras</a>
 				</li>
 				<li>
+					<a href="./adm_materias.php">Administrar Materias</a>
+				</li>
+				<li>
+					<a href="./adm_tutorias.php">Administrar Tutorias</a>
+				</li>
+				<li>
 					<a href="./adm_usuarios.php">Administrar Usuarios</a>
+				</li>
+				<li>
+					<a href="./adm_horarios.php">Administrar Horarios</a>
+				</li>
+				<li>
+					<a href="./adm_solicitudes.php">Administrar Solicitudes</a>
 				</li>
 				<li>
 					<button id="CerrarS">Cerrar Sesión</button>

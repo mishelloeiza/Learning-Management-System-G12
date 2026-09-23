@@ -1,5 +1,4 @@
 <?php
-    
     require_once(__DIR__ . "/../../config/Connection.php");
     require_once(__DIR__ . "/../../config/Response.php");
 
@@ -7,7 +6,7 @@
         Response::error("Metodo no autorizado", -1000, 405);
     }
 
-    if(!isset($_SESSION['rol']) || $_SESSION['rol'] !== '3'){
+    if(!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2'){
         Response::error("No autorizado", -1001, 401);
     }
 
@@ -17,7 +16,7 @@
     $apellido = trim($_POST['apellido'] ?? '');
     $correo = trim($_POST['correo'] ?? '');
     $telefono = trim($_POST['telefono'] ?? '');
-    $carrera = trim($_POST["carrera"] ??'');
+    $carrera = trim($_POST['carrera'] ?? '');
 
     if(empty($nombre) || empty($apellido) || empty($correo) || empty($telefono) || empty($carrera)){
         Response::error("Todos los campos son obligatorios", -1002, 400);
@@ -31,18 +30,21 @@
         Response::error("Telefono invalido", -1004, 400);
     }
 
-    try {
-        $cn = new Connection("admin");
+    if(!ctype_digit($carrera)){
+        Response::error("Carrera invalida", -1005, 400);
+    }
 
-        $stmt = $cn->prepare("UPDATE usuarios_3 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
+    try {
+        $cn = new Connection("tutor");
+
+        $stmt = $cn->prepare("UPDATE usuarios_2 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $carrera, $id]);
 
         Response::success("Informacion actualizada", 200);
     } catch (PDOException $error) {
         if(isset($error->errorInfo[1]) && $error->errorInfo[1] == 1062){
-            Response::error("Ese correo ya fue registrado", -1005, 409);
+            Response::error("Ese correo ya fue registrado", -1006, 409);
         }
-        Response::error("No se pudo actualizar la informacion", -1006, 500);
-        //Response::debug($error->getMessage(), -1004, 500);
+        Response::error("No se pudo actualizar la informacion", -1007, 500);
     }
 ?>

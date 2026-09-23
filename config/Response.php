@@ -18,7 +18,7 @@ class Response
         exit(json_encode($response));
     }*/
     
-    //Funcion de mensajes de exito solo devuelve mensaje y codigo
+    
     static function success($message, $code, $otherData = null)
     {
         header("Content-Type: application/json");
@@ -34,7 +34,6 @@ class Response
         exit(json_encode($response));
     }
 
-    //Funcion de mensajes de error solo devuelve mensaje y codigo
     static function error($message, $code, $codeMethod)
     {
         header("Content-Type: application/json");
@@ -45,7 +44,7 @@ class Response
         ]));
     }
 
-    //Funcion de errores de desarrolladores
+ 
     static function debug($error = null, $errorTh = null)
     {
         if ($error) {

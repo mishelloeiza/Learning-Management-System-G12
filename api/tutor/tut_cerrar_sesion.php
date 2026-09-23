@@ -1,5 +1,4 @@
 <?php
-   
     require_once(__DIR__ . "/../../config/Connection.php");
     require_once(__DIR__ . "/../../config/Response.php");
 
@@ -9,6 +8,6 @@
 
     $_SESSION = [];
 
-    session_destroy(); 
+    session_destroy();
 
     Response::success("Session cerrada correctamente", 200);

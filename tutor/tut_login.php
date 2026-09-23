@@ -1,5 +1,4 @@
 <?php
-	//si existe una sesion activa se cierra
 	session_start();
 	session_unset();
 	session_destroy();
@@ -11,10 +10,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Login</title>
+	<title>Login Tutores</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<!--<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">-->
-	<!--<link rel="stylesheet" href="auth.css">-->
+	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../CSS/auth.css">
 </head>
 
 <body>
@@ -22,7 +21,7 @@
 		<div class="auth-card">
 			<div class="auth-card-bar"></div>
 			<main class="auth-form">
-				<h2>Iniciar sesión Administradores</h2>
+				<h2>Iniciar sesión Tutores</h2>
 				<p class="subtitle">Ingresá con tu correo institucional.</p>
 
 				<form id="form" method="post">
@@ -37,7 +36,6 @@
 					</div>
 
 					<button type="submit" name="btn" class="btn-primary">Ingresar</button>
-
 				</form>
 			</main>
 		</div>
@@ -45,24 +43,19 @@
 
 	<script>
 		document.getElementById("form").addEventListener("submit", async function(e) {
-			//Evitar comportamiento normal
 			e.preventDefault();
-			//Recoger datos
 			const formulario = new FormData(this);
 			try {
-				//Enviar datos a la API
-				const respuesta = await fetch("../api/admin/adm_login.php", {
+				const respuesta = await fetch("../api/tutor/tut_login.php", {
 					method: "POST",
 					body: formulario
 				});
-				//Guardar resultado de la API
 				const resultado = await respuesta.json();
-				//Si el resultado es ok
+
 				if (resultado.code === 200) {
 					alert(resultado.message);
-					//Limpiar formulario
 					this.reset();
-        			window.location.href = "./adm_dashboard.php";
+					window.location.href = "./tut_dashboard.php";
 				} else {
 					alert(resultado.message);
 				}
