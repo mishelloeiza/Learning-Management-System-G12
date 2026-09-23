@@ -27,6 +27,9 @@ define("ADMIN_PASSWORD_DB", Env::get('ADMIN_DB_PSSW'));
 define("ESTUDIANTE_USER_DB", Env::get('ESTUDIANTE_DB_USER'));
 define("ESTUDIANTE_PASSWORD_DB", Env::get('ESTUDIANTE_DB_PSSW'));
 
+define("TUTOR_USER_DB", Env::get('TUTOR_DB_USER'));
+define("TUTOR_PASSWORD_DB", Env::get('TUTOR_DB_PSSW'));
+
 
 define("NOTUSER_USER_DB", Env::get('NOTUSER_DB_USER'));
 define("NOTUSER_PASSWORD_DB", Env::get('NOTUSER_DB_PSSW'));

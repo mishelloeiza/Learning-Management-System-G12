@@ -1,177 +1,212 @@
 <?php
-	//conexion
-	include("../conexion.php");
-
-	//Verificar sesion
-	session_start();
-
-	
-	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2') {
-	    header("Location: ../login.php");
-	    exit();
-	}
-
-	$id = $_SESSION['id'];
-
-	//hacer consulta
-	function cargardatos(){
-		include("../conexion.php");
-		$id = $_SESSION['id'];
-		
-		$sql = "SELECT nombre, apellido, correo, telefono, contrasena FROM usuarios WHERE id_usuario = $id";
-		$resultado = $cn->query($sql);
-		$fila = $resultado->fetch_assoc();
-
-		return $fila; 
-	}
-	
-	
-	if (isset($_POST['btnG'])) {
-		$nombre = trim($_POST['nombre']);
-		$apellido = trim($_POST['apellido']);
-		$correo = trim($_POST['correo']);
-		$telefono = trim($_POST['telefono']);
-
-		//Validaciones de campos
-		if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-			echo "<script>alert('Correo inválido')</script>";
-		} else if (strlen($telefono) > 9 || !ctype_digit($telefono)) {
-			echo "<script>alert('Teléfono inválido')</script>";
-		} else {
-			try {
-				//Sentencia SQL preparada
-				$stmt = $cn->prepare("UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, telefono = ? WHERE id_usuario = ?");
-				$stmt->bind_param("ssssi", $nombre, $apellido, $correo, $telefono, $id);
-				$stmt->execute();
-				echo "<script>alert('Información actualizada correctamente')</script>";
-			} catch (mysqli_sql_exception $error) {
-				if ($error->getCode() == 1062) {
-					echo "<script>alert('Ese correo ya está registrado')</script>";
-				} else {
-					echo "<script>alert('No se puedo crea la cuenta, intenta de nuevo')</script>";
-				}
-			}
-		}
-	}
- 
- 	$act = cargardatos();
-	//obtener valores
-	$nombre = $act['nombre'];
-	$apellido = $act['apellido'];
-	$correo = $act['correo'];
-	$telefono = $act['telefono'];
-	
-	//Cambiar contraseña
-	if (isset($_POST['btnC'])) {
-		$contrasena_act = $_POST['contrasena_act'];
-		$contrasena_new = $_POST['contrasena_new'];
-
-		//Sentencia SQL preparada
-		$stmt = $cn->prepare("SELECT contrasena FROM usuarios WHERE id_usuario = ?");
-		$stmt->bind_param("i", $id);
-		$stmt->execute();
-		$arrayb = $stmt->get_result()->fetch_assoc();
-
-		if ($arrayb !== null && password_verify($contrasena_act, $arrayb['contrasena'])) {
-   			if (strlen($contrasena_new < 8)) {
-				echo "<script>alert('La nueva contraseña debe tener al menos 8 caracteres')</script>";
-			}else {
-				//Cifrar la contraseña
-				$cifrada = password_hash($contrasena_new, PASSWORD_DEFAULT);
-				// Actualizar contraseña
-            	$stmt = $cn->prepare("UPDATE usuarios SET contrasena = ? WHERE id_usuario = ?");
-            	$stmt->bind_param("si", $cifrada, $id);
-            	if ($stmt->execute()){
-            		echo "<script>alert('Contraseña actualizada correctamente')</script>";
-            	}else {
-            		echo "<script>alert('Contraseña no actualizada')</script>";
-            	}	
-			}
-		} else {
-			echo "<script>alert('La contraseña actual es incorrecta')</script>";
-		}
-	}
-
-	//Eliminar cuenta
-	if(isset($_POST['btnElim'])){
-		$stmt = $cn->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
-		$stmt->bind_param("i", $id);
-		if($stmt->execute()){
-			session_start();
-			$_SESSION = [];
-			session_destroy();
-			header("Location: ../login.php");
-			exit(); 
-		}else {
-			echo "<script>alert('Cuenta no eliminada')</script>";
-		}
-	}
-	
-
+	require_once("../api/tutor/tut_verificar_sesion.php");
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+	<title>Mi perfil</title>
 </head>
 <body>
 	<header>
 		<nav>
 			<ul>
 				<li>
-					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+					<a href="./tut_dashboard.php">Inicio</a>
+				</li>
+				<li>
+					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
-	
+
 	<h1>Mi perfil</h1>
-	<form action="tut_perfil.php" method="post">
+
+	<form id="formactu" method="post">
 		<label for="nombre">Nombre:</label>
-		<input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($nombre) ?>" disabled required>
+		<input type="text" id="nombre" name="nombre" disabled required>
 		<label for="apellido">Apellido:</label>
-		<input type="text" id="apellido" name="apellido" value="<?= htmlspecialchars($apellido) ?>" disabled required>
+		<input type="text" id="apellido" name="apellido" disabled required>
 		<label for="correo">Correo</label>
-		<input type="email" id="correo" name="correo" value="<?= htmlspecialchars($correo) ?>" disabled required>
+		<input type="email" id="correo" name="correo" disabled required>
 		<label for="telefono">Teléfono</label>
-		<input type="tel" id="telefono" name="telefono" value="<?= htmlspecialchars($telefono) ?>" disabled required>
-		<button type="submit" name="btnE" id="btnE">Editar Datos</button>
-		<button type="submit" name="btnG" id="btnG" disabled >Guardar Cambios</button>
+		<input type="tel" id="telefono" name="telefono" disabled required>
+
+		<label for="carrera">Carrera</label>
+		<select id="carrera" name="carrera" disabled required>
+			<option value="">Seleccione una carrera</option>
+		</select>
+
+		<button type="button" name="btnE" id="btnE">Editar Datos</button>
+		<button type="submit" name="btnG" id="btnG" disabled>Guardar Cambios</button>
 	</form>
 
 	<h2>Cambiar contraseña</h2>
-	<form action="tut_perfil.php" method="post">
+	<form id="formcam" method="post">
 		<label for="contrasena_act">Contraseña Actual:</label>
-		<input type="password" name="contrasena_act" placeholder="Ingrese su contraseña actual" required>
+		<input type="password" id="contrasena_act" name="contrasena_act" placeholder="Ingrese su contraseña actual" required>
 		<label for="contrasena_new">Nueva Contraseña:</label>
-		<input type="password" name="contrasena_new" placeholder="Ingrese su nueva contraseña" required>
+		<input type="password" id="contrasena_new" name="contrasena_new" placeholder="Ingrese su nueva contraseña" required>
 		<button type="submit" name="btnC" id="btnC">Cambiar contraseña</button>
 	</form>
 
-	<form action="tut_perfil.php" method="post" 
-	onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta?');">
-	    <button type="submit" name="btnElim">
-	        Eliminar cuenta
-	    </button>
+	<form id="formeli" method="post">
+		<button type="submit" name="btnElim">Eliminar cuenta</button>
 	</form>
 
 	<script>
 		const Editar = document.getElementById("btnE");
 		const Guardar = document.getElementById("btnG");
-		const inputs = document.querySelectorAll("input"); 
+		const inputs = document.querySelectorAll("#formactu input");
+		const combo = document.getElementById("carrera");
 
-		Editar.addEventListener("click", function(){
+		function bloquearFormulario(bloquear) {
 			inputs.forEach(function(input) {
-	            input.disabled = false;
-	        });
-	        Guardar.disabled = false;
+				input.disabled = bloquear;
+			});
+			combo.disabled = bloquear;
+			Guardar.disabled = bloquear;
+			Editar.disabled = !bloquear;
+		}
 
-        	Editar.disabled = true;
+		Editar.addEventListener("click", function() {
+			bloquearFormulario(false);
+		});
+
+		document.getElementById("CerrarS").addEventListener("click", async function() {
+			try {
+				const respuesta = await fetch("../api/tutor/tut_cerrar_sesion.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json();
+
+				if (resultado.code === 200) {
+					window.location.href = "../prin_dashboard.php";
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al cerrar sesión");
+			}
+		});
+
+		async function cargarCarreras() {
+			try {
+				const respuesta = await fetch("../api/tutor/tut_ver_carreras.php");
+				const resultado = await respuesta.json();
+
+				if (resultado.code === 200) {
+					resultado.carreras.forEach(function(carrera) {
+						combo.appendChild(new Option(carrera.nombre, carrera.id_carrera));
+					});
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Error al cargar carreras");
+			}
+		}
+
+		async function cargarDatos() {
+			try {
+				const respuesta = await fetch("../api/tutor/tut_perfil_cargar.php");
+				const resultado = await respuesta.json();
+
+				if (resultado.code === 200) {
+					document.getElementById("nombre").value = resultado.usuario.nombre;
+					document.getElementById("apellido").value = resultado.usuario.apellido;
+					document.getElementById("correo").value = resultado.usuario.correo;
+					document.getElementById("telefono").value = resultado.usuario.telefono;
+					combo.value = resultado.usuario.idcarrera;
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Error al cargar datos");
+			}
+		}
+
+		async function iniciar() {
+			await cargarCarreras();
+			await cargarDatos();
+		}
+
+		iniciar();
+
+		document.getElementById("formactu").addEventListener("submit", async function(e) {
+			e.preventDefault();
+			const formulario = new FormData(this);
+			try {
+				const respuesta = await fetch("../api/tutor/tut_perfil_actualizar.php", {
+					method: "POST",
+					body: formulario
+				});
+
+				const resultado = await respuesta.json();
+				alert(resultado.message);
+
+				if (resultado.code === 200) {
+					cargarDatos();
+					bloquearFormulario(true);
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
+		});
+
+		document.getElementById("formcam").addEventListener("submit", async function(e) {
+			e.preventDefault();
+			const formulario = new FormData(this);
+			try {
+				const respuesta = await fetch("../api/tutor/tut_perfil_camcont.php", {
+					method: "POST",
+					body: formulario
+				});
+
+				const resultado = await respuesta.json();
+				alert(resultado.message);
+
+				if (resultado.code === 200) {
+					this.reset();
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
+		});
+
+		document.getElementById("formeli").addEventListener("submit", async function(e) {
+			e.preventDefault();
+
+			if (!confirm("¿Estás seguro de que deseas eliminar tu cuenta?")) {
+				return;
+			}
+
+			try {
+				const respuesta = await fetch("../api/tutor/tut_perfil_eliminar.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json();
+				alert(resultado.message);
+
+				if (resultado.code === 200) {
+					window.location.href = "../prin_dashboard.php";
+				}
+			} catch (error) {
+				console.log(error);
+				alert("Ocurrio un error al comunicarse con el servidor");
+			}
 		});
 	</script>
-	
+
 </body>
 </html>

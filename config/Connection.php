@@ -19,6 +19,10 @@ class Connection extends PDO
                 $usuario   = ESTUDIANTE_USER_DB;
                 $contrasena = ESTUDIANTE_PASSWORD_DB;
                 break;
+            case "tutor":
+                $usuario   = TUTOR_USER_DB;
+                $contrasena = TUTOR_PASSWORD_DB;
+                break;
             case "notuser":
                 $usuario   = NOTUSER_USER_DB;
                 $contrasena = NOTUSER_PASSWORD_DB;

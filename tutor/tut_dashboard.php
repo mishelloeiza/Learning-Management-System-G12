@@ -1,38 +1,50 @@
 <?php
-	//conexion
-	include("../conexion.php");
-
-	session_start();
-
-	
-	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2') {
-	    header("Location: ../login.php");
-	    exit();
-	}
+	require_once("../api/tutor/tut_verificar_sesion.php");
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+	<title>Tutor</title>
 </head>
 <body>
-		<header>
+	<header>
 		<nav>
 			<ul>
 				<li>
-					<a href="./tut_perfil.php">Mi perfil</a>	
+					<a href="./tut_perfil.php">Mi perfil</a>
 				</li>
 				<li>
-					<a href="../cerrar_sesion.php">Cerrar sesión</a>
+					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
 	<main>
 		<h1>Tutor</h1>
 	</main>
+
+	<script>
+		document.getElementById("CerrarS").addEventListener("click", async function() {
+			try {
+				const respuesta = await fetch("../api/tutor/tut_cerrar_sesion.php", {
+					method: "POST"
+				});
+
+				const resultado = await respuesta.json();
+
+				if (resultado.code === 200) {
+					window.location.href = "../prin_dashboard.php";
+				} else {
+					alert(resultado.message);
+				}
+			} catch (error) {
+				console.error(error);
+				alert("Ocurrio un error al cerrar sesión");
+			}
+		});
+	</script>
 </body>
 </html>
