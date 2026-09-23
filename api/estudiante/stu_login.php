@@ -1,7 +1,7 @@
 <?php
     //Usar archivos de response y conexion
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     //Solo aceptar solicitudes POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -24,7 +24,7 @@
 
     try {
         //Crear conexion cn
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         //Realizar la consulta a la base de datos
         $stmt = $cn->prepare("SELECT id_usuario, correo, contrasena, id_rol FROM usuarios_1 WHERE correo = ? && activo = true");

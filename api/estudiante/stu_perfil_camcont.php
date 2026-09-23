@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     if($_SERVER['REQUEST_METHOD'] !== 'POST'){
         Response::error("Metodo no permitido", -1000, 404);
@@ -24,7 +24,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         $stmt = $cn->prepare('SELECT contrasena FROM usuarios_1 WHERE id_usuario = ?');
         $stmt->execute([$id]);

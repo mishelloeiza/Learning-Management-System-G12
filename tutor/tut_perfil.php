@@ -5,13 +5,12 @@
 	//Verificar sesion
 	session_start();
 
-	//Si no hay sesion iniciada o si el rol no es 2
+	
 	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2') {
 	    header("Location: ../login.php");
 	    exit();
 	}
 
-	//obtener id del usuario
 	$id = $_SESSION['id'];
 
 	//hacer consulta
@@ -26,7 +25,7 @@
 		return $fila; 
 	}
 	
-	//Cambiar datos 
+	
 	if (isset($_POST['btnG'])) {
 		$nombre = trim($_POST['nombre']);
 		$apellido = trim($_POST['apellido']);

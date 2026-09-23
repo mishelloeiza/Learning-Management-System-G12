@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/../config_adm/Connection.php");
-    require_once(__DIR__ . "/../config_adm/Response.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "POST") {
         Response::error("Metodo no permitido", -1000, 405);
@@ -38,7 +38,7 @@
     $cifrada = password_hash($contrasena, PASSWORD_DEFAULT);
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         if(empty($contrasena)){
             $stmt = $cn->prepare("UPDATE usuarios SET nombre = ?, apellido = ?, correo = ?, telefono = ?, activo = ?, 

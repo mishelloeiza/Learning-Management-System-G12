@@ -1,7 +1,7 @@
 <?php
     //Usar archivos de response y conexion
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     if($_SERVER['REQUEST_METHOD'] !== 'POST'){
         Response::error("Metodo no autorizado", -1000, 405);
@@ -32,7 +32,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         $stmt = $cn->prepare("UPDATE usuarios_1 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $carrera, $id]);

@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/../config_adm/Connection.php");
-    require_once(__DIR__ . "/../config_adm/Response.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "POST") {
         Response::error("Metodo no autorizado", -1000, 405);
@@ -18,7 +18,7 @@
     }
 
     try {
-        $cn = new Connection(); 
+        $cn = new Connection("admin"); 
 
         $stmt = $cn->prepare("INSERT INTO carreras (nombre, descripcion) VALUES (?, ?)");
         $stmt->execute([$nombre, $descripcion]);

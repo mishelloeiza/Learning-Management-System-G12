@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/../config_adm/Connection.php");
-    require_once(__DIR__ . "/../config_adm/Response.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "GET"){
         Response::error("Metodo no permitido", -1000, 405);
@@ -11,7 +11,7 @@
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         $stmt = $cn->prepare("SELECT * FROM roles");
         $stmt->execute();

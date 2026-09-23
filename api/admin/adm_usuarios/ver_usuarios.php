@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/../config_adm/Connection.php");
-    require_once(__DIR__ . "/../config_adm/Response.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "GET") {
         Response::error("Metodo no permitido", -1000, 405);
@@ -15,7 +15,7 @@
     $id_rol = trim($_GET["id_rol"] ?? '');
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("admin");
 
         if($buscar == "" && $id_carrera == "" && $id_rol == "") {
             $stmt = $cn->prepare("SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.telefono, u.id_carrera, c.nombre AS carrera,

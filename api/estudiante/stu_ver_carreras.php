@@ -1,13 +1,13 @@
 <?php
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "GET"){
         Response::error("Metodo no permitido", -1000, 405);
     }
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         $stmt = $cn->prepare("SELECT * FROM carreras WHERE activo = true");
         $stmt->execute();

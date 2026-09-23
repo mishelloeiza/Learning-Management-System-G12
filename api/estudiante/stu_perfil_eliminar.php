@@ -1,6 +1,6 @@
 <?php
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     if($_SERVER["REQUEST_METHOD"] !== "POST"){
         Response::error("Metodo no permitido", -1000, 405);
@@ -13,7 +13,7 @@
     $id = $_SESSION['id'];
 
     try {
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
         $stmt = $cn->prepare("UPDATE usuarios_1 SET activo = false WHERE id_usuario = ?");
         $stmt->execute([$id]);
 

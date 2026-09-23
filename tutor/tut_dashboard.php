@@ -2,10 +2,9 @@
 	//conexion
 	include("../conexion.php");
 
-	//Verificar sesion
 	session_start();
 
-	//Si no hay sesion iniciada o si el rol no es 2
+	
 	if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2') {
 	    header("Location: ../login.php");
 	    exit();

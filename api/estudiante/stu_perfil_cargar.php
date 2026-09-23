@@ -1,7 +1,7 @@
 <?php
     //Usar archivos de response y conexion
-    require_once(__DIR__ . "/config_stu/Connection.php");
-    require_once(__DIR__ . "/config_stu/Response.php");
+    require_once(__DIR__ . "/../../config/Connection.php");
+    require_once(__DIR__ . "/../../config/Response.php");
 
     //Verificar que la conexion sea Get
     if($_SERVER['REQUEST_METHOD'] !== 'GET'){
@@ -17,7 +17,7 @@
 
     try {
         //Crear la conexion
-        $cn = new Connection();
+        $cn = new Connection("estudiante");
 
         //Hacer consulta a BDD
         $stmt = $cn->prepare("SELECT u.nombre, u.apellido, u.correo, u.telefono, u.contrasena, c.id_carrera AS idcarrera FROM usuarios_1 u INNER JOIN carreras c ON u.id_carrera = c.id_carrera WHERE u.id_usuario = ?");
