@@ -24,7 +24,7 @@
     }
 
     try {
-        $cn = new Connection("tutor");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT contrasena FROM usuarios_2 WHERE id_usuario = ?");
         $stmt->execute([$id]);

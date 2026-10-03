@@ -15,7 +15,7 @@
     $id_materia = trim($_GET["id_materia"] ?? '');
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT t.id_tutoria, t.titulo, t.descripcion, t.estado, t.fecha_inicio, t.fecha_fin,
             t.id_tutor, CONCAT(u.nombre, ' ', u.apellido) AS tutor, t.id_materia, m.nombre AS materia

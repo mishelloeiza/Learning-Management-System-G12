@@ -13,7 +13,7 @@
     $id = $_SESSION['id'];
 
     try {
-        $cn = new Connection("tutor");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT nombre, apellido, correo, telefono, id_carrera AS idcarrera FROM usuarios_2 WHERE id_usuario = ?");
         $stmt->execute([$id]);

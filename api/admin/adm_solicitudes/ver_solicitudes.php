@@ -19,7 +19,7 @@
     $FechaFin = ($FechaFin === '') ? null : $FechaFin;
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn -> prepare("SELECT s.id_solicitud, s.estado, s.fecha_solicitud, s.fecha_respuesta, s.id_horario, s.id_usuario, m.nombre AS materia
             FROM solicitudes AS s JOIN horarios AS h ON s.id_horario = h.id_horarios JOIN tutorias AS t ON h.id_tutoria = t.id_tutoria
