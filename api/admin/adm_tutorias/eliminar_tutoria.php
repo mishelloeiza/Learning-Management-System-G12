@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE tutorias SET estado = 'cancelada' WHERE id_tutoria = ?");
         $stmt->execute([$id_tutoria]);

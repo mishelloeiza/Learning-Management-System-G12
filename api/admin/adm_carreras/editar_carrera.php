@@ -20,7 +20,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE carreras SET nombre = ?, descripcion = ?, activo = ? WHERE id_carrera = ?");
         $stmt->execute([$nombre, $descripcion, $activo, $id_carrera]);

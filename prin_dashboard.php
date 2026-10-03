@@ -16,17 +16,12 @@
 			<ul>
 				<li>
 					<a href="./estudiante/stu_crear_cuenta.php">Crear Cuenta Estudiante</a>
-				<li>
-					<a href="./estudiante/stu_login.php">Iniciar Sesion Estudiante</a>
 				</li>
                 <li>
-					<a href="./tutor/tut_login.php">Iniciar Sesion Tutor</a>
-				</li>
-                <li>
-					<a href="./admin/adm_login.php">Iniciar Sesion Administrador</a>
+					<a href="./login.php">Iniciar Sesion</a>
 				</li>
 			</ul>
-		</nav>	
+		</nav>
 	</header>
 
 	<h1>dashboard principal</h1>

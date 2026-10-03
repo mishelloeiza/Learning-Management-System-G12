@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         // La tabla solicitudes no tiene columna "activo", el borrado
         // logico se hace pasando el estado a 'rechazada' y guardando

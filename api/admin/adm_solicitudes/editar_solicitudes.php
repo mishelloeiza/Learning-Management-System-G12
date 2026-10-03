@@ -25,7 +25,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE solicitudes SET estado = ?, fecha_respuesta = ?, id_horario = ?, id_usuario = ? WHERE id_solicitud = ?");
         $stmt->execute([$Estado, $FechaRespuesta, $IdHorario, $IdUsuario, $IdSolicitud]);

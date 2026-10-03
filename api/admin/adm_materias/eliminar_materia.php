@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE materias SET activo = false WHERE id_materia = ?");
         $stmt->execute([$id_materia]);

@@ -18,7 +18,7 @@
     }
 
     try {
-        $cn = new Connection("admin"); 
+        $cn = new Connection($_SESSION["rol"]); 
 
         $stmt = $cn->prepare("INSERT INTO carreras (nombre, descripcion) VALUES (?, ?)");
         $stmt->execute([$nombre, $descripcion]);

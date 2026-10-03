@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE carreras SET activo = false WHERE id_carrera = ?");
         $stmt->execute([$id_carrera]);

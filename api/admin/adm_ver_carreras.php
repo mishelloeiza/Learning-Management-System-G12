@@ -7,7 +7,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT * FROM carreras WHERE activo = true");
         $stmt->execute();
