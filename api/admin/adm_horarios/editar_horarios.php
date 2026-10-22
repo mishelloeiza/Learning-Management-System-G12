@@ -22,7 +22,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn -> prepare("UPDATE horarios SET hora_inicio = ?, hora_fin = ?, dias_curso = ?, estado = ?, id_tutoria = ? WHERE id_horarios = ?");
         $stmt -> execute([$HoraInicio, $HoraFin, $DiasCurso, $Estado, $IdTutoria, $IdHorarios]);

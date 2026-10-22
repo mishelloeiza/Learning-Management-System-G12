@@ -11,7 +11,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT * FROM roles");
         $stmt->execute();

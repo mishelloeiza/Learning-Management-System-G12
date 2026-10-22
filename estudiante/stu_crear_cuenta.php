@@ -60,7 +60,7 @@
 
 					<button type="submit" name="btn" class="btn-primary">Crear cuenta</button>
 
-					<p class="auth-switch">¿Ya tienes cuenta? <a href="./stu_login.php">Inicia sesión</a></p>
+					<p class="auth-switch">¿Ya tienes cuenta? <a href="../login.php">Inicia sesión</a></p>
 				</form>
 			</main>
 		</div>

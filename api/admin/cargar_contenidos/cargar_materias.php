@@ -11,7 +11,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT id_materia, nombre, activo FROM materias ORDER BY nombre");
         $stmt->execute();

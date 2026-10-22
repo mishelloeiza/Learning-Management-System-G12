@@ -16,9 +16,8 @@
 
     try {
         
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
-        
         $stmt = $cn->prepare("SELECT u.nombre, u.apellido, u.correo, u.telefono, u.contrasena, c.id_carrera AS idcarrera FROM usuarios_3 u INNER JOIN carreras c ON u.id_carrera = c.id_carrera WHERE u.id_usuario = ?");
        
         $stmt->execute([$id]);
@@ -29,7 +28,6 @@
             Response::error("Usuario no encontrado", -1002, 404);
         }
 
-       
         Response::success("Datos obtenidos", 200, ["usuario"=>$usuario]);
 
     } catch (PDOException $error) {

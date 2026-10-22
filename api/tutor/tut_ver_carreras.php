@@ -11,7 +11,7 @@
     }
 
     try {
-        $cn = new Connection("tutor");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT id_carrera, nombre FROM carreras WHERE activo = true");
         $stmt->execute();

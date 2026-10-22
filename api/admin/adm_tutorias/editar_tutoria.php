@@ -47,7 +47,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $tutor = $cn->prepare("SELECT 1 FROM usuarios WHERE id_usuario = ? AND id_rol = 2");
         $tutor->execute([$id_tutor]);

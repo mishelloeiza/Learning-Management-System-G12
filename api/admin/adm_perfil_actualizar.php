@@ -32,7 +32,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("UPDATE usuarios_3 SET nombre = ?, apellido = ?, correo = ?, telefono = ?, id_carrera = ? WHERE id_usuario = ?");
         $stmt->execute([$nombre, $apellido, $correo, $telefono, $carrera, $id]);

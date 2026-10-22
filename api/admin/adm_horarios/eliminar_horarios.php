@@ -17,7 +17,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn -> prepare("UPDATE horarios SET estado = 'cancelado' WHERE id_horarios = ?");
         $stmt -> execute([$IdHorarios]);

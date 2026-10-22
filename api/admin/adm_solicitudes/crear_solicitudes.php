@@ -20,7 +20,7 @@
     $Estado = "pendiente";
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("INSERT INTO solicitudes (estado, id_horario, id_usuario) VALUES (?, ?, ?)");
         $stmt->execute([$Estado, $IdHorario, $IdUsuario]);

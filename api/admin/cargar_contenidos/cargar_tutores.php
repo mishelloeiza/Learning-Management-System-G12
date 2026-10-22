@@ -11,7 +11,7 @@
     }
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT id_usuario, nombre, apellido, activo FROM usuarios WHERE id_rol = 2 ORDER BY nombre, apellido");
         $stmt->execute();

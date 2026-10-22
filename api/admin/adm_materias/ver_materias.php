@@ -14,7 +14,7 @@
     $id_carrera = trim($_GET["id_carrera"] ?? '');
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn->prepare("SELECT m.id_materia, m.nombre, m.descripcion, m.activo, m.id_carrera, c.nombre AS carrera
             FROM materias m INNER JOIN carreras c ON m.id_carrera = c.id_carrera

@@ -22,7 +22,7 @@
     $Estado = "disponible";
 
     try {
-        $cn = new Connection("admin");
+        $cn = new Connection($_SESSION["rol"]);
 
         $stmt = $cn -> prepare("INSERT INTO horarios (hora_inicio, hora_fin, dias_curso, estado, id_tutoria) VALUES (?, ?, ?, ?, ?)");
         $stmt -> execute([$HoraInicio, $HoraFin, $DiasCurso, $Estado, $IdTutoria]);

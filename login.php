@@ -13,8 +13,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="auth.css">
+	<!--<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">-->
+	<!--<link rel="stylesheet" href="auth.css">-->
 </head>
 
 <body>
@@ -22,7 +22,7 @@
 		<div class="auth-card">
 			<div class="auth-card-bar"></div>
 			<main class="auth-form">
-				<h2>Iniciar sesión Estudiantes</h2>
+				<h2>Iniciar sesión</h2>
 				<p class="subtitle">Ingresá con tu correo institucional.</p>
 
 				<form id="form" method="post">
@@ -38,7 +38,6 @@
 
 					<button type="submit" name="btn" class="btn-primary">Ingresar</button>
 
-					<p class="auth-switch"><a href="./stu_crear_cuenta.php" title="Crear cuenta">Crear cuenta</a></p>
 				</form>
 			</main>
 		</div>
@@ -52,7 +51,7 @@
 			const formulario = new FormData(this);
 			try {
 				//Enviar datos a la API
-				const respuesta = await fetch("../api/estudiante/stu_login.php", {
+				const respuesta = await fetch("./api/notuser/not_login.php", {
 					method: "POST",
 					body: formulario
 				});
@@ -63,7 +62,13 @@
 					alert(resultado.message);
 					//Limpiar formulario
 					this.reset();
-        			window.location.href = "./stu_dashboard.php";
+					if(resultado.rol === '3'){
+						window.location.href = "./admin/adm_dashboard.php";
+					}else if(resultado.rol === '2'){
+						window.location.href = "./tutor/tut_dashboard.php";
+					}else if(resultado.rol === '1'){
+						window.location.href = "./estudiante/stu_dashboard.php";
+					}
 				} else {
 					alert(resultado.message);
 				}
