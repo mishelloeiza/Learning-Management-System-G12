@@ -49,6 +49,7 @@ create table if not exists tutorias (
     estado varchar(15) not null check (estado in ('activa','finalizada','cancelada','en curso')),
     fecha_inicio date not null,
     fecha_fin date not null,
+    cupos int not null default 1 check (cupos between 1 and 5),
     id_tutor int not null,
     id_materia int not null,
     creado_en timestamp default current_timestamp not null,
@@ -90,6 +91,8 @@ create or replace view usuarios_2 as select * from usuarios where id_rol = 2;
 create or replace view usuarios_3 as select * from usuarios where id_rol = 3;
 create or replace view usuarios_login as
 select id_usuario, correo, contrasena, id_rol, activo from usuarios;
+create or replace view estudiantes_info as
+select id_usuario, nombre, apellido, correo from usuarios where id_rol = 1;
 
 insert ignore into roles (id_rol, nombre, descripcion) values (1, 'Estudiante',    'Usuario de estudiantes'),
 (2, 'Tutor', 'Usuario de tutores'), (3, 'Administrador', 'Usuario de Administradores');

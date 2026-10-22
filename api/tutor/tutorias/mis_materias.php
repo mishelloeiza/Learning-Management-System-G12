@@ -1,7 +1,16 @@
 <?php
-    require_once(__DIR__ . "/../../../config/TutorHelper.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
-    $idTutor = TutorHelper::iniciar("GET");
+    if($_SERVER["REQUEST_METHOD"] !== "GET") {
+        Response::error("Metodo no permitido", -1000, 405);
+    }
+
+    if(!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2' || !isset($_SESSION['id'])) {
+        Response::error("No autorizado", -1001, 403);
+    }
+
+    $idTutor = $_SESSION['id'];
 
     try {
         $cn = new Connection($_SESSION["rol"]);

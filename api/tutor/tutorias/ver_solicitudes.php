@@ -1,18 +1,33 @@
 <?php
-    require_once(__DIR__ . "/../../../config/TutorHelper.php");
+    require_once(__DIR__ . "/../../../config/Connection.php");
+    require_once(__DIR__ . "/../../../config/Response.php");
 
-    $idTutor = TutorHelper::iniciar("GET");
+    if($_SERVER["REQUEST_METHOD"] !== "GET") {
+        Response::error("Metodo no permitido", -1000, 405);
+    }
 
+    if(!isset($_SESSION['rol']) || $_SESSION['rol'] !== '2' || !isset($_SESSION['id'])) {
+        Response::error("No autorizado", -1001, 403);
+    }
+
+    $idTutor = $_SESSION['id'];
     $estado = trim($_GET["estado"] ?? '');
     $idMateria = trim($_GET["id_materia"] ?? '');
     $idTutoria = trim($_GET["id_tutoria"] ?? '');
-    $desde = TutorHelper::leerFecha("fecha_inicio");
-    $hasta = TutorHelper::leerFecha("fecha_fin");
+    $desde = trim($_GET["fecha_inicio"] ?? '');
+    $hasta = trim($_GET["fecha_fin"] ?? '');
 
-    if ($estado !== '' && !in_array($estado, ['pendiente', 'aprobada', 'rechazada'], true)) {
+    foreach([$desde, $hasta] as $fecha) {
+        if($fecha !== '' && (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha) || !checkdate((int) substr($fecha, 5, 2), (int) substr($fecha, 8, 2), (int) substr($fecha, 0, 4)))) {
+            Response::error("Fecha invalida en el filtro", -1120, 400);
+        }
+    }
+
+    if($estado !== '' && !in_array($estado, ['pendiente', 'aprobada', 'rechazada'], true)) {
         Response::error("Estado invalido", -1190, 400);
     }
-    if (($idMateria !== '' && !ctype_digit($idMateria)) || ($idTutoria !== '' && !ctype_digit($idTutoria))) {
+
+    if(($idMateria !== '' && !ctype_digit($idMateria)) || ($idTutoria !== '' && !ctype_digit($idTutoria))) {
         Response::error("Filtro invalido", -1191, 400);
     }
 
