@@ -8,6 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Solicitudes</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../CSS/auth.css">
+	<link rel="stylesheet" href="../CSS/panel.css">
 </head>
 <body>
     <header>
