@@ -1,0 +1,15 @@
+/* Utilidades: atributo hidden, texto atenuado y estado vacío */
+
+/* asegura el comportamiento nativo del atributo hidden de HTML5, evitando que otros estilos CSS lo dejen sin efecto de manera accidental.*/
+[hidden] { display: none !important; }
+
+.muted {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.empty {
+  color: var(--ink-soft);
+  text-align: center;
+  padding: var(--space-3) 0;
+}

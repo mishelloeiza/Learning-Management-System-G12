@@ -1,0 +1,16 @@
+/* Títulos y texto pequeño */
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0 0 var(--space-1);
+}
+
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.05rem; }
+
+small {
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-weight: 400;
+}

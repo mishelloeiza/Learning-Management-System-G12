@@ -1,0 +1,75 @@
+/* Botones: base, primarios, peligro y botones en tablas */
+
+/* ---------- Botones ---------- */
+button {
+  background: var(--field-bg);
+  color: var(--ink);
+  border: 1px solid var(--card-edge);
+  border-radius: var(--radius);
+  padding: 9px var(--space-2);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-right: var(--space-1);
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+button:hover { background: var(--card-edge); }
+button:active { transform: scale(0.99); }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+form > button { margin-top: var(--space-2); }
+
+button[type="submit"],
+button.primary,
+.btnAprobar,
+#btnNueva,
+#btnBuscar,
+#btnFiltrar,
+#btnFiltrarSol,
+#btnFiltrarEnCurso,
+#AbrirTutorias,
+#AbrirSolicitudes {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-on);
+}
+
+button[type="submit"]:hover,
+button.primary:hover,
+.btnAprobar:hover,
+#btnNueva:hover,
+#btnBuscar:hover,
+#btnFiltrar:hover,
+#btnFiltrarSol:hover,
+#btnFiltrarEnCurso:hover,
+#AbrirTutorias:hover,
+#AbrirSolicitudes:hover {
+  background: #661F2A;
+  border-color: #661F2A;
+}
+
+.btnEliminar,
+.btnRechazar,
+.quitarHorario,
+#formeli button {
+  background: var(--error-bg);
+  border-color: var(--error-bg);
+  color: var(--error);
+}
+
+.btnEliminar:hover,
+.btnRechazar:hover,
+.quitarHorario:hover,
+#formeli button:hover {
+  background: #F0D5CB;
+  border-color: #F0D5CB;
+}
+
+td button {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}

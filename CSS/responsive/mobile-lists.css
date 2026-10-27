@@ -1,0 +1,24 @@
+/* Tablet y móvil: listas de tutorías y solicitudes */
+
+@media (max-width: 768px) {
+
+    /* Listas */
+    .scroll-list {
+        max-height: 55vh;
+        min-width: 0;
+    }
+
+    .tutoria-item,
+    .solicitud-item {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .tutoria-item h3 {
+        overflow-wrap: anywhere;
+    }
+
+    .solicitud-item button {
+        max-width: 100%;
+    }
+}

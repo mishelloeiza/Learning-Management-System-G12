@@ -1,0 +1,14 @@
+/* Accesibilidad: reducir movimiento */
+
+/* ==========================
+   ACCESIBILIDAD
+========================== */
+
+@media (prefers-reduced-motion: reduce) {
+    button,
+    input,
+    select,
+    textarea {
+        transition: none;
+    }
+}

@@ -1,0 +1,81 @@
+/* Tarjetas de resumen del dashboard */
+
+/* ---------- Tarjetas de resumen del administrador ---------- */
+
+.resumen-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+
+.resumen-dashboard .tarjeta-resumen {
+    background: var(--card);
+    border-top: 4px solid var(--accent);
+    border-radius: var(--radius-card);
+    box-shadow: 0 0 0 1px var(--card-edge);
+    padding: var(--space-3);
+    margin: 0;
+    min-width: 0;
+}
+
+.tarjeta-resumen h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin: 0 0 var(--space-2);
+}
+
+.tarjeta-resumen .resumen-cantidad {
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 var(--space-1);
+}
+
+.tarjeta-resumen small {
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+}
+
+/* ---------- Botones de tarjetas del estudiante ---------- */
+
+.tarjeta-resumen button {
+    margin: var(--space-2) 0 0;
+}
+
+.tarjeta-resumen button:first-of-type {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-on);
+}
+
+.tarjeta-resumen button:first-of-type:hover {
+    background: #661F2A;
+    border-color: #661F2A;
+}
+
+.tarjeta-resumen .resumen-cantidad {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Adaptación a tabletas ---------- */
+
+@media (max-width: 900px) {
+    .resumen-dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ---------- Adaptación a teléfonos ---------- */
+
+@media (max-width: 600px) {
+    .resumen-dashboard {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,73 @@
+/* Acciones, filtros y listas del dashboard (tutorías, solicitudes, slots) */
+
+/* ---------- Dashboard estudiante ---------- */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.actions button { margin: 0; }
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.filters > label { margin: 0; }
+
+.filters label input,
+.filters label select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: flex-end;
+}
+
+.filter-actions button { margin: 0; }
+
+.scroll-list {
+  max-height: 50vh;
+  overflow-y: auto;
+  display: grid;
+  gap: var(--space-1);
+}
+
+.tutoria-item button {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: var(--space-2);
+  text-align: left;
+  font-weight: 400;
+  background: var(--card);
+  border: 1px solid var(--card-edge);
+}
+
+.tutoria-item button:hover { background: var(--field-bg); }
+.tutoria-item h3 { margin: 0 0 4px; }
+
+.solicitud-item {
+  border: 1px solid var(--card-edge);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+}
+
+.solicitud-item button { margin: var(--space-1) 0 0; }
+
+.slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--card-edge);
+}
+
+.slot button { margin: 0; }

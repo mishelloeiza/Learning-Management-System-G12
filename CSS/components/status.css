@@ -1,0 +1,32 @@
+/* Avisos y etiquetas de estado */
+
+.notice {
+  background: var(--field-bg);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.85rem;
+  margin: var(--space-2) 0;
+}
+
+.status {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--field-bg);
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
+
+.status[data-state="aprobada"] {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+.status[data-state="rechazada"] {
+  background: var(--error-bg);
+  color: var(--error);
+}

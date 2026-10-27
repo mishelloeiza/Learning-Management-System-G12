@@ -1,0 +1,27 @@
+/* Tablas */
+
+/* ---------- Tablas ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--space-2);
+  font-size: 0.9rem;
+}
+
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--field-bg);
+  padding: 10px 12px;
+  white-space: nowrap;
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--card-edge);
+  vertical-align: top;
+}
+
+tbody tr:hover { background: var(--field-bg); }

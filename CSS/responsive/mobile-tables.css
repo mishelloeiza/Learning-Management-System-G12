@@ -1,0 +1,47 @@
+/* Tablet y móvil: tablas con scroll horizontal */
+
+@media (max-width: 768px) {
+
+    /* ==========================
+       TABLAS ADAPTABLES (CON SCROLL SUAVE)
+    ========================== */
+
+    section {
+        overflow-x: auto; /* Permite scroll horizontal nativo si la tabla es ancha */
+    }
+
+    table {
+        width: 100%;
+        min-width: 500px; /* Asegura un ancho mínimo para que los datos no se apretuen */
+        max-width: none;
+        table-layout: auto; /* Permite que las columnas se adapten al contenido */
+        border-collapse: collapse;
+        font-size: 0.8rem;
+        margin-top: var(--space-2);
+    }
+
+    th,
+    td {
+        padding: 8px 6px;
+        vertical-align: middle;
+        overflow-wrap: normal;
+        white-space: nowrap; /* Evita que el texto se rompa feo en varias líneas dentro de la celda */
+    }
+
+    th {
+        font-size: 0.75rem;
+    }
+
+    /* Botones de las tablas */
+    td button {
+        display: inline-block;
+        width: auto;
+        max-width: 100%;
+        padding: 4px 8px;
+        margin: 0 2px;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+}

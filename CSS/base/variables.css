@@ -1,0 +1,28 @@
+/* Variables de diseño: colores, tipografía, espaciado y radios */
+
+:root {
+  /* Color */
+  --paper: #F3EEE4;        /* fondo general */
+  --card: #FFFFFF;         /* superficie de la tarjeta */
+  --card-edge: #E4DCC8;    /* borde sutil de la tarjeta */
+  --ink: #3A2E24;          /* texto principal */
+  --ink-soft: #8A7A66;     /* texto secundario */
+  --field-bg: #F7F3EA;     /* fondo de inputs */
+  --accent: #7A2E3A;       /* vino - barra superior, focus, botón */
+  --accent-on: #F7E9EA;    /* texto sobre acento */
+  --error: #B3492B;
+  --error-bg: #F7E9E4;
+
+  /* Tipografía */
+  --font-display: "Lora", Georgia, serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+
+  /* Espaciado */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+
+  --radius: 6px;
+  --radius-card: 10px;
+}

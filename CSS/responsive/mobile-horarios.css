@@ -1,0 +1,30 @@
+/* Tablet y móvil: lista de horarios y slots */
+
+@media (max-width: 768px) {
+
+    /* Horarios */
+    #listaHorarios > div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    #listaHorarios span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    #listaHorarios button {
+        margin: 0;
+    }
+
+    .slot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-1);
+        min-width: 0;
+    }
+}

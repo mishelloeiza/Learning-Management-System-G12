@@ -1,0 +1,51 @@
+/* Tablet y móvil: ventanas modales */
+
+@media (max-width: 768px) {
+
+    /* ==========================
+       VENTANAS MODALES
+    ========================== */
+
+    dialog {
+        width: 94vw;
+        max-width: 94vw;
+        max-height: 85vh;
+        padding: var(--space-2);
+        margin: auto;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    dialog section {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+
+    dialog table {
+        width: 100%;
+        min-width: 450px;
+        max-width: none;
+        table-layout: auto;
+    }
+
+    .dialog-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .dialog-head h2 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .close {
+        flex-shrink: 0;
+    }
+}

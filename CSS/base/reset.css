@@ -1,0 +1,10 @@
+/* Reset mínimo y estilos globales del body */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+}
