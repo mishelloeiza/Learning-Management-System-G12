@@ -348,5 +348,6 @@
         cargarMaterias();
         verTutorias();
     </script>
+	<script src="../JS/tablas-responsive.js"></script>
 </body>
 </html>

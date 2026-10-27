@@ -117,12 +117,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tbody>
+            <tbody></tbody>
         </table>
     </section>
 
@@ -426,5 +421,6 @@
         Cargarcarreras();
         Cargarroles();
     </script>
+	<script src="../JS/tablas-responsive.js"></script>
 </body>
 </html>

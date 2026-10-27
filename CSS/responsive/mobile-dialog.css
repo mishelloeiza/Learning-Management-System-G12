@@ -23,14 +23,13 @@
         max-width: 100%;
         padding: 0;
         box-sizing: border-box;
-        overflow-x: auto;
+        overflow-x: visible;
     }
 
     dialog table {
         width: 100%;
-        min-width: 450px;
-        max-width: none;
-        table-layout: auto;
+        min-width: 0;
+        max-width: 100%;
     }
 
     .dialog-head {

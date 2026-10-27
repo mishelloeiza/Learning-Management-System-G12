@@ -563,5 +563,6 @@
 		verTutorias();
 		cargarEstadisticas();
 	</script>
+	<script src="../JS/tablas-responsive.js"></script>
 </body>
 </html>

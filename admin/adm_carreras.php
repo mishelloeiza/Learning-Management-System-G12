@@ -82,12 +82,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tbody>
+            <tbody></tbody>
         </table>
     </section>
 
@@ -293,5 +288,6 @@
         //Cargar funcion de ver carreras
         verCarreras();
     </script>
+	<script src="../JS/tablas-responsive.js"></script>
 </body>
 </html>

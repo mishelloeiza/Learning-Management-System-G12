@@ -15,13 +15,16 @@ th {
   color: var(--ink-soft);
   background: var(--field-bg);
   padding: 10px 12px;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--card-edge);
   vertical-align: top;
+  overflow-wrap: break-word;
 }
 
 tbody tr:hover { background: var(--field-bg); }
+
+td button { white-space: nowrap; }
