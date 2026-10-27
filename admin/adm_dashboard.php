@@ -54,48 +54,89 @@
 		<h1>Administrador</h1>
 		<p>Resumen general del sistema de tutorías.</p>
 
-		<section class="resumen-dashboard">
+		<section class="resumen-dashboard" aria-live="polite">
 
 			<article class="tarjeta-resumen">
 				<h3>Usuarios</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Usuarios registrados</small>
+				<p class="resumen-cantidad" data-stat="usuarios">–</p>
+				<small data-desc="usuarios">Usuarios registrados</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Estudiantes</h3>
+				<p class="resumen-cantidad" data-stat="estudiantes">–</p>
+				<small data-desc="estudiantes">Cuentas de estudiantes</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Tutores</h3>
+				<p class="resumen-cantidad" data-stat="tutores">–</p>
+				<small data-desc="tutores">Cuentas de tutores</small>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Carreras</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Carreras registradas</small>
+				<p class="resumen-cantidad" data-stat="carreras">–</p>
+				<small data-desc="carreras">Carreras registradas</small>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Materias</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Materias registradas</small>
+				<p class="resumen-cantidad" data-stat="materias">–</p>
+				<small data-desc="materias">Materias registradas</small>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Tutorías</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Tutorías registradas</small>
+				<p class="resumen-cantidad" data-stat="tutorias">–</p>
+				<small data-desc="tutorias">Tutorías registradas</small>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Horarios</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Horarios registrados</small>
+				<p class="resumen-cantidad" data-stat="horarios">–</p>
+				<small data-desc="horarios">Horarios registrados</small>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Solicitudes</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Solicitudes recibidas</small>
+				<p class="resumen-cantidad" data-stat="solicitudes">–</p>
+				<small data-desc="solicitudes">Solicitudes recibidas</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes pendientes</h3>
+				<p class="resumen-cantidad" data-stat="solicitudes_pendientes">–</p>
+				<small data-desc="solicitudes_pendientes">Esperando respuesta del tutor</small>
 			</article>
 
 		</section>
 	</main>
 
 	<script>
+
+		//Estadisticas de las tarjetas
+		async function cargarEstadisticas() {
+			try {
+				const respuesta = await fetch("../api/admin/adm_estadisticas.php");
+				const resultado = await respuesta.json();
+
+				if (resultado.code !== 200) {
+					console.error(resultado.message);
+					return;
+				}
+
+				const e = resultado.estadisticas;
+				document.querySelectorAll("[data-stat]").forEach(function(el) {
+					el.textContent = e[el.dataset.stat] ?? "–";
+				});
+				document.querySelector('[data-desc="tutorias"]').textContent = e.tutorias_vigentes + " vigentes (activas o en curso)";
+			} catch (error) {
+				console.error(error);
+			}
+		}
+
+		cargarEstadisticas();
 
 		//Cerrar sesion
 		document.getElementById("CerrarS").addEventListener("click", async function() {

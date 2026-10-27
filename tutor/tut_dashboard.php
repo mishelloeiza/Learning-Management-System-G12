@@ -12,6 +12,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
+	<link rel="stylesheet" href="../CSS/tarjetas.css">
 	<link rel="stylesheet" href="../CSS/navbar.css">
 </head>
 <body>
@@ -29,6 +30,48 @@
 	</header>
 	<main>
 		<h1>Tutor</h1>
+
+		<section class="resumen-dashboard" aria-live="polite">
+
+			<article class="tarjeta-resumen">
+				<h3>Mis tutorías</h3>
+				<p class="resumen-cantidad" data-stat="total">–</p>
+				<small data-desc="total">Tutorías creadas por ti</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Activas</h3>
+				<p class="resumen-cantidad" data-stat="activas">–</p>
+				<small data-desc="activas">Publicadas, aún sin iniciar</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>En curso</h3>
+				<p class="resumen-cantidad" data-stat="en_curso">–</p>
+				<small data-desc="en_curso">Tutorías en desarrollo</small>
+				<button type="button" class="abrirEnCurso">Ver en curso</button>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Finalizadas</h3>
+				<p class="resumen-cantidad" data-stat="finalizadas">–</p>
+				<small data-desc="finalizadas">Tutorías ya concluidas</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes pendientes</h3>
+				<p class="resumen-cantidad" data-stat="solicitudes_pendientes">–</p>
+				<small data-desc="solicitudes_pendientes">Esperando tu respuesta</small>
+				<button type="button" class="abrirSolicitudes">Ver solicitudes</button>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Estudiantes</h3>
+				<p class="resumen-cantidad" data-stat="estudiantes">–</p>
+				<small data-desc="estudiantes">Estudiantes con solicitud aprobada</small>
+			</article>
+
+		</section>
 
 		<section>
 			<h2>Mis tutorías</h2>
@@ -214,6 +257,24 @@
 			}
 		});
 
+		async function cargarEstadisticas() {
+			const r = await pedir("../api/tutor/tut_estadisticas.php");
+			if (r.code !== 200) {
+				console.error(r.message);
+				return;
+			}
+			document.querySelectorAll("[data-stat]").forEach(function(el) {
+				el.textContent = r.estadisticas[el.dataset.stat] ?? "–";
+			});
+		}
+
+		document.querySelectorAll(".abrirEnCurso").forEach(function(btn) {
+			btn.addEventListener("click", function() { document.getElementById("btnEnCurso").click(); });
+		});
+		document.querySelectorAll(".abrirSolicitudes").forEach(function(btn) {
+			btn.addEventListener("click", function() { document.getElementById("btnSolicitudes").click(); });
+		});
+
 		async function cargarMaterias() {
 			const r = await pedir(API + "mis_materias.php");
 			if (r.code !== 200) {
@@ -295,6 +356,7 @@
 					alert(res.message);
 					if (res.code === 200) {
 						verTutorias();
+						cargarEstadisticas();
 					}
 				});
 			});
@@ -390,6 +452,7 @@
 			if (r.code === 200) {
 				document.getElementById("modalTutoria").close();
 				verTutorias();
+				cargarEstadisticas();
 			}
 		});
 
@@ -440,6 +503,7 @@
 					alert(res.message);
 					verSolicitudes();
 					verTutorias();
+					cargarEstadisticas();
 				}
 
 				fila.querySelector(".btnAprobar").addEventListener("click", function() { responder("aprobar"); });
@@ -497,6 +561,7 @@
 
 		cargarMaterias();
 		verTutorias();
+		cargarEstadisticas();
 	</script>
 </body>
 </html>

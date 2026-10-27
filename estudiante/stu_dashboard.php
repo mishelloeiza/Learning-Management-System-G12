@@ -32,33 +32,45 @@
 		<h1>Estudiante</h1>
 		<p>Encuentra una tutoría o revisa el estado de tus solicitudes.</p>
 
-		<section class="resumen-dashboard">
+		<section class="resumen-dashboard" aria-live="polite">
 
 			<article class="tarjeta-resumen">
 				<h3>Tutorías disponibles</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Tutorías que puedes consultar</small>
-				<button type="button" id="AbrirTutorias">
-					Consultar tutorías
-				</button>
+				<p class="resumen-cantidad" data-stat="disponibles">–</p>
+				<small data-desc="disponibles">Tutorías que puedes consultar</small>
+				<button type="button" class="abrirTutorias">Consultar tutorías</button>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Solicitudes pendientes</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Solicitudes esperando respuesta</small>
-				<button type="button" id="AbrirSolicitudes">
-					Ver solicitudes
-				</button>
+				<p class="resumen-cantidad" data-stat="pendientes">–</p>
+				<small data-desc="pendientes">Solicitudes esperando respuesta</small>
+				<button type="button" class="abrirSolicitudes">Ver solicitudes</button>
 			</article>
 
 			<article class="tarjeta-resumen">
 				<h3>Solicitudes aprobadas</h3>
-				<p class="resumen-cantidad">0</p>
-				<small>Solicitudes aceptadas por el tutor</small>
-				<button type="button" id="AbrirSolicitudes">
-					Ver solicitudes
-				</button>
+				<p class="resumen-cantidad" data-stat="aprobadas">–</p>
+				<small data-desc="aprobadas">Solicitudes aceptadas por el tutor</small>
+				<button type="button" class="abrirSolicitudes">Ver solicitudes</button>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes rechazadas</h3>
+				<p class="resumen-cantidad" data-stat="rechazadas">–</p>
+				<small data-desc="rechazadas">Solicitudes que el tutor rechazó</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Total de solicitudes</h3>
+				<p class="resumen-cantidad" data-stat="total">–</p>
+				<small data-desc="total">Solicitudes que has enviado</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Mis tutorías vigentes</h3>
+				<p class="resumen-cantidad" data-stat="tutorias_vigentes">–</p>
+				<small data-desc="tutorias_vigentes">Tutorías aprobadas que siguen activas</small>
 			</article>
 
 		</section>
@@ -124,6 +136,17 @@
 			const resultado = await respuesta.json();
 			if (!respuesta.ok || resultado.code !== 200) throw new Error(resultado.message || "No se pudo completar la operación");
 			return resultado;
+		}
+
+		async function cargarEstadisticas() {
+			try {
+				const resultado = await consultar("../api/estudiante/stu_estadisticas.php");
+				document.querySelectorAll("[data-stat]").forEach(el => {
+					el.textContent = resultado.estadisticas[el.dataset.stat] ?? "–";
+				});
+			} catch (error) {
+				console.error(error);
+			}
 		}
 
 		function filtrosDe(id) {
@@ -224,6 +247,7 @@
 			datos.append("id_horario", idHorario);
 			try {
 				await consultar(apiTutorias + "crear_solicitud.php", {method: "POST", body: datos});
+				cargarEstadisticas();
 				await verDetalle(tutoriaActual.id_tutoria);
 			} catch (error) {
 				alert(error.message);
@@ -237,6 +261,7 @@
 			datos.append("id_solicitud", idSolicitud);
 			try {
 				await consultar(apiTutorias + "eliminar_solicitud.php", {method: "POST", body: datos});
+				cargarEstadisticas();
 				if (actualizarDetalle && tutoriaActual) await verDetalle(tutoriaActual.id_tutoria);
 				if (!actualizarDetalle) reiniciarSolicitudes();
 			} catch (error) {
@@ -278,15 +303,15 @@
 			}
 		}
 
-		document.getElementById("AbrirTutorias").addEventListener("click", () => {
+		document.querySelectorAll(".abrirTutorias").forEach(boton => boton.addEventListener("click", () => {
 			abrirListaTutorias();
 			document.getElementById("ModalTutorias").showModal();
 			reiniciarTutorias();
-		});
-		document.getElementById("AbrirSolicitudes").addEventListener("click", () => {
+		}));
+		document.querySelectorAll(".abrirSolicitudes").forEach(boton => boton.addEventListener("click", () => {
 			document.getElementById("ModalSolicitudes").showModal();
 			reiniciarSolicitudes();
-		});
+		}));
 		document.querySelectorAll("[data-close]").forEach(boton => boton.addEventListener("click", () => document.getElementById(boton.dataset.close).close()));
 		document.getElementById("FiltrarTutorias").addEventListener("click", reiniciarTutorias);
 		document.getElementById("FiltrarSolicitudes").addEventListener("click", reiniciarSolicitudes);
@@ -314,6 +339,7 @@
 			if (boton) eliminarSolicitud(boton.dataset.eliminar, false);
 		});
 		cargarFiltros();
+		cargarEstadisticas();
 
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
