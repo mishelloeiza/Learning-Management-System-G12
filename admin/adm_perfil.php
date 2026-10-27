@@ -12,11 +12,36 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
+	<link rel="stylesheet" href="../CSS/navbar.css">
 </head>
 <body>
 	<header>
 		<nav>
 			<ul>
+				<li>
+					<a href="./adm_perfil.php">Mi perfil</a>
+				</li>
+				<li>
+                    <a href="./adm_dashboard.php">Inicio</a>
+                </li>
+				<li>
+					<a href="./adm_carreras.php">Administrar Carreras</a>
+				</li>
+				<li>
+					<a href="./adm_materias.php">Administrar Materias</a>
+				</li>
+				<li>
+					<a href="./adm_tutorias.php">Administrar Tutorias</a>
+				</li>
+				<li>
+					<a href="./adm_usuarios.php">Administrar Usuarios</a>
+				</li>
+				<li>
+					<a href="./adm_horarios.php">Administrar Horarios</a>
+				</li>
+				<li>
+					<a href="./adm_solicitudes.php">Administrar Solicitudes</a>
+				</li>
 				<li>
 					<button id="CerrarS">Cerrar Sesión</button>
 				</li>
@@ -87,7 +112,7 @@
 				const resultado = await respuesta.json();
 
 				if (resultado.code = 200){
-					window.location.href = "../prin_dashboard.php";
+					window.location.href = "../index.php";
 				} else {
 					alert(resultado.message);
 				}

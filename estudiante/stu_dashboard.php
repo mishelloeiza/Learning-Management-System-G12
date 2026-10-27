@@ -12,6 +12,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
+	<link rel="stylesheet" href="../CSS/navbar.css">
 </head>
 <body>
 	<header>
@@ -26,13 +27,41 @@
 			</ul>
 		</nav>
 	</header>
+
 	<main>
 		<h1>Estudiante</h1>
 		<p>Encuentra una tutoría o revisa el estado de tus solicitudes.</p>
-		<div class="actions">
-			<button type="button" id="AbrirTutorias">Consultar tutorías</button>
-			<button type="button" id="AbrirSolicitudes">Mis solicitudes</button>
-		</div>
+
+		<section class="resumen-dashboard">
+
+			<article class="tarjeta-resumen">
+				<h3>Tutorías disponibles</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Tutorías que puedes consultar</small>
+				<button type="button" id="AbrirTutorias">
+					Consultar tutorías
+				</button>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes pendientes</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Solicitudes esperando respuesta</small>
+				<button type="button" id="AbrirSolicitudes">
+					Ver solicitudes
+				</button>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes aprobadas</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Solicitudes aceptadas por el tutor</small>
+				<button type="button" id="AbrirSolicitudes">
+					Ver solicitudes
+				</button>
+			</article>
+
+		</section>
 	</main>
 
 	<dialog id="ModalTutorias">
@@ -295,7 +324,7 @@
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200){
-					window.location.href = "../prin_dashboard.php";
+					window.location.href = "../index.php";
 				} else {
 					alert(resultado.message);
 				}

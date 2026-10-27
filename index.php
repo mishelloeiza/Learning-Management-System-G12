@@ -9,6 +9,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="CSS/auth.css">
 	<link rel="stylesheet" href="CSS/panel.css">
+	<link rel="stylesheet" href="CSS/navbar.css">
 </head>
 
 <body>
