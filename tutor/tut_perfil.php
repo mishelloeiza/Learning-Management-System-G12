@@ -89,7 +89,7 @@
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
-					window.location.href = "../prin_dashboard.php";
+					window.location.href = "../index.php";
 				} else {
 					alert(resultado.message);
 				}
@@ -203,7 +203,7 @@
 				alert(resultado.message);
 
 				if (resultado.code === 200) {
-					window.location.href = "../prin_dashboard.php";
+					window.location.href = "../index.php";
 				}
 			} catch (error) {
 				console.log(error);

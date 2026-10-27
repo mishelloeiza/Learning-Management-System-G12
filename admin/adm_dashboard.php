@@ -12,6 +12,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
+	<link rel="stylesheet" href="../CSS/tarjetas.css">
+	<link rel="stylesheet" href="../CSS/navbar.css">
 </head>
 <body>
 	<header>
@@ -20,6 +22,9 @@
 				<li>
 					<a href="./adm_perfil.php">Mi perfil</a>
 				</li>
+				<li>
+                    <a href="./adm_dashboard.php">Inicio</a>
+                </li>
 				<li>
 					<a href="./adm_carreras.php">Administrar Carreras</a>
 				</li>
@@ -44,8 +49,50 @@
 			</ul>
 		</nav>
 	</header>
+
 	<main>
 		<h1>Administrador</h1>
+		<p>Resumen general del sistema de tutorías.</p>
+
+		<section class="resumen-dashboard">
+
+			<article class="tarjeta-resumen">
+				<h3>Usuarios</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Usuarios registrados</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Carreras</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Carreras registradas</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Materias</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Materias registradas</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Tutorías</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Tutorías registradas</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Horarios</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Horarios registrados</small>
+			</article>
+
+			<article class="tarjeta-resumen">
+				<h3>Solicitudes</h3>
+				<p class="resumen-cantidad">0</p>
+				<small>Solicitudes recibidas</small>
+			</article>
+
+		</section>
 	</main>
 
 	<script>
@@ -59,8 +106,8 @@
 
 				const resultado = await respuesta.json(); 
 
-				if (resultado.code = 200){
-					window.location.href = "../prin_dashboard.php";
+				if (resultado.code === 200){
+					window.location.href = "../index.php";
 				} else {
 					alert(resultado.message);
 				}
