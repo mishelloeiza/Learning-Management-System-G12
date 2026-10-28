@@ -10,18 +10,18 @@
 	<link rel="stylesheet" href="CSS/auth.css">
 	<link rel="stylesheet" href="CSS/panel.css">
 	<link rel="stylesheet" href="CSS/navbar.css">
+	<script src="JS/navbar.js" defer></script>
 </head>
 
 <body>
-    <header>
-		<nav>
-			<ul>
-				<li>
-					<a href="./estudiante/stu_crear_cuenta.php">Crear Cuenta Estudiante</a>
-				</li>
-                <li>
-					<a href="./login.php">Iniciar Sesion</a>
-				</li>
+	<header class="site-header">
+		<nav class="navbar" aria-label="Navegación principal">
+			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
+				<span class="navbar__bars" aria-hidden="true"></span>
+			</button>
+			<ul class="navbar__menu" id="menuPrincipal">
+				<li><a href="./estudiante/stu_crear_cuenta.php">Crear Cuenta Estudiante</a></li>
+				<li><a class="navbar__cta" href="./login.php">Iniciar Sesion</a></li>
 			</ul>
 		</nav>
 	</header>

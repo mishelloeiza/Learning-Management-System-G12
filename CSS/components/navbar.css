@@ -1,129 +1,378 @@
-/* Barra de navegación */
+/* Barra de navegación
+   - Escritorio: enlaces en línea, acción (cerrar sesión) a la derecha.
+   - Cuando los enlaces no caben, JS/navbar.js agrega .is-collapsed y el menú pasa a ser
+     un panel desplegable con botón de hamburguesa (sirve igual en móvil, tablet o ventanas angostas). */
+
+:root {
+    --navbar-height: 64px;
+}
 
 /* ==========================
-   NAVBAR
+   CONTENEDOR
 ========================== */
 
-header {
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     background: var(--card);
-    border-top: 5px solid var(--accent);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid var(--accent);
+    border-bottom: 1px solid var(--card-edge);
 }
 
-header nav {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 24px;
-    box-sizing: border-box;
-}
-
-header nav ul {
+.navbar {
+    position: relative;
     display: flex;
     align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 1440px;
+    min-height: var(--navbar-height);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+
+/* ==========================
+   MENÚ (escritorio)
+========================== */
+
+.navbar .navbar__menu {
+    display: flex;
+    flex: 1;
+    align-items: center;
     flex-wrap: nowrap;
-    gap: 8px;
+    gap: 0;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-header nav li {
+.navbar .navbar__menu li {
     display: flex;
-    align-items: center;
     flex-shrink: 0;
     margin: 0;
 }
 
-/* Cerrar sesión siempre al extremo derecho */
-header nav li:last-child {
+/* El último elemento (cerrar sesión o acción principal) va al extremo derecho */
+.navbar .navbar__menu li:last-child {
     margin-left: auto;
 }
 
-/* Enlaces y botones */
-header nav a,
-header nav button {
+/* Enlaces: la barra inferior marca la página actual y el hover */
+.navbar .navbar__menu a {
+    position: relative;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 8px 10px;
+    height: var(--navbar-height);
+    padding: 0 9px;
 
     color: var(--ink);
     font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: color 0.15s ease;
+}
+
+.navbar .navbar__menu a::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.navbar .navbar__menu a:hover {
+    color: var(--accent);
+}
+
+.navbar .navbar__menu a:hover::after,
+.navbar .navbar__menu a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+.navbar .navbar__menu a[aria-current="page"] {
+    color: var(--accent);
+}
+
+.navbar .navbar__menu a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -4px;
+    border-radius: var(--radius);
+}
+
+/* Acción: cerrar sesión (botón con borde) */
+.navbar .navbar__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 8px 16px;
+
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--card-edge);
+    border-radius: var(--radius);
+
+    font-family: var(--font-body);
     font-size: 0.88rem;
     font-weight: 600;
-    line-height: 1.3;
-    text-decoration: none;
-
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    border-radius: 0;
-
     white-space: nowrap;
+    cursor: pointer;
+
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar .navbar__action:hover {
+    background: var(--field-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.navbar .navbar__action:active {
+    transform: none;
+}
+
+.navbar .navbar__action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Acción principal (por ejemplo "Iniciar sesión" en la portada) */
+.navbar .navbar__menu a.navbar__cta {
+    height: auto;
+    margin-left: 8px;
+    padding: 9px 18px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border-radius: var(--radius);
+}
+
+.navbar .navbar__menu a.navbar__cta::after {
+    display: none;
+}
+
+.navbar .navbar__menu a.navbar__cta:hover {
+    background: #661F2A;
+    color: var(--accent-on);
+}
+
+.navbar .navbar__menu a.navbar__cta:focus-visible {
+    outline-offset: 2px;
+}
+
+/* ==========================
+   BOTÓN HAMBURGUESA
+========================== */
+
+.navbar .navbar__toggle {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    margin: 0 -10px 0 auto;
+    padding: 0;
+
+    background: transparent;
+    border: none;
+    border-radius: var(--radius);
+    color: var(--ink);
     cursor: pointer;
 }
 
-/* Subrayado discreto, sin cuadros ni animaciones */
-header nav a:hover,
-header nav button:hover {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-    background: none;
+.navbar .navbar__toggle:hover {
+    background: var(--field-bg);
 }
 
-/* Accesibilidad */
-header nav a:focus-visible,
-header nav button:focus-visible {
+.navbar .navbar__toggle:active {
+    transform: none;
+}
+
+.navbar .navbar__toggle:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
+    outline-offset: 2px;
+}
+
+.navbar__bars,
+.navbar__bars::before,
+.navbar__bars::after {
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    margin-left: -10px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, top 0.2s ease, background 0.2s ease;
+}
+
+.navbar__bars {
+    top: 50%;
+    margin-top: -1px;
+}
+
+.navbar__bars::before,
+.navbar__bars::after {
+    content: "";
+    left: 0;
+    margin-left: 0;
+}
+
+.navbar__bars::before { top: -6px; }
+.navbar__bars::after  { top: 6px; }
+
+/* Hamburguesa -> X */
+.navbar.is-open .navbar__bars {
+    background: transparent;
+}
+
+.navbar.is-open .navbar__bars::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.navbar.is-open .navbar__bars::after {
+    top: 0;
+    transform: rotate(-45deg);
 }
 
 /* ==========================
-   TABLETS
+   MODO COLAPSADO (no caben los enlaces)
 ========================== */
 
-@media (max-width: 900px) {
-    header nav {
-        padding: 10px 14px;
-    }
+.navbar.is-collapsed {
+    gap: var(--space-2);
+    padding: 0 var(--space-2);
+}
 
-    header nav ul {
-        gap: 4px;
-    }
+.navbar.is-collapsed .navbar__toggle {
+    display: block;
+}
 
-    header nav a,
-    header nav button {
-        padding: 8px 7px;
-        font-size: 0.82rem;
-    }
+.navbar.is-collapsed .navbar__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 60;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    max-height: calc(100vh - var(--navbar-height) - 20px);
+    overflow-y: auto;
+    padding: var(--space-1) var(--space-2) var(--space-2);
+
+    background: var(--card);
+    border-bottom: 1px solid var(--card-edge);
+    box-shadow: 0 12px 24px rgba(58, 46, 36, 0.12);
+
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.navbar.is-collapsed.is-open .navbar__menu {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+}
+
+.navbar.is-collapsed .navbar__menu li {
+    display: block;
+}
+
+.navbar.is-collapsed .navbar__menu li:last-child {
+    margin-left: 0;
+    margin-top: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--card-edge);
+}
+
+/* Enlaces de 48 px de alto: cómodos para tocar con el dedo */
+.navbar.is-collapsed .navbar__menu a {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+}
+
+.navbar.is-collapsed .navbar__menu a:hover {
+    background: var(--field-bg);
+}
+
+/* La página actual se marca con una barra lateral y fondo suave */
+.navbar.is-collapsed .navbar__menu a::after {
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    right: auto;
+    width: 3px;
+    height: auto;
+    border-radius: 3px;
+    transform: scaleY(0);
+    transform-origin: center;
+}
+
+.navbar.is-collapsed .navbar__menu a:hover::after,
+.navbar.is-collapsed .navbar__menu a[aria-current="page"]::after {
+    transform: scaleY(1);
+}
+
+.navbar.is-collapsed .navbar__menu a[aria-current="page"] {
+    background: var(--field-bg);
+}
+
+.navbar.is-collapsed .navbar__menu a:focus-visible {
+    outline-offset: -2px;
+}
+
+.navbar.is-collapsed .navbar__action,
+.navbar.is-collapsed .navbar__menu a.navbar__cta {
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    padding: 0 var(--space-2);
+    font-size: 0.95rem;
+}
+
+.navbar.is-collapsed .navbar__menu a.navbar__cta {
+    justify-content: center;
+}
+
+.navbar.is-collapsed .navbar__menu li:last-child a.navbar__cta {
+    margin-top: 0;
+}
+
+/* En la portada (sin sesión) la acción principal no necesita separador */
+.navbar.is-collapsed .navbar__menu li:last-child:has(.navbar__cta) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
 }
 
 /* ==========================
-   MÓVILES
+   ACCESIBILIDAD: menos movimiento
 ========================== */
 
-@media (max-width: 600px) {
-    header nav ul {
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 4px 10px;
-    }
-
-    header nav li {
-        flex-shrink: 1;
-        max-width: 100%;
-    }
-
-    header nav li:last-child {
-        margin-left: 0;
-    }
-
-    header nav a,
-    header nav button {
-        padding: 8px 4px;
-        font-size: 0.84rem;
-        white-space: normal;
-        text-align: left;
+@media (prefers-reduced-motion: reduce) {
+    .navbar *,
+    .navbar *::before,
+    .navbar *::after {
+        transition: none !important;
     }
 }

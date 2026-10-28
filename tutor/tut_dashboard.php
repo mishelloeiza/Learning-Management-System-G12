@@ -14,17 +14,17 @@
 	<link rel="stylesheet" href="../CSS/panel.css">
 	<link rel="stylesheet" href="../CSS/tarjetas.css">
 	<link rel="stylesheet" href="../CSS/navbar.css">
+	<script src="../JS/navbar.js" defer></script>
 </head>
 <body>
-	<header>
-		<nav>
-			<ul>
-				<li>
-					<a href="./tut_perfil.php">Mi perfil</a>
-				</li>
-				<li>
-					<button id="CerrarS">Cerrar Sesión</button>
-				</li>
+	<header class="site-header">
+		<nav class="navbar" aria-label="Navegación principal">
+			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
+				<span class="navbar__bars" aria-hidden="true"></span>
+			</button>
+			<ul class="navbar__menu" id="menuPrincipal">
+				<li><a href="./tut_perfil.php">Mi perfil</a></li>
+				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
 	</header>
