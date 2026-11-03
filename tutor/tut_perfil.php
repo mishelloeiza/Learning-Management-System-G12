@@ -13,16 +13,31 @@
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
 	<link rel="stylesheet" href="../CSS/navbar.css">
-	<script src="../JS/navbar.js" defer></script>
+
+	<link rel="stylesheet" href="../CSS/password-visibility.css">
 </head>
 <body>
+<script>
+    // El token lo genera Csrf.php; el servidor lo comprueba en cada operación.
+    const apiCsrfToken = <?php require_once __DIR__ . '/../config/Csrf.php'; echo json_encode(Csrf::token()); ?>;
+    function apiFetch(url, options = {}) {
+        if (!['GET', 'HEAD', 'OPTIONS'].includes((options.method || 'GET').toUpperCase())) {
+            options = { ...options, headers: { ...(options.headers || {}), 'X-CSRF-Token': apiCsrfToken } };
+        }
+        return fetch(url, options);
+    }
+</script>
+
 	<header class="site-header">
 		<nav class="navbar" aria-label="Navegación principal">
-			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
-				<span class="navbar__bars" aria-hidden="true"></span>
-			</button>
+            <span class="navbar__brand" aria-label="LMS G12"><span class="navbar__brand-mark" aria-hidden="true">G12</span><span class="navbar__brand-name">Campus<span>Virtual</span></span></span>
+			<input class="navbar__check" id="navToggle" type="checkbox" aria-label="Mostrar menú de navegación">
+			<label class="navbar__toggle" for="navToggle" aria-label="Abrir o cerrar menú">
+			<span class="navbar__bars" aria-hidden="true"></span>
+			</label>
 			<ul class="navbar__menu" id="menuPrincipal">
-				<li><a href="./tut_dashboard.php">Inicio</a></li>
+				<li><a href="./tut_dashboard">Inicio</a></li>
+				<li><a href="./tut_reportes">Reportes</a></li>
 				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
@@ -52,9 +67,9 @@
 	<h2>Cambiar contraseña</h2>
 	<form id="formcam" method="post">
 		<label for="contrasena_act">Contraseña Actual:</label>
-		<input type="password" id="contrasena_act" name="contrasena_act" placeholder="Ingrese su contraseña actual" required>
+		<span class="password-visibility"><input type="password" id="contrasena_act" name="contrasena_act" placeholder="Ingrese su contraseña actual" required autocomplete="current-password"><button type="button" class="password-visibility__toggle" aria-label="Mostrar contraseña" aria-pressed="false" title="Mostrar u ocultar contraseña"><svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A11 11 0 0 1 12 6c6.4 0 10 6 10 6a16 16 0 0 1-3.2 3.7M6.3 6.4C3.5 8.2 2 12 2 12s3.6 6 10 6c1.8 0 3.4-.5 4.8-1.2M10 10a3 3 0 0 0 4 4"/></svg></button></span>
 		<label for="contrasena_new">Nueva Contraseña:</label>
-		<input type="password" id="contrasena_new" name="contrasena_new" placeholder="Ingrese su nueva contraseña" required>
+		<span class="password-visibility"><input type="password" id="contrasena_new" name="contrasena_new" placeholder="Ingrese su nueva contraseña" required autocomplete="new-password"><button type="button" class="password-visibility__toggle" aria-label="Mostrar contraseña" aria-pressed="false" title="Mostrar u ocultar contraseña"><svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A11 11 0 0 1 12 6c6.4 0 10 6 10 6a16 16 0 0 1-3.2 3.7M6.3 6.4C3.5 8.2 2 12 2 12s3.6 6 10 6c1.8 0 3.4-.5 4.8-1.2M10 10a3 3 0 0 0 4 4"/></svg></button></span>
 		<button type="submit" name="btnC" id="btnC">Cambiar contraseña</button>
 	</form>
 
@@ -83,14 +98,14 @@
 
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
-				const respuesta = await fetch("../api/tutor/tut_cerrar_sesion.php", {
+				const respuesta = await apiFetch("../api/tutor/tut_cerrar_sesion.php", {
 					method: "POST"
 				});
 
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				} else {
 					alert(resultado.message);
 				}
@@ -102,7 +117,7 @@
 
 		async function cargarCarreras() {
 			try {
-				const respuesta = await fetch("../api/tutor/tut_ver_carreras.php");
+				const respuesta = await apiFetch("../api/tutor/tut_ver_carreras.php");
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
@@ -120,7 +135,7 @@
 
 		async function cargarDatos() {
 			try {
-				const respuesta = await fetch("../api/tutor/tut_perfil_cargar.php");
+				const respuesta = await apiFetch("../api/tutor/tut_perfil_cargar.php");
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
@@ -149,9 +164,9 @@
 			e.preventDefault();
 			const formulario = new FormData(this);
 			try {
-				const respuesta = await fetch("../api/tutor/tut_perfil_actualizar.php", {
-					method: "POST",
-					body: formulario
+				const respuesta = await apiFetch("../api/tutor/tut_perfil_actualizar.php", {
+					method: "PUT",
+					body: new URLSearchParams(formulario)
 				});
 
 				const resultado = await respuesta.json();
@@ -171,9 +186,9 @@
 			e.preventDefault();
 			const formulario = new FormData(this);
 			try {
-				const respuesta = await fetch("../api/tutor/tut_perfil_camcont.php", {
-					method: "POST",
-					body: formulario
+				const respuesta = await apiFetch("../api/tutor/tut_perfil_camcont.php", {
+					method: "PUT",
+					body: new URLSearchParams(formulario)
 				});
 
 				const resultado = await respuesta.json();
@@ -196,15 +211,15 @@
 			}
 
 			try {
-				const respuesta = await fetch("../api/tutor/tut_perfil_eliminar.php", {
-					method: "POST"
+				const respuesta = await apiFetch("../api/tutor/tut_perfil_eliminar.php", {
+					method: "DELETE"
 				});
 
 				const resultado = await respuesta.json();
 				alert(resultado.message);
 
 				if (resultado.code === 200) {
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				}
 			} catch (error) {
 				console.log(error);
@@ -213,5 +228,19 @@
 		});
 	</script>
 
+
+<script>
+    // Cambia la visibilidad de la contraseña sin enviar ni modificar su valor.
+    document.querySelectorAll('.password-visibility__toggle').forEach(function(boton) {
+        boton.addEventListener('click', function() {
+            const campo = boton.parentElement.querySelector('input');
+            const visible = campo.type === 'password';
+            campo.type = visible ? 'text' : 'password';
+            boton.classList.toggle('is-visible', visible);
+            boton.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+            boton.setAttribute('aria-pressed', String(visible));
+        });
+    });
+</script>
 </body>
 </html>

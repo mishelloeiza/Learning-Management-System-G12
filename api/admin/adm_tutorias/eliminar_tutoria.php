@@ -1,8 +1,12 @@
 <?php
     require_once(__DIR__ . "/../../../config/Connection.php");
     require_once(__DIR__ . "/../../../config/Response.php");
+    // PHP no rellena $_POST con PUT/DELETE; el cliente envía los campos codificados para formularios.
+    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        parse_str(file_get_contents('php://input'), $_POST);
+    }
 
-    if($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if($_SERVER["REQUEST_METHOD"] !== "DELETE") {
         Response::error("Metodo no permitido", -1000, 405);
     }
 
@@ -10,29 +14,43 @@
         Response::error("No autorizado", -1001, 403);
     }
 
-    $id_tutoria = trim($_POST["id_tutoria"] ?? '');
+    $idTutoria = trim($_POST["id_tutoria"] ?? '');
 
-    if(empty($id_tutoria) || !ctype_digit($id_tutoria)) {
-        Response::error("El id de la tutoria es obligatorio", -1002, 400);
+    if($idTutoria === '' || !ctype_digit($idTutoria)) {
+        Response::error("El id de la tutoria es obligatorio", -1180, 400);
     }
 
     try {
         $cn = new Connection($_SESSION["rol"]);
+        $cn->beginTransaction();
 
-        $stmt = $cn->prepare("UPDATE tutorias SET estado = 'cancelada' WHERE id_tutoria = ?");
-        $stmt->execute([$id_tutoria]);
+        $stmt = $cn->prepare("SELECT estado FROM tutorias WHERE id_tutoria = ? FOR UPDATE");
+        $stmt->execute([$idTutoria]);
+        $estado = $stmt->fetchColumn();
 
-        if($stmt->rowCount() === 0) {
-            $existe = $cn->prepare("SELECT 1 FROM tutorias WHERE id_tutoria = ?");
-            $existe->execute([$id_tutoria]);
-
-            if(!$existe->fetchColumn()) {
-                Response::error("No se encontro la tutoria", -1003, 404);
-            }
+        if($estado === false) {
+            $cn->rollBack();
+            Response::error("No se encontro la tutoria", -1181, 404);
         }
 
-        Response::success("Tutoria cancelada correctamente", 200);
+        if(!in_array($estado, ["activa", "en curso"], true)) {
+            $cn->rollBack();
+            Response::error("Solo se pueden eliminar tutorias activas o en curso", -1182, 409);
+        }
+
+        $cn->prepare("UPDATE tutorias SET estado = 'cancelada' WHERE id_tutoria = ?")->execute([$idTutoria]);
+        $cn->prepare("UPDATE horarios SET estado = 'cancelado' WHERE id_tutoria = ? AND estado IN ('disponible','asignado')")->execute([$idTutoria]);
+        $cn->prepare("UPDATE solicitudes s INNER JOIN horarios h ON s.id_horario = h.id_horarios
+            SET s.estado = 'rechazada', s.fecha_respuesta = ? WHERE h.id_tutoria = ? AND s.estado = 'pendiente'")
+            ->execute([date("Y-m-d"), $idTutoria]);
+
+        $cn->commit();
+
+        Response::success("Tutoria eliminada correctamente", 200);
     } catch (PDOException $error) {
-        Response::error("No se pudo cancelar la tutoria", -1004, 500);
+        if(isset($cn) && $cn->inTransaction()) {
+            $cn->rollBack();
+        }
+        Response::error("No se pudo eliminar la tutoria", -1183, 500);
     }
 ?>

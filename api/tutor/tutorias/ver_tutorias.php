@@ -82,6 +82,7 @@
 
         Response::success("Tutorias encontradas", 200, ["tutorias" => $tutorias]);
     } catch (PDOException $error) {
-        Response::error("No se pudieron cargar las tutorias", -1133, 500);
+        //Response::error("No se pudieron cargar las tutorias", -1133, 500);
+        Response::debug($error);
     }
 ?>

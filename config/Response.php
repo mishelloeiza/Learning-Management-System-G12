@@ -1,4 +1,13 @@
 <?php
+    // Protección CSRF centralizada para los endpoints que modifican datos.
+    require_once __DIR__ . '/Csrf.php';
+    if (in_array($_SERVER['REQUEST_METHOD'] ?? '', ['POST', 'PUT', 'PATCH', 'DELETE'], true)
+        && !Csrf::validate()) {
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code(403);
+        exit(json_encode(['code' => 403, 'message' => 'Token CSRF inválido']));
+    }
+
     class Response
     {
         /*static function success($message, $data, $code, $otherData = null)

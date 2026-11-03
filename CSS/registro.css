@@ -1,0 +1,87 @@
+/* Registro de estudiantes: solo aplica cuando existe el formulario de alta. */
+body:has(.auth-page #form #carrera) .auth-page {
+    align-items:center;
+    padding:36px 18px;
+    background:radial-gradient(circle at 12% 10%, #f6e2e6, transparent 32%),radial-gradient(circle at 95% 90%,#f2d8de,transparent 33%),#faf6f7;
+}
+body:has(.auth-page #form #carrera) .auth-card {
+    max-width:680px;
+    border-radius:24px;
+    border:1px solid #ead6da;
+    box-shadow:0 24px 70px rgba(85,17,39,.12);
+}
+body:has(.auth-page #form #carrera) .auth-card-bar {
+    height:7px;
+    background:linear-gradient(90deg,#661027,#a2163b,#df546b);
+}
+body:has(.auth-page #form #carrera) .auth-form {
+    max-width:none;
+    padding:clamp(24px,4vw,48px);
+}
+body:has(.auth-page #form #carrera) .auth-form h2 {
+    color:#68132c;
+    font-size:clamp(1.65rem,3vw,2.35rem);
+    letter-spacing:-.045em;
+}
+body:has(.auth-page #form #carrera) .auth-form .subtitle {
+    margin-bottom:28px;
+    color:#79666c;
+}
+body:has(.auth-page #form #carrera) #form {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px 20px;
+}
+body:has(.auth-page #form #carrera) #form .field {
+    min-width:0;
+    margin:0;
+}
+body:has(.auth-page #form #carrera) #form .field label {
+    display:block;
+    margin-bottom:8px;
+    font-size:.86rem;
+    font-weight:700;
+    color:#55303a;
+}
+body:has(.auth-page #form #carrera) #form input,body:has(.auth-page #form #carrera) #form select {
+    display:block;
+    width:100%;
+    min-width:0;
+    min-height:48px;
+    padding:11px 14px;
+    background:#fff;
+    border:1px solid #e3cfd4;
+    border-radius:12px;
+    color:#34242a;
+    transition:border-color .2s,box-shadow .2s;
+}
+body:has(.auth-page #form #carrera) #form :is(input,select):focus-visible {
+    outline:0;
+    border-color:#a2163b;
+    box-shadow:0 0 0 4px #a2163b22;
+}
+body:has(.auth-page #form #carrera) #form .btn-primary {
+    grid-column:1/-1;
+    min-height:50px;
+    margin-top:8px;
+    border-radius:12px;
+    background:linear-gradient(110deg,#7c1231,#ae1e41);
+    font-weight:700;
+}
+body:has(.auth-page #form #carrera) #form .auth-switch {
+    grid-column:1/-1;
+    text-align:center;
+    margin:0;
+}
+@media(max-width:580px) {
+    body:has(.auth-page #form #carrera) #form {
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+    body:has(.auth-page #form #carrera) .auth-card {
+        border-radius:18px;
+    }
+    body:has(.auth-page #form #carrera) .auth-form {
+        padding:26px 20px;
+    }
+}

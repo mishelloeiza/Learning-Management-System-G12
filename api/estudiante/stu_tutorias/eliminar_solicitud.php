@@ -1,8 +1,12 @@
 <?php
     require_once(__DIR__ . "/../../../config/Connection.php");
     require_once(__DIR__ . "/../../../config/Response.php");
+    // PHP no rellena $_POST con PUT/DELETE; el cliente envía los campos codificados para formularios.
+    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        parse_str(file_get_contents('php://input'), $_POST);
+    }
 
-    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    if ($_SERVER["REQUEST_METHOD"] !== "DELETE") {
         Response::error("Metodo no permitido", -1350, 405);
     }
     if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "1" || !isset($_SESSION["id"])) {

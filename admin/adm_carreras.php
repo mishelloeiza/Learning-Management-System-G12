@@ -13,23 +13,37 @@
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
     <link rel="stylesheet" href="../CSS/navbar.css">
-	<script src="../JS/navbar.js" defer></script>
+
 </head>
 <body>
+<script>
+    // El token lo genera Csrf.php; el servidor lo comprueba en cada operación.
+    const apiCsrfToken = <?php require_once __DIR__ . '/../config/Csrf.php'; echo json_encode(Csrf::token()); ?>;
+    function apiFetch(url, options = {}) {
+        if (!['GET', 'HEAD', 'OPTIONS'].includes((options.method || 'GET').toUpperCase())) {
+            options = { ...options, headers: { ...(options.headers || {}), 'X-CSRF-Token': apiCsrfToken } };
+        }
+        return fetch(url, options);
+    }
+</script>
+
 	<header class="site-header">
 		<nav class="navbar" aria-label="Navegación principal">
-			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
-				<span class="navbar__bars" aria-hidden="true"></span>
-			</button>
+            <span class="navbar__brand" aria-label="LMS G12"><span class="navbar__brand-mark" aria-hidden="true">G12</span><span class="navbar__brand-name">Campus<span>Virtual</span></span></span>
+			<input class="navbar__check" id="navToggle" type="checkbox" aria-label="Mostrar menú de navegación">
+			<label class="navbar__toggle" for="navToggle" aria-label="Abrir o cerrar menú">
+			<span class="navbar__bars" aria-hidden="true"></span>
+			</label>
 			<ul class="navbar__menu" id="menuPrincipal">
-				<li><a href="./adm_perfil.php">Mi perfil</a></li>
-				<li><a href="./adm_dashboard.php">Inicio</a></li>
-				<li><a href="./adm_carreras.php">Administrar Carreras</a></li>
-				<li><a href="./adm_materias.php">Administrar Materias</a></li>
-				<li><a href="./adm_tutorias.php">Administrar Tutorias</a></li>
-				<li><a href="./adm_usuarios.php">Administrar Usuarios</a></li>
-				<li><a href="./adm_horarios.php">Administrar Horarios</a></li>
-				<li><a href="./adm_solicitudes.php">Administrar Solicitudes</a></li>
+				<li><a href="./adm_perfil">Mi perfil</a></li>
+				<li><a href="./adm_dashboard">Inicio</a></li>
+				<li><a href="./adm_carreras">Administrar Carreras</a></li>
+				<li><a href="./adm_materias">Administrar Materias</a></li>
+				<li><a href="./adm_tutorias">Administrar Tutorias</a></li>
+				<li><a href="./adm_usuarios">Administrar Usuarios</a></li>
+				<li><a href="./adm_horarios">Administrar Horarios</a></li>
+				<li><a href="./adm_solicitudes">Administrar Solicitudes</a></li>
+				<li><a href="./adm_reportes">Reportes</a></li>
 				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
@@ -76,14 +90,14 @@
         //Cerrar sesion
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
-				const respuesta = await fetch("../api/admin/adm_cerrar_sesion.php", {
+				const respuesta = await apiFetch("../api/admin/adm_cerrar_sesion.php", {
 					method: "POST"
 				});
 
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200){
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				} else {
 					alert(resultado.message);
 				}
@@ -104,9 +118,9 @@
                     formulario.append("id_carrera", idcarreraselect);
                     formulario.append("activo", estado);
 
-                    const respuesta_e = await fetch("../api/admin/adm_carreras/editar_carrera.php", {
-                        method: "POST",
-                        body: formulario
+                    const respuesta_e = await apiFetch("../api/admin/adm_carreras/editar_carrera.php", {
+                        method: "PUT",
+                        body: new URLSearchParams(formulario)
                     });
 
                     const resultado_e = await respuesta_e.json();
@@ -130,7 +144,7 @@
                         document.getElementById("btnGuardar").textContent = "Registrar";
                     }
                 }else{
-                    const respuesta = await fetch("../api/admin/adm_carreras/crear_carrera.php", {
+                    const respuesta = await apiFetch("../api/admin/adm_carreras/crear_carrera.php", {
                         method: "POST",
                         body: formulario
                     });
@@ -160,7 +174,7 @@
         //Visualizar carreras
         async function verCarreras(busqueda = ""){
             try {
-                const respuesta = await fetch("../api/admin/adm_carreras/ver_carreras.php?buscar=" + encodeURIComponent(busqueda));
+                const respuesta = await apiFetch("../api/admin/adm_carreras/ver_carreras.php?buscar=" + encodeURIComponent(busqueda));
 
                 const resultado = await respuesta.json();
 
@@ -204,9 +218,9 @@
                             const dato = new FormData();
                             dato.append("id_carrera", id_carreraelim);
                             try {
-                                const respuesta_b = await fetch("../api/admin/adm_carreras/eliminar_carrera.php", {
-                                    method: "POST",
-                                    body: dato
+                                const respuesta_b = await apiFetch("../api/admin/adm_carreras/eliminar_carrera.php", {
+                                    method: "DELETE",
+                                    body: new URLSearchParams(dato)
                                 });
 
                                 const resultado_b = await respuesta_b.json();
@@ -274,6 +288,6 @@
         //Cargar funcion de ver carreras
         verCarreras();
     </script>
-	<script src="../JS/tablas-responsive.js"></script>
+
 </body>
 </html>

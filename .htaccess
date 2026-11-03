@@ -1,3 +1,14 @@
 <FilesMatch "^(script_bd\.sql|script_bd_usuarios\.sql|README\.md|\.gitignore)$">
     Require all denied
 </FilesMatch>
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{THE_REQUEST} \s/[^\s?]+\.php[\s?] [NC]
+RewriteRule ^(?!api/|config/)(.+)\.php$ $1 [R=302,L,NE]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]

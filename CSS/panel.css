@@ -1,17 +1,7 @@
-/* Entrada PANEL: layout, formularios, botones, tablas, modales y responsive (requiere auth.css antes por las variables) */
+/* Punto de entrada: estilos del panel en orden de cascada. */
+@import url("panel-base.css");
+@import url("panel-responsive.css");
+@import url("panel-acabados.css");
+@import url("tablas-moviles.css");
 
-@import url("base/typography.css");
-@import url("base/utilities.css");
-@import url("layout/layout.css");
-@import url("components/forms.css");
-@import url("components/buttons.css");
-@import url("components/tables.css");
-@import url("components/dialog.css");
-@import url("components/filters-lists.css");
-@import url("components/status.css");
-@import url("responsive/mobile-layout-forms.css");
-@import url("responsive/mobile-horarios.css");
-@import url("responsive/mobile-tables.css");
-@import url("responsive/mobile-dialog.css");
-@import url("responsive/mobile-lists.css");
-@import url("responsive/accessibility.css");
+.reporte-dashboard-descarga{display:inline-block;padding:.65rem 1rem;border-radius:8px;background:#174977;color:#fff;text-decoration:none;font-weight:600}.reporte-dashboard-descarga:hover{background:#0d335c;color:#fff}

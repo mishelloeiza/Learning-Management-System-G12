@@ -1,0 +1,332 @@
+/* Dashboard tutor: selectores limitados al panel con sus controles propios. */
+body:has(#formTutoria) main {
+    max-width:1280px;
+    padding-top:36px;
+    padding-bottom:64px;
+}
+body:has(#formTutoria) main > h1 {
+    color:#67132a;
+    font-size:clamp(2rem,4vw,2.75rem);
+    letter-spacing:-.045em;
+    margin-bottom:24px;
+}
+body:has(#formTutoria) .resumen-dashboard {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+    padding:0;
+    margin:0 0 32px;
+    background:transparent;
+    border:0;
+    box-shadow:none;
+    overflow:visible;
+}
+body:has(#formTutoria) .resumen-dashboard .tarjeta-resumen {
+    position:relative;
+    min-width:0;
+    min-height:185px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+    border:1px solid #ead5db;
+    border-top:4px solid #a41d40;
+    border-radius:18px;
+    background:linear-gradient(160deg,#fff 65%,#fff8f9);
+    padding:23px;
+    box-shadow:0 8px 26px #4f182313;
+}
+body:has(#formTutoria) .tarjeta-resumen h3 {
+    color:#58313c;
+    font-size:.95rem;
+    margin:0;
+}
+body:has(#formTutoria) .tarjeta-resumen .resumen-cantidad {
+    margin:2px 0;
+    color:#851333;
+    font-size:clamp(2rem,3vw,2.8rem);
+    line-height:1.1;
+    font-weight:800;
+}
+body:has(#formTutoria) .tarjeta-resumen small {
+    color:#827079;
+    line-height:1.5;
+}
+body:has(#formTutoria) .tarjeta-resumen button {
+    margin-top:auto;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) {
+    border:1px solid #ead5db;
+    border-radius:20px;
+    box-shadow:0 12px 35px #4f182310;
+    padding:clamp(18px,3vw,30px);
+    overflow-x:auto;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) h2 {
+    color:#651529;
+    margin-bottom:18px;
+    font-size:1.45rem;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) > button {
+    margin:0 8px 14px 0;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) > div {
+    display:flex;
+    align-items:end;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:18px;
+    margin:8px 0 20px;
+    border:1px solid #f0dfe3;
+    border-radius:15px;
+    background:#fff9fa;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) > div label {
+    color:#643a45;
+    font-size:.86rem;
+    font-weight:650;
+}
+body:has(#formTutoria) main > section:not(.resumen-dashboard) > div :is(input,select) {
+    min-width:120px;
+    max-width:210px;
+}
+body:has(#formTutoria) table {
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+}
+body:has(#formTutoria) th {
+    white-space:nowrap;
+    background:#7f1532;
+    color:#fff;
+}
+body:has(#formTutoria) td {
+    vertical-align:middle;
+}
+body:has(#formTutoria) dialog {
+    width:min(94vw,760px);
+    max-height:88dvh;
+    overflow:auto;
+    padding:clamp(20px,3vw,30px);
+    border:1px solid #edd5dc;
+    border-radius:20px;
+    box-shadow:0 28px 90px #2c0c1b45;
+}
+body:has(#formTutoria) dialog::backdrop {
+    background:#28101995;
+    backdrop-filter:blur(3px);
+}
+body:has(#formTutoria) dialog h2 {
+    color:#70132f;
+    margin-bottom:20px;
+}
+body:has(#formTutoria) dialog :is(input,select,textarea) {
+    max-width:100%;
+}
+@media(max-width:900px) {
+    body:has(#formTutoria) .resumen-dashboard {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+@media(max-width:570px) {
+    body:has(#formTutoria) main {
+        padding:22px 14px 48px;
+    }
+    body:has(#formTutoria) .resumen-dashboard {
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+    body:has(#formTutoria) .resumen-dashboard .tarjeta-resumen {
+        min-height:150px;
+    }
+    body:has(#formTutoria) main > section:not(.resumen-dashboard) > div {
+        display:grid;
+        grid-template-columns:1fr;
+    }
+    body:has(#formTutoria) main > section:not(.resumen-dashboard) > div :is(input,select,button) {
+        max-width:none;
+        width:100%;
+    }
+}
+/* ===== Ventanas del tutor: controles compactos sin desplazamiento lateral ===== */
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso,#modalTutoria) {
+    box-sizing:border-box;
+    width:min(940px,calc(100vw - 32px));
+    max-width:calc(100vw - 32px);
+    max-height:min(88dvh,900px);
+    margin:auto;
+    padding:clamp(18px,3vw,32px);
+    overflow-x:hidden;
+    overflow-y:auto;
+    border-radius:22px;
+    background:#fff;
+}
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso,#modalTutoria) > h2 {
+    margin:0 0 22px;
+    padding-bottom:15px;
+    border-bottom:1px solid #f0dce2;
+    color:#79132f;
+    font-size:clamp(1.35rem,2.5vw,1.8rem);
+    line-height:1.25;
+}
+/* Filtros: cada rótulo permanece junto a su control */
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px 16px;
+    align-items:center;
+    padding:16px;
+    margin-bottom:18px;
+    border:1px solid #f0dce2;
+    border-radius:16px;
+    background:#fff8f9;
+    min-width:0;
+}
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type > label {
+    color:#704653;
+    font-size:.86rem;
+    font-weight:650;
+    margin:0;
+}
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type > :is(input,select) {
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    max-width:none;
+    margin:0;
+    background:#fff;
+}
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type > button {
+    justify-self:start;
+    margin:0;
+}
+/* Solicitudes: tarjetas con etiquetas en vez de una tabla que se corta */
+body:has(#formTutoria) #modalSolicitudes table,
+body:has(#formTutoria) #modalSolicitudes tbody {
+    display:block;
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    border:0;
+    overflow:visible;
+    background:transparent;
+}
+body:has(#formTutoria) #modalSolicitudes thead {
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+}
+body:has(#formTutoria) #modalSolicitudes tbody tr {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:0 22px;
+    min-width:0;
+    padding:10px 18px;
+    margin-bottom:14px;
+    border:1px solid #ecd7dd;
+    border-left:4px solid #a0163a;
+    border-radius:15px;
+    background:#fff;
+    box-shadow:0 5px 16px #5311230d;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td {
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    width:auto;
+    max-width:100%;
+    min-width:0;
+    padding:12px 0;
+    border:0;
+    border-bottom:1px solid #f2e8eb;
+    background:transparent;
+    color:#38272e;
+    font-size:.94rem;
+    line-height:1.5;
+    overflow-wrap:anywhere;
+    white-space:normal;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td::before {
+    content:attr(data-label);
+    color:#875064;
+    font-size:.71rem;
+    font-weight:800;
+    line-height:1.3;
+    letter-spacing:.075em;
+    text-transform:uppercase;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td:last-child {
+    flex-direction:row;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    grid-column:1 / -1;
+    border-bottom:0;
+    padding-top:14px;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td:last-child::before {
+    flex-basis:100%;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td:last-child button {
+    margin:0;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td[colspan] {
+    grid-column:1/-1;
+}
+body:has(#formTutoria) #modalSolicitudes tbody td[colspan]::before {
+    content:none;
+}
+body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > .cerrarModal {
+    margin:12px 0 0;
+    background:#fff8fa;
+    color:#74172f;
+    border:1px solid #e8cdd5;
+}
+/* Crear tutoría y la vista en curso usan el mismo sistema visual */
+body:has(#formTutoria) #formTutoria {
+    min-width:0;
+}
+body:has(#formTutoria) #listaEnCurso {
+    display:grid;
+    gap:14px;
+    min-width:0;
+}
+body:has(#formTutoria) #listaEnCurso article {
+    border:1px solid #eed6dd;
+    border-left:4px solid #9c1a3a;
+    border-radius:15px;
+    background:#fffafb;
+    padding:18px;
+    overflow-wrap:anywhere;
+}
+body:has(#formTutoria) #listaEnCurso article h3 {
+    margin:0 0 9px;
+    color:#751831;
+}
+body:has(#formTutoria) #listaEnCurso article ul {
+    margin-bottom:0;
+    padding-left:20px;
+}
+@media (max-width:700px) {
+    body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type {
+        grid-template-columns:1fr;
+        gap:7px;
+        padding:12px;
+    }
+    body:has(#formTutoria) :is(#modalSolicitudes,#modalEnCurso) > div:first-of-type > :is(input,select) {
+        margin-bottom:7px;
+    }
+    body:has(#formTutoria) #modalSolicitudes tbody tr {
+        grid-template-columns:1fr;
+        padding:10px 14px;
+    }
+    body:has(#formTutoria) #modalSolicitudes tbody td:last-child {
+        grid-column:1;
+    }
+    body:has(#formTutoria) #modalSolicitudes tbody td:last-child button {
+        flex:1 1 110px;
+    }
+}

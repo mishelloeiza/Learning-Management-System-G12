@@ -13,23 +13,37 @@
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
     <link rel="stylesheet" href="../CSS/navbar.css">
-	<script src="../JS/navbar.js" defer></script>
+
 </head>
 <body>
+<script>
+    // El token lo genera Csrf.php; el servidor lo comprueba en cada operación.
+    const apiCsrfToken = <?php require_once __DIR__ . '/../config/Csrf.php'; echo json_encode(Csrf::token()); ?>;
+    function apiFetch(url, options = {}) {
+        if (!['GET', 'HEAD', 'OPTIONS'].includes((options.method || 'GET').toUpperCase())) {
+            options = { ...options, headers: { ...(options.headers || {}), 'X-CSRF-Token': apiCsrfToken } };
+        }
+        return fetch(url, options);
+    }
+</script>
+
 	<header class="site-header">
 		<nav class="navbar" aria-label="Navegación principal">
-			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
-				<span class="navbar__bars" aria-hidden="true"></span>
-			</button>
+            <span class="navbar__brand" aria-label="LMS G12"><span class="navbar__brand-mark" aria-hidden="true">G12</span><span class="navbar__brand-name">Campus<span>Virtual</span></span></span>
+			<input class="navbar__check" id="navToggle" type="checkbox" aria-label="Mostrar menú de navegación">
+			<label class="navbar__toggle" for="navToggle" aria-label="Abrir o cerrar menú">
+			<span class="navbar__bars" aria-hidden="true"></span>
+			</label>
 			<ul class="navbar__menu" id="menuPrincipal">
-				<li><a href="./adm_perfil.php">Mi perfil</a></li>
-				<li><a href="./adm_dashboard.php">Inicio</a></li>
-				<li><a href="./adm_carreras.php">Administrar Carreras</a></li>
-				<li><a href="./adm_materias.php">Administrar Materias</a></li>
-				<li><a href="./adm_tutorias.php">Administrar Tutorias</a></li>
-				<li><a href="./adm_usuarios.php">Administrar Usuarios</a></li>
-				<li><a href="./adm_horarios.php">Administrar Horarios</a></li>
-				<li><a href="./adm_solicitudes.php">Administrar Solicitudes</a></li>
+				<li><a href="./adm_perfil">Mi perfil</a></li>
+				<li><a href="./adm_dashboard">Inicio</a></li>
+				<li><a href="./adm_carreras">Administrar Carreras</a></li>
+				<li><a href="./adm_materias">Administrar Materias</a></li>
+				<li><a href="./adm_tutorias">Administrar Tutorias</a></li>
+				<li><a href="./adm_usuarios">Administrar Usuarios</a></li>
+				<li><a href="./adm_horarios">Administrar Horarios</a></li>
+				<li><a href="./adm_solicitudes">Administrar Solicitudes</a></li>
+				<li><a href="./adm_reportes">Reportes</a></li>
 				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
@@ -44,6 +58,8 @@
             <input type="text" id="titulo" name="titulo" maxlength="255" placeholder="Ingrese titulo de la tutoria" required>
             <label for="descripcion">Descripcion</label>
             <input type="text" id="descripcion" name="descripcion" maxlength="255" placeholder="Ingrese descripcion de la tutoria" required>
+            <label for="cupos">Cupos</label>
+            <input type="number" id="cupos" name="cupos" min="1" max="5" value="1" required>
             <label for="fecha_inicio">Fecha de inicio</label>
             <input type="date" id="fecha_inicio" name="fecha_inicio" required>
             <label for="fecha_fin">Fecha de fin</label>
@@ -56,6 +72,9 @@
             <select name="id_materia" id="id_materia" required>
                 <option value="">Seleccione una materia</option>
             </select>
+            <label>Horarios</label>
+            <div id="listaHorarios"></div>
+            <button type="button" id="btnAgregarHorario">Agregar horario</button>
             <label for="estado">Estado</label>
             <select name="estado" id="estado" disabled>
                 <option value="activa">Activa</option>
@@ -96,6 +115,8 @@
                     <th>Estado</th>
                     <th>Inicio</th>
                     <th>Fin</th>
+                    <th>Cupos</th>
+                    <th>Horarios</th>
                     <th>Tutor</th>
                     <th>Materia</th>
                     <th>Acciones</th>
@@ -106,7 +127,7 @@
     </section>
 
     <script>
-        const campos = ["titulo", "descripcion", "fecha_inicio", "fecha_fin", "id_tutor", "id_materia", "estado"];
+        const campos = ["titulo", "descripcion", "cupos", "fecha_inicio", "fecha_fin", "id_tutor", "id_materia", "estado"];
         let idtutoriaselect = null;
         let editando = false;
 
@@ -116,7 +137,36 @@
             return div.innerHTML;
         }
 
+        const dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+
+        function agregarHorario(horario = {}) {
+            const lista = document.getElementById("listaHorarios");
+            if (lista.children.length >= 5) return;
+            const fila = document.createElement("div");
+            fila.dataset.idHorario = horario.id_horario || "";
+            const dia = document.createElement("select");
+            dia.required = true;
+            dias.forEach(function(d) { dia.add(new Option(d, d)); });
+            dia.value = horario.dia || "lunes";
+            const hora = document.createElement("input");
+            hora.type = "time";
+            hora.required = true;
+            hora.value = (horario.hora_inicio || "08:00").substring(0, 5);
+            const quitar = document.createElement("button");
+            quitar.type = "button";
+            quitar.textContent = "Quitar";
+            quitar.addEventListener("click", function() { fila.remove(); });
+            fila.append(dia, hora, quitar);
+            lista.appendChild(fila);
+        }
+
+        document.getElementById("btnAgregarHorario").addEventListener("click", function() { agregarHorario(); });
+
         function habilitarCampos(habilitar) {
+            document.querySelectorAll("#listaHorarios select, #listaHorarios input, #listaHorarios button").forEach(function(campo) {
+                campo.disabled = !habilitar;
+            });
+            document.getElementById("btnAgregarHorario").disabled = !habilitar;
             campos.forEach(function(id) {
                 document.getElementById(id).disabled = !habilitar;
             });
@@ -126,6 +176,8 @@
             document.getElementById("formtut").reset();
             idtutoriaselect = null;
             editando = false;
+            document.getElementById("listaHorarios").innerHTML = "";
+            agregarHorario();
             habilitarCampos(true);
             document.getElementById("estado").disabled = true;
             document.getElementById("btnGuardar").disabled = false;
@@ -134,14 +186,14 @@
 
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
-				const respuesta = await fetch("../api/admin/adm_cerrar_sesion.php", {
+				const respuesta = await apiFetch("../api/admin/adm_cerrar_sesion.php", {
 					method: "POST"
 				});
 
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				} else {
 					alert(resultado.message);
 				}
@@ -153,7 +205,7 @@
 
         async function cargarTutores() {
             try {
-                const respuesta = await fetch("../api/admin/cargar_contenidos/cargar_tutores.php");
+                const respuesta = await apiFetch("../api/admin/cargar_contenidos/cargar_tutores.php");
                 const resultado = await respuesta.json();
 
                 if (resultado.code === 200) {
@@ -174,7 +226,7 @@
 
         async function cargarMaterias() {
             try {
-                const respuesta = await fetch("../api/admin/cargar_contenidos/cargar_materias.php");
+                const respuesta = await apiFetch("../api/admin/cargar_contenidos/cargar_materias.php");
                 const resultado = await respuesta.json();
 
                 if (resultado.code === 200) {
@@ -198,6 +250,14 @@
         document.getElementById("formtut").addEventListener("submit", async function(e) {
             e.preventDefault();
             const formulario = new FormData(this);
+            const horarios = Array.from(document.querySelectorAll("#listaHorarios > div")).map(function(fila) {
+                return {id_horario: fila.dataset.idHorario, dia: fila.querySelector("select").value, hora_inicio: fila.querySelector("input").value};
+            });
+            if (horarios.length < 1 || horarios.length < Number(document.getElementById("cupos").value)) {
+                alert("Debe registrar suficientes horarios para los cupos seleccionados");
+                return;
+            }
+            formulario.append("horarios", JSON.stringify(horarios));
             let url = "../api/admin/adm_tutorias/crear_tutoria.php";
 
             if (editando) {
@@ -206,9 +266,9 @@
             }
 
             try {
-                const respuesta = await fetch(url, {
-                    method: "POST",
-                    body: formulario
+                const respuesta = await apiFetch(url, {
+                    method: url.includes("editar_") ? "PUT" : "POST",
+                    body: new URLSearchParams(formulario)
                 });
 
                 const resultado = await respuesta.json();
@@ -231,7 +291,7 @@
 
             try {
                 const url = "../api/admin/adm_tutorias/ver_tutorias.php?buscar=" + encodeURIComponent(buscar) + "&estado=" + encodeURIComponent(estado) + "&id_materia=" + encodeURIComponent(idMateria);
-                const respuesta = await fetch(url);
+                const respuesta = await apiFetch(url);
                 const resultado = await respuesta.json();
 
                 if (resultado.code !== 200) {
@@ -243,7 +303,7 @@
                 tabla.innerHTML = "";
 
                 if (resultado.tutorias.length === 0) {
-                    tabla.innerHTML = '<tr><td colspan="9">No se encontraron tutorias</td></tr>';
+                    tabla.innerHTML = '<tr><td colspan="11">No se encontraron tutorias</td></tr>';
                     return;
                 }
 
@@ -256,6 +316,8 @@
                         <td>${esc(tutoria.estado)}</td>
                         <td>${esc(tutoria.fecha_inicio)}</td>
                         <td>${esc(tutoria.fecha_fin)}</td>
+                        <td>${esc(tutoria.cupos)}</td>
+                        <td>${(tutoria.horarios || []).map(h => esc(h.dia) + " " + esc(h.hora_inicio.substring(0, 5))).join(", ")}</td>
                         <td>${esc(tutoria.tutor)}</td>
                         <td>${esc(tutoria.materia)}</td>
                         <td>
@@ -270,6 +332,9 @@
                         editando = false;
                         document.getElementById("titulo").value = tutoria.titulo;
                         document.getElementById("descripcion").value = tutoria.descripcion;
+                        document.getElementById("cupos").value = tutoria.cupos;
+                        document.getElementById("listaHorarios").innerHTML = "";
+                        (tutoria.horarios || []).forEach(agregarHorario);
                         document.getElementById("fecha_inicio").value = tutoria.fecha_inicio;
                         document.getElementById("fecha_fin").value = tutoria.fecha_fin;
                         document.getElementById("id_tutor").value = tutoria.id_tutor;
@@ -289,9 +354,9 @@
                         dato.append("id_tutoria", tutoria.id_tutoria);
 
                         try {
-                            const respuesta_b = await fetch("../api/admin/adm_tutorias/eliminar_tutoria.php", {
-                                method: "POST",
-                                body: dato
+                            const respuesta_b = await apiFetch("../api/admin/adm_tutorias/eliminar_tutoria.php", {
+                                method: "DELETE",
+                                body: new URLSearchParams(dato)
                             });
 
                             const resultado_b = await respuesta_b.json();
@@ -330,10 +395,11 @@
 
         document.getElementById("btnCancelar").addEventListener("click", limpiarFormulario);
 
+        limpiarFormulario();
         cargarTutores();
         cargarMaterias();
         verTutorias();
     </script>
-	<script src="../JS/tablas-responsive.js"></script>
+
 </body>
 </html>
