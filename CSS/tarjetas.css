@@ -1,3 +1,178 @@
-/* Entrada TARJETAS */
-
-@import url("components/cards.css");
+/* Tarjetas y estadísticas | LMS G12 - estilos consolidados */
+/* --- components/cards.css --- */
+/* Tarjetas de resumen del dashboard */
+/* ---------- Tarjetas de resumen del administrador ---------- */
+.resumen-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+}
+.resumen-dashboard .tarjeta-resumen {
+    background: var(--card);
+    border-top: 4px solid var(--accent);
+    border-radius: var(--radius-card);
+    box-shadow: 0 0 0 1px var(--card-edge);
+    padding: var(--space-3);
+    margin: 0;
+    min-width: 0;
+}
+.tarjeta-resumen h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin: 0 0 var(--space-2);
+}
+.tarjeta-resumen .resumen-cantidad {
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 var(--space-1);
+}
+.tarjeta-resumen small {
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+}
+/* ---------- Botones de tarjetas del estudiante ---------- */
+.tarjeta-resumen button {
+    margin: var(--space-2) 0 0;
+}
+.tarjeta-resumen button:first-of-type {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-on);
+}
+.tarjeta-resumen button:first-of-type:hover {
+    background: #661F2A;
+    border-color: #661F2A;
+}
+.tarjeta-resumen .resumen-cantidad {
+    font-variant-numeric: tabular-nums;
+}
+/* ---------- Adaptación a tabletas ---------- */
+@media (max-width: 900px) {
+    .resumen-dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+/* ---------- Adaptación a teléfonos ---------- */
+@media (max-width: 600px) {
+    .resumen-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+/* Tarjetas de lectura más clara */
+.resumen-dashboard {
+    gap: clamp(14px, 2vw, 24px);
+}
+.resumen-dashboard .tarjeta-resumen {
+    border:1px solid var(--card-edge);
+    border-top:4px solid var(--accent);
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s,box-shadow .2s;
+}
+.resumen-dashboard .tarjeta-resumen:hover {
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-md);
+}
+.tarjeta-resumen .resumen-cantidad {
+    font-size:clamp(1.8rem, 3vw, 2.5rem);
+    letter-spacing:-.035em;
+}
+@media(max-width:600px) {
+    .resumen-dashboard {
+        grid-template-columns:minmax(0,1fr);
+    }
+    .resumen-dashboard .tarjeta-resumen {
+        padding:20px;
+    }
+}
+@media(prefers-reduced-motion:reduce) {
+    .resumen-dashboard .tarjeta-resumen {
+        transition:none;
+    }
+}
+/* Refinamiento visual 2: indicadores */
+.resumen-dashboard {
+    gap:clamp(12px,2vw,22px);
+}
+.resumen-dashboard .tarjeta-resumen {
+    min-width:0;
+    border:1px solid var(--card-edge);
+    border-top:3px solid var(--accent);
+    border-radius:18px;
+    padding:clamp(16px,2vw,26px);
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s var(--ease-out),box-shadow .2s ease;
+}
+.resumen-dashboard .tarjeta-resumen:hover {
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-md);
+}
+.tarjeta-resumen .resumen-cantidad {
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-.04em;
+}
+@media(max-width:768px) {
+    .resumen-dashboard {
+        gap:12px;
+    }
+    .resumen-dashboard .tarjeta-resumen {
+        padding:18px;
+    }
+}
+@media(prefers-reduced-motion:reduce) {
+    .resumen-dashboard .tarjeta-resumen {
+        transition:none;
+    }
+    .resumen-dashboard .tarjeta-resumen:hover {
+        transform:none;
+    }
+}
+/* Premium rojo | KPIs */
+.resumen-dashboard {
+    gap:clamp(12px,2vw,22px);
+}
+.tarjeta-resumen {
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--card-edge);
+    background:linear-gradient(160deg,#fff 60%,#fff8f9);
+    border-radius:18px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .18s,box-shadow .18s,border-color .18s;
+}
+.tarjeta-resumen::before {
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:4px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-bright));
+    opacity:.82;
+}
+.tarjeta-resumen:hover {
+    transform:translateY(-3px);
+    border-color:var(--border-hover);
+    box-shadow:var(--shadow-md);
+}
+.tarjeta-resumen h3 {
+    font-weight:700;
+    letter-spacing:-.02em;
+}
+.resumen-cantidad {
+    color:var(--accent);
+    font-weight:850;
+    letter-spacing:-.06em;
+}
+@media(prefers-reduced-motion:reduce) {
+    .tarjeta-resumen:hover {
+        transform:none;
+    }
+}

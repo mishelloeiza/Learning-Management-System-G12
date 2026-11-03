@@ -1,0 +1,125 @@
+/* Perfiles de estudiante, tutor y administrador; conserva identificadores y acciones. */
+body:has(> #formactu) {
+    background:radial-gradient(circle at 100% 0,#f8e6ea,transparent 32%),#faf6f7;
+}
+body:has(> #formactu) > h1, body:has(> #formactu) > h2 {
+    max-width:820px;
+    width:calc(100% - 36px);
+    margin:30px auto 16px;
+    color:#6d152f;
+    letter-spacing:-.035em;
+}
+body:has(> #formactu) > h1 {
+    font-size:clamp(1.75rem,3.5vw,2.4rem);
+    margin-top:38px;
+}
+body:has(> #formactu) > h2 {
+    font-size:1.3rem;
+    margin-top:26px;
+}
+body:has(> #formactu) > form {
+    max-width:820px;
+    width:calc(100% - 36px);
+    margin:0 auto 18px;
+    padding:clamp(20px,3.5vw,36px);
+    border:1px solid #ead7dd;
+    border-radius:20px;
+    box-shadow:0 10px 35px #60172a0c;
+    background:#fff;
+    overflow:visible;
+}
+body:has(> #formactu) > #formactu {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px 20px;
+}
+body:has(> #formactu) > #formactu label {
+    align-self:end;
+    color:#59313c;
+    font-weight:650;
+    font-size:.9rem;
+}
+body:has(> #formactu) > #formactu :is(input,select) {
+    min-width:0;
+    width:100%;
+    min-height:46px;
+    border-radius:11px;
+    border:1px solid #e9d6dc;
+    background:#fffafb;
+}
+/* Agrupa visualmente cada etiqueta y campo sin cambiar la estructura del documento. */
+body:has(> #formactu) > #formactu label {
+    grid-column:1/-1;
+}
+body:has(> #formactu) > #formactu :is(input,select) {
+    grid-column:1/-1;
+}
+body:has(> #formactu) > #formactu button {
+    min-height:44px;
+    margin-top:12px;
+    border-radius:11px;
+}
+body:has(> #formactu) > #formactu #btnE {
+    background:#fff2f5;
+    color:#861b37;
+    border:1px solid #e5bec9;
+}
+body:has(> #formactu) > #formactu #btnG:not(:disabled) {
+    background:#901637;
+    color:#fff;
+}
+body:has(> #formactu) > form input:disabled,body:has(> #formactu) > form select:disabled {
+    opacity:1;
+    color:#77646b;
+    background:#f8f4f5;
+    cursor:not-allowed;
+}
+body:has(> #formactu) > #formcam label {
+    display:block;
+    margin:16px 0 7px;
+    color:#59313c;
+    font-weight:650;
+}
+body:has(> #formactu) > #formcam input {
+    display:block;
+    width:100%;
+    min-height:46px;
+    border:1px solid #e9d6dc;
+    border-radius:11px;
+    background:#fffafb;
+    padding:10px 12px;
+}
+body:has(> #formactu) > #formcam button {
+    margin-top:20px;
+}
+body:has(> #formactu) > #formeli {
+    border-color:#f0cdd3;
+    background:#fff8f9;
+    padding:22px 30px;
+    margin-bottom:60px;
+}
+body:has(> #formactu) > #formeli button {
+    color:#a01839;
+    background:#fff;
+    border:1px solid #d99ead;
+    font-weight:700;
+}
+body:has(> #formactu) > #formeli button:hover {
+    background:#a01839;
+    color:#fff;
+}
+body:has(> #formactu) > form :is(input,select,button):focus-visible {
+    outline:3px solid #b8274a55;
+    outline-offset:2px;
+}
+@media(max-width:560px) {
+    body:has(> #formactu) > form {
+        padding:20px 18px;
+    }
+    body:has(> #formactu) > #formactu {
+        grid-template-columns:1fr;
+    }
+    body:has(> #formactu) > #formactu button {
+        width:100%;
+    }
+}

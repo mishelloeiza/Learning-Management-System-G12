@@ -13,6 +13,7 @@
     $hasta = trim($_GET["fecha_fin"] ?? "");
     $idTutor = trim($_GET["id_tutor"] ?? "");
     $idMateria = trim($_GET["id_materia"] ?? "");
+    $estado = trim($_GET["estado"] ?? "");
     $offset = trim($_GET["offset"] ?? "0");
     foreach (["fecha_inicio" => $desde, "fecha_fin" => $hasta] as $fecha) {
         if ($fecha !== "" && (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha) || !checkdate((int) substr($fecha, 5, 2), (int) substr($fecha, 8, 2), (int) substr($fecha, 0, 4)))) {
@@ -23,8 +24,16 @@
         Response::error("Filtro invalido", -1333, 400);
     }
 
+    if (!in_array($estado, ["", "pendiente", "aprobada", "rechazada"], true)) {
+        Response::error("Estado invalido", -1335, 400);
+    }
+
     $filtros = [];
     $parametros = [$_SESSION["id"]];
+    if ($estado !== "") {
+        $filtros[] = "s.estado = ?";
+        $parametros[] = $estado;
+    }
     if ($desde !== "") {
         $filtros[] = "t.fecha_fin >= ?";
         $parametros[] = $desde;

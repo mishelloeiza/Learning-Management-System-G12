@@ -1,6 +1,7 @@
 create database if not exists bd_tutorias; 
 use bd_tutorias;
 
+
 create table if not exists carreras (
     id_carrera int primary key auto_increment not null,
     nombre varchar(255) not null unique,

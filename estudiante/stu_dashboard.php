@@ -13,66 +13,81 @@
 	<link rel="stylesheet" href="../CSS/auth.css">
 	<link rel="stylesheet" href="../CSS/panel.css">
 	<link rel="stylesheet" href="../CSS/navbar.css">
-	<script src="../JS/navbar.js" defer></script>
+	<link rel="stylesheet" href="../CSS/estudiante-dashboard.css">
+
 </head>
 <body>
+<script>
+    // El token lo genera Csrf.php; el servidor lo comprueba en cada operación.
+    const apiCsrfToken = <?php require_once __DIR__ . '/../config/Csrf.php'; echo json_encode(Csrf::token()); ?>;
+    function apiFetch(url, options = {}) {
+        if (!['GET', 'HEAD', 'OPTIONS'].includes((options.method || 'GET').toUpperCase())) {
+            options = { ...options, headers: { ...(options.headers || {}), 'X-CSRF-Token': apiCsrfToken } };
+        }
+        return fetch(url, options);
+    }
+</script>
+
 	<header class="site-header">
 		<nav class="navbar" aria-label="Navegación principal">
-			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
-				<span class="navbar__bars" aria-hidden="true"></span>
-			</button>
+            <span class="navbar__brand" aria-label="LMS G12"><span class="navbar__brand-mark" aria-hidden="true">G12</span><span class="navbar__brand-name">Campus<span>Virtual</span></span></span>
+			<input class="navbar__check" id="navToggle" type="checkbox" aria-label="Mostrar menú de navegación">
+			<label class="navbar__toggle" for="navToggle" aria-label="Abrir o cerrar menú">
+			<span class="navbar__bars" aria-hidden="true"></span>
+			</label>
 			<ul class="navbar__menu" id="menuPrincipal">
-				<li><a href="./stu_perfil.php">Mi perfil</a></li>
+				<li><a href="./stu_perfil">Mi perfil</a></li>
+				<li><a href="./stu_reportes">Descargar reporte general</a></li>
 				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
 	</header>
 
-	<main>
-		<h1>Estudiante</h1>
-		<p>Encuentra una tutoría o revisa el estado de tus solicitudes.</p>
-
-		<section class="resumen-dashboard" aria-live="polite">
-
-			<article class="tarjeta-resumen">
+	<main class="student-dashboard">
+		<div class="student-section-heading">
+			<div><p class="student-kicker">VISTA GENERAL</p><h2>Resumen de tu actividad</h2><p>Consulta tus datos y accede rápidamente a tus tutorías.</p></div>
+			<span class="student-section-heading__tag"><a class="reporte-dashboard-descarga" href="./stu_reportes">Descargar reporte general (PDF)</a></span>
+		</div>
+		<section class="resumen-dashboard student-stats" aria-label="Estadísticas del estudiante" aria-live="polite">
+			<article class="tarjeta-resumen student-stat student-stat--disponibles">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">01</span><span class="student-stat__tag">Explorar</span></div>
 				<h3>Tutorías disponibles</h3>
 				<p class="resumen-cantidad" data-stat="disponibles">–</p>
-				<small data-desc="disponibles">Tutorías que puedes consultar</small>
-				<button type="button" class="abrirTutorias">Consultar tutorías</button>
+				<small data-desc="disponibles">Explora las tutorías abiertas para ti.</small>
+				<button type="button" class="abrirTutorias student-stat__action">Consultar tutorías<span aria-hidden="true">↗</span></button>
 			</article>
-
-			<article class="tarjeta-resumen">
+			<article class="tarjeta-resumen student-stat student-stat--pendientes">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">02</span><span class="student-stat__tag">En revisión</span></div>
 				<h3>Solicitudes pendientes</h3>
 				<p class="resumen-cantidad" data-stat="pendientes">–</p>
-				<small data-desc="pendientes">Solicitudes esperando respuesta</small>
-				<button type="button" class="abrirSolicitudes">Ver solicitudes</button>
+				<small data-desc="pendientes">Solicitudes esperando respuesta.</small>
+				<button type="button" class="abrirSolicitudes student-stat__action">Ver solicitudes<span aria-hidden="true">↗</span></button>
 			</article>
-
-			<article class="tarjeta-resumen">
+			<article class="tarjeta-resumen student-stat student-stat--aprobadas">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">03</span><span class="student-stat__tag">Confirmadas</span></div>
 				<h3>Solicitudes aprobadas</h3>
 				<p class="resumen-cantidad" data-stat="aprobadas">–</p>
-				<small data-desc="aprobadas">Solicitudes aceptadas por el tutor</small>
-				<button type="button" class="abrirSolicitudes">Ver solicitudes</button>
+				<small data-desc="aprobadas">Solicitudes aceptadas por un tutor.</small>
+				<button type="button" class="abrirSolicitudes student-stat__action">Ver solicitudes<span aria-hidden="true">↗</span></button>
 			</article>
-
-			<article class="tarjeta-resumen">
+			<article class="tarjeta-resumen student-stat student-stat--rechazadas">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">04</span><span class="student-stat__tag">No aprobadas</span></div>
 				<h3>Solicitudes rechazadas</h3>
 				<p class="resumen-cantidad" data-stat="rechazadas">–</p>
-				<small data-desc="rechazadas">Solicitudes que el tutor rechazó</small>
+				<small data-desc="rechazadas">Solicitudes no aceptadas por el tutor.</small>
 			</article>
-
-			<article class="tarjeta-resumen">
+			<article class="tarjeta-resumen student-stat student-stat--total">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">05</span><span class="student-stat__tag">Tu actividad</span></div>
 				<h3>Total de solicitudes</h3>
 				<p class="resumen-cantidad" data-stat="total">–</p>
-				<small data-desc="total">Solicitudes que has enviado</small>
+				<small data-desc="total">Todas las solicitudes que has enviado.</small>
 			</article>
-
-			<article class="tarjeta-resumen">
+			<article class="tarjeta-resumen student-stat student-stat--tutorias_vigentes">
+				<div class="student-stat__top"><span class="student-stat__icon" aria-hidden="true">06</span><span class="student-stat__tag">En curso</span></div>
 				<h3>Mis tutorías vigentes</h3>
 				<p class="resumen-cantidad" data-stat="tutorias_vigentes">–</p>
-				<small data-desc="tutorias_vigentes">Tutorías aprobadas que siguen activas</small>
+				<small data-desc="tutorias_vigentes">Tutorías aprobadas que siguen activas.</small>
 			</article>
-
 		</section>
 	</main>
 
@@ -110,6 +125,7 @@
 				<label>Fecha de fin<input type="date" name="fecha_fin"></label>
 				<label>Tutor<select name="id_tutor"><option value="">Todos</option></select></label>
 				<label>Materia<select name="id_materia"><option value="">Todas</option></select></label>
+				<label>Estado<select name="estado"><option value="">Todos</option><option value="pendiente">Pendiente</option><option value="aprobada">Aprobada</option><option value="rechazada">Rechazada</option></select></label>
 				<div class="filter-actions"><button type="button" class="primary" id="FiltrarSolicitudes">Filtrar</button></div>
 			</form>
 			<div class="scroll-list" id="ListaSolicitudes" aria-live="polite"></div>
@@ -132,7 +148,7 @@
 		}
 
 		async function consultar(url, opciones = {}) {
-			const respuesta = await fetch(url, opciones);
+			const respuesta = await apiFetch(url, opciones);
 			const resultado = await respuesta.json();
 			if (!respuesta.ok || resultado.code !== 200) throw new Error(resultado.message || "No se pudo completar la operación");
 			return resultado;
@@ -260,7 +276,7 @@
 			const datos = new FormData();
 			datos.append("id_solicitud", idSolicitud);
 			try {
-				await consultar(apiTutorias + "eliminar_solicitud.php", {method: "POST", body: datos});
+				await consultar(apiTutorias + "eliminar_solicitud.php", {method: "DELETE", body: new URLSearchParams(datos)});
 				cargarEstadisticas();
 				if (actualizarDetalle && tutoriaActual) await verDetalle(tutoriaActual.id_tutoria);
 				if (!actualizarDetalle) reiniciarSolicitudes();
@@ -309,6 +325,10 @@
 			reiniciarTutorias();
 		}));
 		document.querySelectorAll(".abrirSolicitudes").forEach(boton => boton.addEventListener("click", () => {
+			const tarjeta = boton.closest(".student-stat");
+			const estado = tarjeta?.classList.contains("student-stat--pendientes") ? "pendiente"
+				: tarjeta?.classList.contains("student-stat--aprobadas") ? "aprobada" : "";
+			document.getElementById("FiltrosSolicitudes").elements.estado.value = estado;
 			document.getElementById("ModalSolicitudes").showModal();
 			reiniciarSolicitudes();
 		}));
@@ -343,14 +363,14 @@
 
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
-				const respuesta = await fetch("../api/estudiante/stu_cerrar_sesion.php", {
+				const respuesta = await apiFetch("../api/estudiante/stu_cerrar_sesion.php", {
 					method: "POST"
 				});
 
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200){
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				} else {
 					alert(resultado.message);
 				}

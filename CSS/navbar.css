@@ -1,3 +1,568 @@
-/* Entrada NAVBAR */
-
-@import url("components/navbar.css");
+@import url("tutor-dashboard.css");
+@import url("perfiles.css");
+/* Navegación desktop y móvil | LMS G12 - estilos consolidados */
+/* --- components/navbar.css --- */
+/* Barra de navegación
+   - Escritorio: enlaces en línea, acción (cerrar sesión) a la derecha.
+   - En dispositivos compactos, CSS colapsa la navegación y el menú pasa a ser
+     un panel desplegable con botón de hamburguesa (sirve igual en móvil, tablet o ventanas angostas). */
+:root {
+    --navbar-height: 64px;
+}
+/* ==========================
+   CONTENEDOR
+========================== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--card);
+    border-top: 4px solid var(--accent);
+    border-bottom: 1px solid var(--card-edge);
+}
+.navbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 1440px;
+    min-height: var(--navbar-height);
+    margin: 0 auto;
+    padding: 0 var(--space-3);
+}
+/* ==========================
+   MENÚ (escritorio)
+========================== */
+.navbar .navbar__menu {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.navbar .navbar__menu li {
+    display: flex;
+    flex-shrink: 0;
+    margin: 0;
+}
+/* El último elemento (cerrar sesión o acción principal) va al extremo derecho */
+.navbar .navbar__menu li:last-child {
+    margin-left: auto;
+}
+/* Enlaces: la barra inferior marca la página actual y el hover */
+.navbar .navbar__menu a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: var(--navbar-height);
+    padding: 0 9px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease;
+}
+.navbar .navbar__menu a::after {
+    content: "";
+    position: absolute;
+    left: 9px;
+    right: 9px;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+.navbar .navbar__menu a:hover {
+    color: var(--accent);
+}
+.navbar .navbar__menu a:hover::after,
+.navbar .navbar__menu a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+.navbar .navbar__menu a[aria-current="page"] {
+    color: var(--accent);
+}
+.navbar .navbar__menu a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -4px;
+    border-radius: var(--radius);
+}
+/* Acción: cerrar sesión (botón con borde) */
+.navbar .navbar__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 8px 16px;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--card-edge);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.navbar .navbar__action:hover {
+    background: var(--field-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.navbar .navbar__action:active {
+    transform: none;
+}
+.navbar .navbar__action:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+/* Acción principal (por ejemplo "Iniciar sesión" en la portada) */
+.navbar .navbar__menu a.navbar__cta {
+    height: auto;
+    margin-left: 8px;
+    padding: 9px 18px;
+    background: var(--accent);
+    color: var(--accent-on);
+    border-radius: var(--radius);
+}
+.navbar .navbar__menu a.navbar__cta::after {
+    display: none;
+}
+.navbar .navbar__menu a.navbar__cta:hover {
+    background: #661F2A;
+    color: var(--accent-on);
+}
+.navbar .navbar__menu a.navbar__cta:focus-visible {
+    outline-offset: 2px;
+}
+/* ==========================
+   BOTÓN HAMBURGUESA
+========================== */
+.navbar .navbar__toggle {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    margin: 0 -10px 0 auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius);
+    color: var(--ink);
+    cursor: pointer;
+}
+.navbar .navbar__toggle:hover {
+    background: var(--field-bg);
+}
+.navbar .navbar__toggle:active {
+    transform: none;
+}
+.navbar .navbar__toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+.navbar__bars,
+.navbar__bars::before,
+.navbar__bars::after {
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    margin-left: -10px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, top 0.2s ease, background 0.2s ease;
+}
+.navbar__bars {
+    top: 50%;
+    margin-top: -1px;
+}
+.navbar__bars::before,
+.navbar__bars::after {
+    content: "";
+    left: 0;
+    margin-left: 0;
+}
+.navbar__bars::before {
+    top: -6px;
+}
+.navbar__bars::after {
+    top: 6px;
+}
+/* Hamburguesa -> X */
+.navbar.is-open .navbar__bars {
+    background: transparent;
+}
+.navbar.is-open .navbar__bars::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+.navbar.is-open .navbar__bars::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+/* ==========================
+   MODO COLAPSADO (no caben los enlaces)
+========================== */
+.navbar.is-collapsed {
+    gap: var(--space-2);
+    padding: 0 var(--space-2);
+}
+.navbar.is-collapsed .navbar__toggle {
+    display: block;
+}
+.navbar.is-collapsed .navbar__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    max-height: calc(100vh - var(--navbar-height) - 20px);
+    overflow-y: auto;
+    padding: var(--space-1) var(--space-2) var(--space-2);
+    background: var(--card);
+    border-bottom: 1px solid var(--card-edge);
+    box-shadow: 0 12px 24px rgba(58, 46, 36, 0.12);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+.navbar.is-collapsed.is-open .navbar__menu {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s;
+}
+.navbar.is-collapsed .navbar__menu li {
+    display: block;
+}
+.navbar.is-collapsed .navbar__menu li:last-child {
+    margin-left: 0;
+    margin-top: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--card-edge);
+}
+/* Enlaces de 48 px de alto: cómodos para tocar con el dedo */
+.navbar.is-collapsed .navbar__menu a {
+    display: flex;
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+}
+.navbar.is-collapsed .navbar__menu a:hover {
+    background: var(--field-bg);
+}
+/* La página actual se marca con una barra lateral y fondo suave */
+.navbar.is-collapsed .navbar__menu a::after {
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    right: auto;
+    width: 3px;
+    height: auto;
+    border-radius: 3px;
+    transform: scaleY(0);
+    transform-origin: center;
+}
+.navbar.is-collapsed .navbar__menu a:hover::after,
+.navbar.is-collapsed .navbar__menu a[aria-current="page"]::after {
+    transform: scaleY(1);
+}
+.navbar.is-collapsed .navbar__menu a[aria-current="page"] {
+    background: var(--field-bg);
+}
+.navbar.is-collapsed .navbar__menu a:focus-visible {
+    outline-offset: -2px;
+}
+.navbar.is-collapsed .navbar__action,
+.navbar.is-collapsed .navbar__menu a.navbar__cta {
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    padding: 0 var(--space-2);
+    font-size: 0.95rem;
+}
+.navbar.is-collapsed .navbar__menu a.navbar__cta {
+    justify-content: center;
+}
+.navbar.is-collapsed .navbar__menu li:last-child a.navbar__cta {
+    margin-top: 0;
+}
+/* En la portada (sin sesión) la acción principal no necesita separador */
+.navbar.is-collapsed .navbar__menu li:last-child:has(.navbar__cta) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+/* ==========================
+   ACCESIBILIDAD: menos movimiento
+========================== */
+@media (prefers-reduced-motion: reduce) {
+    .navbar *,
+    .navbar *::before,
+    .navbar *::after {
+        transition: none !important;
+    }
+}
+/* Ajustes finales de navegación sin modificar JS */
+.site-header {
+    box-shadow: 0 2px 14px rgba(58,46,36,.05);
+}
+.navbar {
+    max-width: 1440px;
+}
+.navbar .navbar__menu a {
+    transition: color .18s,background-color .18s;
+}
+.navbar .navbar__menu a[aria-current="page"] {
+    color:var(--accent);
+}
+.navbar .navbar__menu a.navbar__cta {
+    border-radius:var(--radius);
+}
+.navbar.is-collapsed .navbar__menu {
+    border:1px solid var(--card-edge);
+    border-top:0;
+    border-radius:0 0 var(--radius-card) var(--radius-card);
+    box-shadow:var(--shadow-lg);
+}
+@media(max-width:768px) {
+    .navbar {
+        padding-inline:16px;
+    }
+    .navbar.is-collapsed .navbar__menu {
+        max-height: min(75vh, 640px);
+    }
+}
+/* Refinamiento visual 2: navegación */
+.site-header {
+    background:rgba(255,255,255,.97);
+    border-top:3px solid var(--accent);
+    border-bottom:1px solid var(--card-edge);
+    box-shadow:0 5px 20px rgba(34,43,68,.055);
+}
+@supports(backdrop-filter:blur(12px)) {
+    .site-header {
+        background:rgba(255,255,255,.90);
+        backdrop-filter:blur(12px);
+    }
+}
+.navbar {
+    max-width:1392px;
+    min-height:68px;
+    gap:clamp(10px,2vw,26px);
+}
+.navbar .navbar__menu a {
+    border-radius:10px;
+    transition:color .18s ease,background-color .18s ease;
+}
+.navbar .navbar__menu a:hover {
+    background:var(--surface-hover);
+}
+.navbar .navbar__menu a[aria-current="page"] {
+    background:var(--accent-soft);
+    color:var(--accent);
+}
+.navbar .navbar__action {
+    border-radius:11px;
+}
+.navbar.is-collapsed .navbar__menu {
+    border:1px solid var(--card-edge);
+    border-top:0;
+    border-radius:0 0 18px 18px;
+    box-shadow:var(--shadow-lg);
+}
+@media(max-width:768px) {
+    .navbar {
+        padding-inline:14px;
+        min-height:62px;
+    }
+    .navbar.is-collapsed .navbar__menu {
+        max-height:min(75dvh,640px);
+        overflow-y:auto;
+    }
+}
+/* Premium rojo | navegación */
+.site-header {
+    background:rgba(255,255,255,.96);
+    border-top:4px solid var(--accent);
+    border-bottom:1px solid var(--card-edge);
+    box-shadow:0 3px 20px rgba(73,14,31,.06);
+}
+.navbar {
+    max-width:1480px;
+    min-height:72px;
+    padding-inline:clamp(12px,2.5vw,36px);
+    gap:14px;
+}
+.navbar__brand {
+    display:inline-flex;
+    align-items:center;
+    flex:0 0 auto;
+    gap:9px;
+    min-width:0;
+    white-space:nowrap;
+}
+.navbar__brand-mark {
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,var(--accent-bright),var(--accent-dark));
+    color:white;
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    font-weight:800;
+    font-size:.77rem;
+    box-shadow:0 5px 12px rgba(155,24,52,.2);
+    letter-spacing:-.03em;
+}
+.navbar__brand-name {
+    font-weight:800;
+    font-size:1rem;
+    color:var(--ink);
+    letter-spacing:-.045em;
+}
+.navbar__brand-name span {
+    color:var(--accent);
+}
+.navbar .navbar__menu a {
+    font-weight:600;
+    font-size:.88rem;
+}
+.navbar .navbar__menu a[aria-current="page"] {
+    background:var(--accent-soft);
+    color:var(--accent);
+}
+.navbar .navbar__menu a:hover {
+    color:var(--accent);
+    background:var(--surface-hover);
+}
+.navbar .navbar__action {
+    background:var(--accent);
+    color:white;
+    border-radius:10px;
+}
+.navbar .navbar__action:hover {
+    background:var(--accent-dark);
+}
+.navbar.is-collapsed .navbar__menu {
+    background:#fff;
+    border-color:var(--card-edge);
+}
+@media(max-width:460px) {
+    .navbar {
+        min-height:64px;
+    }
+    .navbar__brand-mark {
+        width:34px;
+        height:34px;
+    }
+    .navbar__brand-name {
+        font-size:.91rem;
+    }
+}
+/* Menú nativo: checkbox + label, sin scripts ni clases dinámicas. */
+.navbar .navbar__check {
+    position:absolute;
+    opacity:0;
+    width:1px;
+    height:1px;
+    pointer-events:none;
+}
+.navbar .navbar__check:focus-visible + .navbar__toggle {
+    outline:3px solid var(--accent);
+    outline-offset:3px;
+}
+@media (max-width: 1450px) {
+    .navbar {
+        gap:var(--space-2);
+        padding-inline:clamp(12px,2vw,24px);
+    }
+    .navbar .navbar__toggle {
+        display:block;
+        flex:0 0 44px;
+        order:2;
+    }
+    .navbar .navbar__menu {
+        position:absolute;
+        top:100%;
+        left:0;
+        right:0;
+        z-index:60;
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        gap:2px;
+        max-height:min(75dvh,640px);
+        overflow-y:auto;
+        padding:12px 16px;
+        background:var(--card);
+        border:1px solid var(--card-edge);
+        border-top:0;
+        border-radius:0 0 18px 18px;
+        box-shadow:var(--shadow-lg);
+        visibility:hidden;
+        opacity:0;
+        pointer-events:none;
+        transform:translateY(-8px);
+        transition:opacity .18s ease,transform .18s ease,visibility .18s;
+    }
+    .navbar .navbar__menu li {
+        display:block;
+        flex-shrink:1;
+    }
+    .navbar .navbar__menu li:last-child {
+        margin-left:0;
+        margin-top:8px;
+        padding-top:12px;
+        border-top:1px solid var(--card-edge);
+    }
+    .navbar .navbar__menu a {
+        width:100%;
+        height:auto;
+        min-height:46px;
+        padding:12px 14px;
+        font-size:.95rem;
+        white-space:normal;
+    }
+    .navbar .navbar__menu a.navbar__cta,.navbar .navbar__action {
+        width:100%;
+        min-height:44px;
+        margin:0;
+    }
+    .navbar .navbar__check:checked ~ .navbar__menu {
+        visibility:visible;
+        opacity:1;
+        pointer-events:auto;
+        transform:none;
+    }
+    .navbar .navbar__check:checked + .navbar__toggle .navbar__bars {
+        background:transparent;
+    }
+    .navbar .navbar__check:checked + .navbar__toggle .navbar__bars::before {
+        top:0;
+        transform:rotate(45deg);
+    }
+    .navbar .navbar__check:checked + .navbar__toggle .navbar__bars::after {
+        top:0;
+        transform:rotate(-45deg);
+    }
+}

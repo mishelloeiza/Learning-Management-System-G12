@@ -14,22 +14,37 @@
 	<link rel="stylesheet" href="../CSS/panel.css">
 	<link rel="stylesheet" href="../CSS/tarjetas.css">
 	<link rel="stylesheet" href="../CSS/navbar.css">
-	<script src="../JS/navbar.js" defer></script>
+
 </head>
 <body>
+<script>
+    // El token lo genera Csrf.php; el servidor lo comprueba en cada operación.
+    const apiCsrfToken = <?php require_once __DIR__ . '/../config/Csrf.php'; echo json_encode(Csrf::token()); ?>;
+    function apiFetch(url, options = {}) {
+        if (!['GET', 'HEAD', 'OPTIONS'].includes((options.method || 'GET').toUpperCase())) {
+            options = { ...options, headers: { ...(options.headers || {}), 'X-CSRF-Token': apiCsrfToken } };
+        }
+        return fetch(url, options);
+    }
+</script>
+
 	<header class="site-header">
 		<nav class="navbar" aria-label="Navegación principal">
-			<button class="navbar__toggle" type="button" aria-expanded="false" aria-controls="menuPrincipal" aria-label="Abrir menú">
-				<span class="navbar__bars" aria-hidden="true"></span>
-			</button>
+            <span class="navbar__brand" aria-label="LMS G12"><span class="navbar__brand-mark" aria-hidden="true">G12</span><span class="navbar__brand-name">Campus<span>Virtual</span></span></span>
+			<input class="navbar__check" id="navToggle" type="checkbox" aria-label="Mostrar menú de navegación">
+			<label class="navbar__toggle" for="navToggle" aria-label="Abrir o cerrar menú">
+			<span class="navbar__bars" aria-hidden="true"></span>
+			</label>
 			<ul class="navbar__menu" id="menuPrincipal">
-				<li><a href="./tut_perfil.php">Mi perfil</a></li>
+				<li><a href="./tut_perfil">Mi perfil</a></li>
+				<li><a href="./tut_reportes">Descargar reporte general</a></li>
 				<li><button class="navbar__action" id="CerrarS" type="button">Cerrar Sesión</button></li>
 			</ul>
 		</nav>
 	</header>
 	<main>
 		<h1>Tutor</h1>
+		<p><a class="reporte-dashboard-descarga" href="./tut_reportes">Descargar reporte general (PDF)</a></p>
 
 		<section class="resumen-dashboard" aria-live="polite">
 
@@ -224,7 +239,7 @@
 
 		async function pedir(url, opciones) {
 			try {
-				const respuesta = await fetch(url, opciones);
+				const respuesta = await apiFetch(url, opciones);
 				return await respuesta.json();
 			} catch (error) {
 				console.error(error);
@@ -240,14 +255,14 @@
 
 		document.getElementById("CerrarS").addEventListener("click", async function() {
 			try {
-				const respuesta = await fetch("../api/tutor/tut_cerrar_sesion.php", {
+				const respuesta = await apiFetch("../api/tutor/tut_cerrar_sesion.php", {
 					method: "POST"
 				});
 
 				const resultado = await respuesta.json();
 
 				if (resultado.code === 200) {
-					window.location.href = "../index.php";
+					window.location.href = "../index";
 				} else {
 					alert(resultado.message);
 				}
@@ -352,7 +367,7 @@
 					}
 					const datos = new FormData();
 					datos.append("id_tutoria", t.id_tutoria);
-					const res = await pedir(API + "eliminar_tutoria.php", { method: "POST", body: datos });
+					const res = await pedir(API + "eliminar_tutoria.php", { method: "DELETE", body: new URLSearchParams(datos) });
 					alert(res.message);
 					if (res.code === 200) {
 						verTutorias();
@@ -447,7 +462,7 @@
 				url = API + "editar_tutoria.php";
 			}
 
-			const r = await pedir(url, { method: "POST", body: datos });
+			const r = await pedir(url, { method: idTutoriaEditar !== null ? "PUT" : "POST", body: new URLSearchParams(datos) });
 			alert(r.message);
 			if (r.code === 200) {
 				document.getElementById("modalTutoria").close();
@@ -499,7 +514,7 @@
 					const datos = new FormData();
 					datos.append("id_solicitud", s.id_solicitud);
 					datos.append("accion", accion);
-					const res = await pedir(API + "responder_solicitud.php", { method: "POST", body: datos });
+					const res = await pedir(API + "responder_solicitud.php", { method: "PUT", body: new URLSearchParams(datos) });
 					alert(res.message);
 					verSolicitudes();
 					verTutorias();
@@ -512,6 +527,9 @@
 		}
 
 		document.getElementById("btnSolicitudes").addEventListener("click", function() {
+			// La tarjeta y el botón de solicitudes pendientes abren únicamente las pendientes.
+			// El tutor puede consultar aprobadas o rechazadas usando el filtro de estado.
+			document.getElementById("sEstado").value = "pendiente";
 			document.getElementById("modalSolicitudes").showModal();
 			verSolicitudes();
 		});
@@ -563,6 +581,6 @@
 		verTutorias();
 		cargarEstadisticas();
 	</script>
-	<script src="../JS/tablas-responsive.js"></script>
+
 </body>
 </html>

@@ -1,5 +1,263 @@
-/* Entrada AUTH: variables + base + pantallas de acceso (login, crear cuenta) */
+@import url("variables.css");
+@import url("registro.css");
+/* Acceso y estilos globales | LMS G12 - estilos consolidados */
+/* --- Estilos básicos de restablecimiento --- */
+/* Reset mínimo y estilos globales del body */
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--paper);
+}
+/* --- Componentes de autenticación --- */
+/* Pantallas de acceso (login / crear cuenta): tarjeta, campos y botón */
+/* ---------- Layout compartido: tarjeta centrada ---------- */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+}
+.auth-card {
+    background: var(--card);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 0 0 1px var(--card-edge);
+}
+.auth-card-bar {
+    background: var(--accent);
+    height: 8px;
+}
+.auth-form {
+    padding: var(--space-4) var(--space-3);
+}
+.auth-form h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0 0 var(--space-1);
+}
+.auth-form .subtitle {
+    color: var(--ink-soft);
+    margin: 0 0 var(--space-3);
+    font-size: 0.9rem;
+}
+/* ---------- Campos en caja ---------- */
+.field {
+    margin-bottom: var(--space-2);
+}
+.field label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+}
+.field input {
+    width: 100%;
+    border: 1px solid transparent;
+    background: var(--field-bg);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+.field input::placeholder {
+    color: #B0A38E;
+}
+.field input:focus {
+    border-color: var(--accent);
+}
+.field input:invalid:not(:placeholder-shown) {
+    border-color: var(--error);
+}
+/* ---------- Botón principal ---------- */
+.btn-primary {
+    width: 100%;
+    padding: 12px var(--space-2);
+    background: var(--accent);
+    color: var(--accent-on);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.15s ease;
+    margin-top: var(--space-1);
+}
+.btn-primary:hover {
+    background: #661F2A;
+}
+.btn-primary:active {
+    transform: scale(0.99);
+}
+.btn-primary:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+/* ---------- Enlace secundario (ir a login / crear cuenta) ---------- */
+.auth-switch {
+    margin-top: var(--space-3);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-align: center;
+}
+.auth-switch a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent);
+}
+/* ---------- Mensajes de error ---------- */
+.form-error {
+    background: var(--error-bg);
+    color: var(--error);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-2);
+}
+/* Pulido visual de acceso */
+.auth-page {
+    padding: clamp(16px, 4vw, 40px);
+    background: radial-gradient(circle at 85% 12%, #f7e7e9 0, transparent 35%), var(--paper);
+}
+.auth-card {
+    max-width: 430px;
+    border: 1px solid var(--card-edge);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg);
+}
+.auth-form {
+    padding: clamp(24px, 5vw, 44px);
+}
+.auth-form h2 {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+}
+.field input {
+    min-height: 46px;
+    border: 1px solid var(--card-edge);
+    background: var(--card);
+}
+.field input:focus {
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.btn-primary {
+    min-height: 46px;
+}
+@media(max-width:480px) {
+    .auth-page {
+        align-items: center;
+    }
+    .auth-card {
+        max-width: 100%;
+    }
+}
+/* Refinamiento visual 2: autenticación */
+.auth-page {
+    min-height:100dvh;
+    padding:24px 14px;
+    background:radial-gradient(ellipse at 12% 16%,rgba(116,59,96,.09),transparent 38%),radial-gradient(ellipse at 90% 82%,rgba(96,120,160,.09),transparent 42%),var(--paper);
+}
+.auth-card {
+    max-width:440px;
+    border:1px solid var(--card-edge);
+    border-radius:24px;
+    box-shadow:0 24px 70px rgba(34,43,68,.12);
+}
+.auth-form {
+    padding:clamp(24px,5vw,42px);
+}
+.auth-form h2 {
+    letter-spacing:-.03em;
+}
+.field input {
+    min-height:48px;
+    border-radius:11px;
+    background:var(--card);
+    border:1px solid var(--border-hover);
+    font-size:16px;
+}
+.field input::placeholder {
+    color:#9299a8;
+}
+.field input:focus-visible {
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:var(--focus-ring);
+}
+.btn-primary {
+    min-height:48px;
+    border-radius:11px;
+    box-shadow:0 8px 18px rgba(116,59,96,.16);
+}
+.btn-primary:hover {
+    background:#623151;
+    box-shadow:0 10px 24px rgba(116,59,96,.23);
+}
+.auth-switch a:focus-visible {
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+}
+@media(max-width:480px) {
+    .auth-card {
+        border-radius:18px;
+    }
+    .auth-form {
+        padding:24px 20px;
+    }
+}
+/* Premium rojo | acceso */
+body {
+    background:radial-gradient(ellipse 80% 48% at 100% -8%,#fce6e9 0%,transparent 75%),var(--paper);
+}
+.auth-page {
+    padding:clamp(20px,5vw,72px) 20px;
+}
+.auth-card {
+    max-width:430px;
+    border:1px solid var(--card-edge);
+    box-shadow:var(--shadow-lg);
+}
+.auth-card-bar {
+    height:6px;
+    background:linear-gradient(90deg,var(--accent-dark),var(--accent-bright));
+}
+.auth-form {
+    padding:clamp(24px,4vw,44px);
+}
+.auth-form h2 {
+    font-size:clamp(1.55rem,3vw,2rem);
+    letter-spacing:-.035em;
+}
+.field input {
+    background:#fff;
+    border:1px solid var(--card-edge);
+    min-height:46px;
+}
+.field input:focus {
+    border-color:var(--accent);
+    box-shadow:var(--focus-ring);
+}
+.field input::placeholder {
+    color:#a18c92;
+}
+.btn-primary {
+    min-height:48px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+    box-shadow:0 5px 16px rgba(155,24,52,.18);
+}
+.btn-primary:hover {
+    background:var(--accent-dark);
+}
 
-@import url("base/variables.css");
-@import url("base/reset.css");
-@import url("components/auth.css");
+/* Permite el control nativo de mostrar contraseña en navegadores compatibles. */
+input[type="password"]::-ms-reveal { display: block; }

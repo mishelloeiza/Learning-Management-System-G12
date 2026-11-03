@@ -1,0 +1,32 @@
+/* LMS G12 | Tema rojo: único origen de tokens visuales */
+:root {
+    color-scheme:light;
+    --paper:#f9f5f5;
+    --card:#ffffff;
+    --card-edge:#eadbde;
+    --border-hover:#d6aeb7;
+    --ink:#302026;
+    --ink-soft:#74656b;
+    --field-bg:#fffafb;
+    --surface-hover:#fff0f2;
+    --accent:#9b1834;
+    --accent-dark:#741128;
+    --accent-bright:#c82e4f;
+    --accent-on:#ffffff;
+    --accent-soft:rgba(155,24,52,.10);
+    --error:#b52437;
+    --error-bg:#fff1f2;
+    --font-display:"Inter","Segoe UI",sans-serif;
+    --font-body:"Inter","Segoe UI",sans-serif;
+    --space-1:8px;
+    --space-2:16px;
+    --space-3:24px;
+    --space-4:40px;
+    --radius:12px;
+    --radius-card:20px;
+    --shadow-sm:0 3px 12px rgba(72,21,35,.055);
+    --shadow-md:0 12px 34px rgba(72,21,35,.095);
+    --shadow-lg:0 26px 64px rgba(72,21,35,.16);
+    --focus-ring:0 0 0 4px rgba(155,24,52,.17);
+    --ease-out:cubic-bezier(.2,.8,.2,1);
+}
