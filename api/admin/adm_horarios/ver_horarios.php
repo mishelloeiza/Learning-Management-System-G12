@@ -18,7 +18,7 @@
 
         $stmt = $cn -> prepare("SELECT h.id_horarios, h.hora_inicio, h.hora_fin, h.dias_curso, h.estado, t.id_tutoria, m.nombre as materia 
         FROM horarios as h INNER JOIN tutorias as t ON h.id_tutoria = t.id_tutoria INNER JOIN materias as m ON t.id_materia = m.id_materia 
-        WHERE (? = '' OR h.dias_curso LIKE ?) AND (? = '' OR m.nombre LIKE ?) ORDER BY h.id_horarios");
+        WHERE (? = '' OR h.dias_curso LIKE ?) AND (? = '' OR m.nombre LIKE ?) ORDER BY h.id_horarios DESC LIMIT 5");
 
         $stmt -> execute([$BuscarDia, "%".$BuscarDia."%", $BuscarMateria, "%".$BuscarMateria."%"]);            
 

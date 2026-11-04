@@ -18,7 +18,7 @@
 
         $stmt = $cn->prepare("SELECT m.id_materia, m.nombre, m.descripcion, m.activo, m.id_carrera, c.nombre AS carrera
             FROM materias m INNER JOIN carreras c ON m.id_carrera = c.id_carrera
-            WHERE m.nombre LIKE ? AND (? = '' OR m.id_carrera = ?) ORDER BY m.id_materia");
+            WHERE m.nombre LIKE ? AND (? = '' OR m.id_carrera = ?) ORDER BY m.id_materia DESC LIMIT 5");
         $stmt->execute(["%" . $buscar . "%", $id_carrera, $id_carrera]);
 
         $materias = $stmt->fetchAll(PDO::FETCH_ASSOC);

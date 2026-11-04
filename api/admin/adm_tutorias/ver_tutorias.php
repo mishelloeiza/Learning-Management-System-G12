@@ -21,7 +21,7 @@
             t.id_tutor, CONCAT(u.nombre, ' ', u.apellido) AS tutor, t.id_materia, m.nombre AS materia
             FROM tutorias t INNER JOIN usuarios u ON t.id_tutor = u.id_usuario
             INNER JOIN materias m ON t.id_materia = m.id_materia
-            WHERE t.titulo LIKE ? AND (? = '' OR t.estado = ?) AND (? = '' OR t.id_materia = ?) ORDER BY t.id_tutoria");
+            WHERE t.titulo LIKE ? AND (? = '' OR t.estado = ?) AND (? = '' OR t.id_materia = ?) ORDER BY t.id_tutoria DESC LIMIT 5");
         $stmt->execute(["%" . $buscar . "%", $estado, $estado, $id_materia, $id_materia]);
 
         $tutorias = $stmt->fetchAll(PDO::FETCH_ASSOC);

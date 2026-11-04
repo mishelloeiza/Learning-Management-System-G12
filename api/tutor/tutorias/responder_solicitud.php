@@ -25,7 +25,7 @@
     try {
         $cn = new Connection($_SESSION["rol"]);
 
-        $stmt = $cn->prepare("SELECT s.id_horario, h.id_tutoria FROM solicitudes s INNER JOIN horarios h ON s.id_horario = h.id_horarios
+        $stmt = $cn->prepare("SELECT s.id_horario, s.id_usuario, h.id_tutoria FROM solicitudes s INNER JOIN horarios h ON s.id_horario = h.id_horarios
             INNER JOIN tutorias t ON h.id_tutoria = t.id_tutoria WHERE s.id_solicitud = ? AND t.id_tutor = ?");
         $stmt->execute([$idSolicitud, $idTutor]);
         $ref = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -81,6 +81,19 @@
         if($aprobadas >= (int) $tutoria["cupos"]) {
             $cn->rollBack();
             Response::error("La tutoria ya alcanzo su cupo maximo", -1205, 409);
+        }
+
+        $stmt = $cn->prepare("SELECT 1 FROM solicitudes s INNER JOIN horarios ha ON s.id_horario = ha.id_horarios
+            INNER JOIN tutorias ta ON ta.id_tutoria = ha.id_tutoria
+            INNER JOIN horarios hb ON hb.id_horarios = ?
+            INNER JOIN tutorias tb ON tb.id_tutoria = hb.id_tutoria
+            WHERE s.id_usuario = ? AND s.estado = 'aprobada'
+            AND ha.dias_curso = hb.dias_curso AND ha.hora_inicio < hb.hora_fin AND ha.hora_fin > hb.hora_inicio
+            AND ta.fecha_inicio <= tb.fecha_fin AND ta.fecha_fin >= tb.fecha_inicio LIMIT 1");
+        $stmt->execute([$ref['id_horario'], $ref['id_usuario']]);
+        if ($stmt->fetchColumn()) {
+            $cn->rollBack();
+            Response::error("El estudiante ya tiene otra tutoria aprobada en ese horario", -1207, 409);
         }
 
         $cn->prepare("UPDATE solicitudes SET estado = 'aprobada', fecha_respuesta = ? WHERE id_solicitud = ?")->execute([$hoy, $idSolicitud]);

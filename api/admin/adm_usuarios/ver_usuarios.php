@@ -20,13 +20,13 @@
         if($buscar == "" && $id_carrera == "" && $id_rol == "") {
             $stmt = $cn->prepare("SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.telefono, u.id_carrera, c.nombre AS carrera,
             u.id_rol, r.nombre AS rol, u.activo FROM usuarios u INNER JOIN carreras c ON u.id_carrera = c.id_carrera
-            INNER JOIN roles r ON u.id_rol = r.id_rol ORDER BY u.id_usuario LIMIT 5");
+            INNER JOIN roles r ON u.id_rol = r.id_rol ORDER BY u.id_usuario DESC LIMIT 5");
             $stmt->execute();
         }else{
             $stmt = $cn->prepare("SELECT u.id_usuario, u.nombre, u.apellido, u.correo, u.telefono, u.id_carrera, c.nombre AS carrera,
             u.id_rol, r.nombre AS rol, u.activo FROM usuarios u INNER JOIN carreras c ON u.id_carrera = c.id_carrera
             INNER JOIN roles r ON u.id_rol = r.id_rol WHERE u.correo LIKE ?
-            AND (? = '' OR u.id_carrera = ?) AND (? = '' OR u.id_rol = ?) ORDER BY u.id_usuario");
+            AND (? = '' OR u.id_carrera = ?) AND (? = '' OR u.id_rol = ?) ORDER BY u.id_usuario DESC LIMIT 5");
 
             $stmt->execute(["%" . $buscar . "%", $id_carrera, $id_carrera, $id_rol, $id_rol]);
         }

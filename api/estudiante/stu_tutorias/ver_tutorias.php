@@ -53,7 +53,7 @@
             FROM tutorias t INNER JOIN usuarios_2 u ON t.id_tutor = u.id_usuario
             INNER JOIN materias m ON t.id_materia = m.id_materia
             WHERE t.estado IN ('activa','en curso') AND t.fecha_fin >= CURDATE()
-            " . $condiciones . " ORDER BY t.fecha_inicio, t.id_tutoria LIMIT 6 OFFSET " . (int) $offset);
+            " . $condiciones . " ORDER BY t.id_tutoria DESC LIMIT 6 OFFSET " . (int) $offset);
         $stmt->execute($parametros);
         $tutorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $hayMas = count($tutorias) > 5;
