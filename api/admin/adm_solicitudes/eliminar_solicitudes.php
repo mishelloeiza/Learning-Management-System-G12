@@ -26,11 +26,11 @@
         // La tabla solicitudes no tiene columna "activo", el borrado
         // logico se hace pasando el estado a 'rechazada' y guardando
         // la fecha de hoy como fecha de respuesta
-        $stmt = $cn->prepare("UPDATE solicitudes SET estado = 'rechazada', fecha_respuesta = CURDATE() WHERE id_solicitud = ?");
+        $stmt = $cn->prepare("UPDATE solicitudes SET estado = 'rechazada', fecha_respuesta = CURDATE() WHERE id_solicitud = ? AND estado = 'pendiente'");
         $stmt->execute([$IdSolicitud]);
 
         if($stmt->rowCount() === 0) {
-            Response::error("No se encontro la solicitud", -1003, 404);
+            Response::error("La solicitud no existe o ya fue respondida", -1003, 409);
         }
 
         Response::success("Solicitud rechazada correctamente", 200);

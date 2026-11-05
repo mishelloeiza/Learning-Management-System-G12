@@ -53,6 +53,18 @@
             Response::error("Ya tiene una solicitud para esta tutoria", -1347, 409);
         }
 
+        $stmt = $cn->prepare("SELECT 1 FROM horarios h1 INNER JOIN tutorias t1 ON t1.id_tutoria = h1.id_tutoria
+            INNER JOIN horarios h2 ON h1.dias_curso = h2.dias_curso AND h1.hora_inicio < h2.hora_fin AND h1.hora_fin > h2.hora_inicio
+            INNER JOIN tutorias t2 ON t2.id_tutoria = h2.id_tutoria
+            INNER JOIN solicitudes s ON s.id_horario = h2.id_horarios
+            WHERE h1.id_horarios = ? AND s.id_usuario = ? AND s.estado = 'aprobada'
+            AND t1.fecha_inicio <= t2.fecha_fin AND t1.fecha_fin >= t2.fecha_inicio LIMIT 1");
+        $stmt->execute([$idHorario, $_SESSION["id"]]);
+        if ($stmt->fetchColumn()) {
+            $cn->rollBack();
+            Response::error("Ya tiene una tutoria aprobada en ese horario", -1349, 409);
+        }
+
         $stmt = $cn->prepare("SELECT COUNT(*) FROM solicitudes WHERE id_horario = ? AND estado IN ('pendiente','aprobada')");
         $stmt->execute([$idHorario]);
         if ((int) $stmt->fetchColumn() > 0) {

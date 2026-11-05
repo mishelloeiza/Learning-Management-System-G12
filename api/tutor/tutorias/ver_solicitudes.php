@@ -47,7 +47,7 @@
             INNER JOIN estudiantes_info u ON s.id_usuario = u.id_usuario
             WHERE t.id_tutor = ? AND (? = '' OR s.estado = ?) AND (? = '' OR t.id_materia = ?) AND (? = '' OR t.id_tutoria = ?)
             AND (? = '' OR DATE(s.fecha_solicitud) >= ?) AND (? = '' OR DATE(s.fecha_solicitud) <= ?)
-            ORDER BY FIELD(s.estado, 'pendiente', 'aprobada', 'rechazada'), s.fecha_solicitud");
+            ORDER BY s.id_solicitud DESC LIMIT 5");
         $stmt->execute([$idTutor, $estado, $estado, $idMateria, $idMateria, $idTutoria, $idTutoria, $desde, $desde, $hasta, $hasta]);
 
         Response::success("Solicitudes encontradas", 200, ["solicitudes" => $stmt->fetchAll(PDO::FETCH_ASSOC)]);

@@ -24,7 +24,7 @@
         $stmt = $cn -> prepare("SELECT s.id_solicitud, s.estado, s.fecha_solicitud, s.fecha_respuesta, s.id_horario, s.id_usuario, m.nombre AS materia
             FROM solicitudes AS s JOIN horarios AS h ON s.id_horario = h.id_horarios JOIN tutorias AS t ON h.id_tutoria = t.id_tutoria
             JOIN materias AS m ON t.id_materia = m.id_materia WHERE (? = '' OR s.estado LIKE ?) AND (? = '' OR m.nombre LIKE ?) 
-            AND (? IS NULL OR DATE(s.fecha_solicitud) >= ?) AND (? IS NULL OR DATE(s.fecha_solicitud) <= ?) ORDER BY s.id_solicitud");
+            AND (? IS NULL OR DATE(s.fecha_solicitud) >= ?) AND (? IS NULL OR DATE(s.fecha_solicitud) <= ?) ORDER BY s.id_solicitud DESC LIMIT 5");
 
         $stmt -> execute([$Estado, "%".$Estado."%", $Materia, "%".$Materia."%", $FechaInicio, $FechaInicio, $FechaFin, $FechaFin]);
 

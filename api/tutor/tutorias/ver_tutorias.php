@@ -51,7 +51,7 @@
             FROM tutorias t INNER JOIN materias m ON t.id_materia = m.id_materia
             WHERE t.id_tutor = ? AND (? = '' OR t.estado = ?) AND (? = '' OR t.id_materia = ?)
             AND (? = '' OR t.fecha_inicio >= ?) AND (? = '' OR t.fecha_fin <= ?)
-            ORDER BY t.fecha_inicio, t.id_tutoria");
+            ORDER BY t.id_tutoria DESC LIMIT 5");
         $stmt->execute([$idTutor, $estado, $estado, $idMateria, $idMateria, $desde, $desde, $hasta, $hasta]);
         $tutorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

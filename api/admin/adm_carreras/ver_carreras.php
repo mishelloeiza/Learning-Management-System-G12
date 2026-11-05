@@ -16,10 +16,10 @@
         $cn = new Connection($_SESSION["rol"]);
 
         if($buscar == ""){
-            $stmt = $cn->prepare("SELECT * FROM carreras ORDER BY id_carrera LIMIT 5");
+            $stmt = $cn->prepare("SELECT * FROM carreras ORDER BY id_carrera DESC LIMIT 5");
             $stmt->execute();
         }else{
-            $stmt = $cn->prepare("SELECT * FROM carreras WHERE nombre LIKE ? ORDER BY id_carrera");
+            $stmt = $cn->prepare("SELECT * FROM carreras WHERE nombre LIKE ? ORDER BY id_carrera DESC LIMIT 5");
             $stmt->execute(["%".$buscar."%"]);
         }
 
