@@ -12,3 +12,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]
+
+#Definir el icono
+AddType image/x-icon .ico
+
+# Redirigir las solicitudes del favicon
+RewriteEngine On
+RewriteRule ^favicon\.ico$ - [L]
